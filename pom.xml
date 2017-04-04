@@ -278,7 +278,28 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/QRCode.jar</systemPath>
 		</dependency>
-
+		
+		<!-- Alipay支付程序 -->
+		<dependency>
+			<groupId>Alipay-sdk</groupId>
+			<artifactId>Alipay-sdk</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.30</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>core</artifactId>
+		    <version>3.3.0</version>
+		</dependency>
+		<!--  -->
 		<dependency>
 			<groupId>io.projectreactor</groupId>
 			<artifactId>reactor-net</artifactId>

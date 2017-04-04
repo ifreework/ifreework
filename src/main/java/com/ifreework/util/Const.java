@@ -65,5 +65,28 @@ public class Const {
 	public static final Map<String,Object> WEBSOCKET_USER_MAP = new HashMap<String, Object>();//缓存websocket登录用户
 	public static final Map<String,List<Msg>> MSG_MAP= new HashMap<String,List<Msg>>(); //用于缓存过长的聊天记录
 	
+	public static final String SUCCESS = "10000"; // 成功
+	public static final String PAYING = "10003"; // 用户支付中
+	public static final String ERROR = "20000"; // 系统异常
+	public static final String NOAUTH = "20001"; // 权限不足
+	public static final String NOPARAM = "40001"; // 缺少必要参数
+	public static final String PARAMERROR = "40002"; // 非法参数
 	
+	public static final String FAILED = "40004"; // 失败
+
+	
+	public static final String UNKNOWN = "50000"; // 系统异常
+	public static final String NETERROR = "50001"; // 网络连接异常
+	public static final String FILEPATH = "50003"; // 读取配置文件异常
+	public static final String REQUESTERROR = "50004"; //请求参数未通过检验
+	public static final String PID_NOT_FOUND = "50005"; // pid不存在
+	
+	public static final String TRADE_NOT_EXIST = "ACQ.TRADE_NOT_EXIST";//关闭时订单不存在
+	public static final String TRADE_STATUS_ERROR = "ACQ.TRADE_STATUS_ERROR";//关闭时订单状态不存在，通常为已经支付或者订单已经关闭
+	
+	
+	public static final String TRADE_CLOSED = "TRADE_CLOSED"; //单据已经关闭
+	public static final String TRADE_SUCCESS = "TRADE_SUCCESS";//订单支付成功状态
+	public static final String TRADE_FINISHED = "TRADE_FINISHED";//交易结束，不可退款
+	public static final String WAIT_BUYER_PAY = "WAIT_BUYER_PAY";//等待买家付款
 }
