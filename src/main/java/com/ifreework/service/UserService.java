@@ -1,0 +1,73 @@
+
+/**    
+ * 文件名：UserService.java    
+ *    
+ * 版本信息：    
+ * 日期：2016年7月6日    
+ * Copyright  Corporation 2016     
+ * 版权所有    
+ *    
+ */
+package com.ifreework.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.ifreework.entity.system.User;
+import com.ifreework.util.PageData;
+
+
+/**        
+ * 描述：    
+ * @author：wangyh qq735789026  
+ * @创建时间：2016年7月6日 下午4:25:00    
+ * @修改人：wangyh    
+ * @修改时间：2016年7月6日 下午4:25:00    
+ * @version 1.0      
+ */
+public interface UserService {
+	
+	/**
+	 * 
+	 * @Title: validateUserByNameAndPwd
+	 * @Description: TODO()
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public PageData validateUserByNameAndPwd(PageData pd);
+	
+	public List<User> queryUserList(PageData pd );
+	/**
+	 * 文件上传后图片保存位置
+	 * @param file
+	 * @param pd 
+	 * @return
+	 */
+	public PageData userImgUpload(MultipartFile file, double width, double height, double sw, double sh, double sx,
+			double sy);
+	
+	public PageData updateUser(User user);
+	
+	/**
+	 * 
+	 * @Title: queryContacts
+	 * @Description: TODO(获取所用联系人和在线联系人信息)
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public Map<String,Object> queryContacts(PageData pd);
+	
+	/**
+	 * 
+	 * @Title: getUserInfoByUserName
+	 * @Description: TODO(通过用户名获取用户信息)
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public User getUserInfoByUserName(PageData pd);
+}

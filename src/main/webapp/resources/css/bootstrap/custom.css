@@ -1,0 +1,24 @@
+/*该CSS中包涵一些自定义的CSS样式，用于改变默认的easyui样式*/
+
+/*************************** alert弹出框样式 ************************************/
+.messager-window {
+	background: #fff;
+}
+
+.messager-body {
+	padding: 20px 10px 0px 10px;
+	border: none;
+}
+
+.messager-button {
+	background: #fff;
+	border: none;
+}
+
+.messager-window .window-body {
+	border: none;
+}
+
+.messager-window .window-header {
+	border: none;
+}

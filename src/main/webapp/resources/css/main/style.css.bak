@@ -1,0 +1,712 @@
+/*********************************页面皮肤******************************************/
+.body_skin1 {
+	background: url('../../img/main/bg.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin2 {
+	background: url('../../img/main/bg2.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin3 {
+	background: url('../../img/main/bg4.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin5 {
+	background: url('../../img/main/giftly.png') repeat;
+}
+
+.body_skin6 {
+	background: url('../../img/main/bg5.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin7 {
+	background: url('../../img/main/bg3.png') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin8 {
+	background: url('../../img/main/bg8.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin9 {
+	background: url('../../img/main/bg9.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin10 {
+	background: url('../../img/main/bg10.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin11 {
+	background: url('../../img/main/bg11.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin12 {
+	background: url('../../img/main/bg12.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.body_skin13 {
+	background: url('../../img/main/bg13.jpg') no-repeat top center fixed;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+/*********************************页面顶部******************************************/
+.navbar{
+	background:rgba(0,0,0,.1);
+	padding: 5px  10px;
+	margin: 0;
+}
+.navbar .logo{
+	text-shadow: 5px -5px #5aaf54, 4px -4px white;
+	font-weight: bold;
+	font-size:30px;
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text ;
+}
+.navbar .logo,.navbar .content,.navbar .logo .logo_img,.navbar .logo .logo_text{
+	display: inline-block;
+	float: left;
+}
+.navbar .logo .logo_text h1{
+	margin:18px 0 0 0px;
+	font-size:28px;
+	font-weight: bold;
+}
+.navbar .content{
+	padding: 10px 10px 0px 15px;
+}
+
+.navbar .content .content-body{
+	display: block;
+	padding:5px 20px;
+	height: 30px;
+	width:1000px;
+	line-height:18px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+	background: rgba(8,8,8,.2);
+}
+.content-body #date,.content-body #time,.content-body #weather{
+	display: inline-block;
+	color: #fff;
+	
+	margin-left: 5px;
+	vertical-align: middle;
+}
+.content-body #date,.content-body #time,.content-body #weather{
+	border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+.content-body span{
+	margin:0 5px;
+}
+.message{
+	float: right;
+}
+.message .nav >li>a{
+    position: relative;
+    min-width: 50px;
+    height: 45px;
+    display: inline-block;
+    padding: 0;
+}
+.message .nav >li>a,.nav >li>a:FOCUS,.nav >li>a:HOVER{
+	background: none!important;
+}
+
+.message .nav >li.open>a {
+    /* background-color: #2dc3e8; */
+    -webkit-box-shadow: 0 2px 40px rgba(0,0,0,.4);
+    -moz-box-shadow: 0 2px 40px rgba(0,0,0,.4);
+    box-shadow: 0 2px 40px rgba(0,0,0,.4);
+}
+
+.message .nav >li>a .icon {
+    display: block;
+    color: #fff;
+    font-size: 18px;
+    line-height: 48px;
+    text-align: center;
+    -webkit-transition: line-height .3s ease;
+    -moz-transition: line-height .3s ease;
+    -o-transition: line-height .3s ease;
+    transition: line-height .3s ease;
+}
+
+.dropdown-menu.pull-right {
+    left: auto;
+    right: 0;
+}
+
+.dropdown-menu {
+    border: 1px solid #ccc!important;
+    -webkit-border-radius: 2px!important;
+    -webkit-background-clip: padding-box!important;
+    -moz-border-radius: 2px!important;
+    -moz-background-clip: padding!important;
+    border-radius: 2px!important;
+    background-clip: padding-box!important;
+    -webkit-box-shadow: 0 2px 40px rgba(0,0,0,.4);
+    -moz-box-shadow: 0 2px 40px rgba(0,0,0,.4);
+    box-shadow: 0 2px 40px rgba(0,0,0,.4);
+    -webkit-transition: opacity .218s;
+    -moz-transition: opacity .218s;
+    -o-transition: opacity .218s;
+    transition: opacity .218s;
+    margin: 1px 0 0;
+    min-width: 170px;
+}
+
+.dropdown-menu:after {
+    border-color: #FFFFFF rgba(0, 0, 0, 0);
+    border-style: solid;
+    border-width: 0 13px 13px;
+    content: "";
+    display: block;
+    right: 11px;
+    margin-left: -15px;
+    position: absolute;
+    top: -10px;
+    width: 0;
+    z-index: 1;
+}
+
+.dropdown-menu>li>a {
+    font-size: 13px;
+    padding-left: 11px;
+    padding-right: 11px;
+    margin-bottom: 1px;
+    margin-top: 1px;
+}
+
+
+
+
+.clearfix:before, .clearfix:after, .dl-horizontal dd:before, .dl-horizontal dd:after, .container:before, .container:after, .container-fluid:before, .container-fluid:after, .row:before, .row:after, .form-horizontal .form-group:before, .form-horizontal .form-group:after, .btn-toolbar:before, .btn-toolbar:after, .btn-group-vertical>.btn-group:before, .btn-group-vertical>.btn-group:after, .nav:before, .nav:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after, .pager:before, .pager:after, .panel-body:before, .panel-body:after, .modal-footer:before, .modal-footer:after {
+    display: table;
+    content: " ";
+}
+
+.message .nav >li .dropdown-menu li:hover {
+    background-color: #f5f5f5; 
+}
+
+.message .nav >li .dropdown-menu.dropdown-notifications,.message .nav >li .dropdown-menu.dropdown-mails , .message .nav >li .dropdown-menu.dropdown-messages{
+    min-width: 300px;
+    max-height:240px;
+    padding-top: 10px;
+}
+
+.message .nav >li .dropdown-menu {
+    padding: 0;
+    min-width: 240px;
+    -webkit-animation-name: dropdownSlideInDown;
+    -moz-animation-name: dropdownSlideInDown;
+    -o-animation-name: dropdownSlideInDown;
+    animation-name: dropdownSlideInDown;
+    -webkit-animation-duration: .3s;
+    -moz-animation-duration: .3s;
+    -o-animation-duration: .3s;
+    animation-duration: .3s;
+    -webkit-border-radius: 0!important;
+    -webkit-background-clip: padding-box!important;
+    -moz-border-radius: 0!important;
+    -moz-background-clip: padding!important;
+    border-radius: 0!important;
+    background-clip: padding-box!important;
+}
+
+
+.message .nav >li.open .dropdown-menu {
+    margin-top: 6px;
+    right: 0;
+    border: 0!important;
+}
+
+.message .nav >li .dropdown-menu li {
+    background-color: #fff;
+    border: 0;
+    padding: 0 8px;
+}
+
+.message .nav >li .dropdown-menu li {
+    border-bottom: 1px solid #f3f3f3;
+}
+
+
+.message .nav >li .dropdown-menu li a {
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 10px 2px;
+}
+
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-icon {
+    float: left;
+}
+
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-icon i {
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    margin-right: 10px;
+    font-size: 15px;
+    border-radius: 50%;
+}
+
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-body {
+    float: left;
+}
+
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-body .title {
+    display: block;
+    font-size: 13px;
+}
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-body .description {
+    display: block;
+    font-size: 10px;
+    color: #999;
+}
+
+
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-extra {
+    float: right;
+    text-align: right;
+}
+
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-extra i {
+    font-size: 14px;
+}
+.message .nav >li .dropdown-menu.dropdown-notifications li .notification-extra .description {
+    display: block;
+    font-size: 10px;
+    color: #999;
+}
+
+
+.message .nav >li .dropdown-menu.dropdown-notifications li.dropdown-footer {
+    background-color: #11a9cc;
+    border-bottom: 0;
+    color: #fff;
+}
+.message .nav >li  .dropdown-menu li.dropdown-footer {
+    padding: 8px 5px 8px 10px;
+}
+.message .nav >li  .dropdown-menu li.dropdown-header, .navbar .navbar-inner .navbar-header .navbar-account .account-area>li .dropdown-menu li.dropdown-footer {
+    -webkit-text-shadow: none;
+    text-shadow: none;
+    font-size: 13px;
+    font-weight: normal;
+    text-transform: none;
+    color: #262626;
+}
+
+.message .nav >li>a.wave {
+    overflow: visible;
+    cursor: pointer;
+    z-index: 10;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -o-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: -webkit-transform .3s cubic-bezier(.68,-.55,.265,1.55);
+    -moz-transition: -moz-transform .3s cubic-bezier(.68,-.55,.265,1.55);
+    -o-transition: -o-transform .3s cubic-bezier(.68,-.55,.265,1.55);
+    transition: -webkit-transform .3s cubic-bezier(.68,-.55,.265,1.55),-moz-transform .3s cubic-bezier(.68,-.55,.265,1.55),-o-transform .3s cubic-bezier(.68,-.55,.265,1.55),transform .3s cubic-bezier(.68,-.55,.265,1.55);
+}
+.message .nav >li>a.wave.in {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+.message .nav >li>a.wave.in:after {
+    content: "";
+    top: 3px;
+    left: 5px;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-image: 8121991;
+    background-image: -webkit-radial-gradient(center center,farthest-side circle,rgba(26,175,93,0) 70%,#f5f5f5 100%);
+    background-image: -moz-radial-gradient(center center,farthest-side circle,rgba(26,175,93,0) 70%,#f5f5f5 100%);
+    background-image: -o-radial-gradient(center center,farthest-side circle,rgba(26,175,93,0) 70%,#f5f5f5 100%);
+    background-image: radial-gradient(center center,farthest-side circle,rgba(26,175,93,0) 70%,#f5f5f5 100%);
+    border: 1px solid #fff;
+    -webkit-animation: wave 5s 3s infinite linear;
+    -moz-animation: wave 5s 3s infinite linear;
+    -o-animation: wave 5s 3s infinite linear;
+    animation: wave 5s 3s infinite linear;
+    zoom: 1;
+    filter: alpha(opacity=0);
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    opacity: 0;
+    -webkit-border-radius: 50%;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 50%;
+    -moz-background-clip: padding;
+    border-radius: 50%;
+    background-clip: padding-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+.message .nav >li>a .badge {
+    position: absolute;
+    top: 6px;
+    left: 25px;
+    padding: 2px;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    -webkit-transition: top .3s ease;
+    -moz-transition: top .3s ease;
+    -o-transition: top .3s ease;
+    transition: top .3s ease;
+}
+.badge {
+    font-size: 11px!important;
+    font-weight: 300;
+    text-align: center;
+    height: 18px;
+    padding: 3px 6px 3px 6px;
+    -webkit-border-radius: 12px!important;
+    -webkit-background-clip: padding-box!important;
+    -moz-border-radius: 12px!important;
+    -moz-background-clip: padding!important;
+    border-radius: 12px!important;
+    background-clip: padding-box!important;
+    -webkit-text-shadow: none!important;
+    text-shadow: none!important;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+
+.message .nav >li .dropdown-menu.dropdown-mails li .message-avatar ,.message .nav >li .dropdown-menu.dropdown-messages li .message-avatar {
+    max-width: 42px;
+    margin-right: 6px;
+    margin-top: 5px;
+    vertical-align: top;
+}
+
+.message .nav >li .dropdown-menu.dropdown-messages li .message-avatar {
+    margin-top: 0px;
+}
+
+.message .nav >li .dropdown-menu.dropdown-messages li .message ,.message .nav >li .dropdown-menu.dropdown-mails li .message {
+    display: inline-block;
+    position: relative;
+    width: 225px;
+}
+
+.message .nav >li .dropdown-menu.dropdown-messages li .message span, .message .nav >li .dropdown-menu.dropdown-mails li .message span{
+    display: block;
+}
+.message .nav >li .dropdown-menu.dropdown-mails li .message-sender  {
+    font-size: 13px;
+}
+.message .nav >li .dropdown-menu.dropdown-messages li .message-time ,.message .nav >li .dropdown-menu.dropdown-mails li .message-time {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 11px;
+    font-weight: 400;
+    color: #2dc3e8;
+}
+.message .nav >li .dropdown-menu.dropdown-messages li .message-subject ,.message .nav >li .dropdown-menu.dropdown-mails li .message-subject {
+    margin-top: 5px;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.message .nav >li .dropdown-menu.dropdown-messages li .message-body ,.message .nav >li .dropdown-menu.dropdown-mails li .message-body {
+    color: #999;
+    max-height: 35px;
+    margin-top:2px;
+    width: 100%;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.message .nav >li .dropdown-menu.dropdown-messages li .message-sender{
+	display: inline-block!important;
+}
+.message .nav >li .dropdown-menu.dropdown-messages li .message-number{
+	display: inline-block!important;
+	color:#fff;
+	padding:0 7px;
+	border-radius: 12px!important;
+}
+
+.message .nav >li .login-area {
+    padding: 8px 20px 10px 20px;
+    height: 45px;
+    opacity: 1;
+    position: relative;
+    cursor: pointer;
+}
+
+.message .nav >li .login-area .avatar {
+    margin-right: 14px;
+    display: block;
+    float: left;
+    border-left: 2px solid #fb6e52;
+    width: 30px;
+    height: 30px;
+}
+.message .nav >li .login-area .avatar img{
+	 width: 30px;
+    height: 30px;
+}
+
+.message .nav >li .login-area  .user-name {
+    width: auto;
+    display: block;
+    overflow: hidden;
+    line-height: 30px;
+    float: left;
+    color: #fff;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    text-decoration: none;
+}
+.message .nav >li .dropdown-menu.dropdown-login-area{
+	padding-top: 10px;
+	min-width: 140px!important;
+}
+
+.message .nav >li .dropdown-menu.dropdown-login-area  li a {
+    clear: both;
+    color: #777777!important;
+    display: block;
+    font-weight: normal;
+    line-height: 1.42857;
+    padding: 10px 10px!important;
+    white-space: nowrap;
+    font-size: 13px;
+}
+.message .nav >li .dropdown-menu.dropdown-login-area  li a:HOVER{
+	color: #39B3D7!important;
+}
+
+
+
+.message .nav >li .dropdown-menu.dropdown-login-area li a span{
+	padding: 5px 15px;
+}
+
+.message .nav >li a.skin-setting  .glyphicon{
+	display: inline-block;
+    color: #fff;
+    font-size: 18px;
+    line-height: 48px;
+    margin-left:10px;
+    text-align: center;
+    -webkit-transition: line-height .3s ease;
+    -moz-transition: line-height .3s ease;
+    -o-transition: line-height .3s ease;
+    transition: line-height .3s ease;
+}
+.message .nav >li a.skin-setting span{
+	width: auto;
+    display: inline-block;
+    overflow: hidden;
+    line-height: 16px;
+    padding:0 10px;
+    color: #fff;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    text-decoration: none;
+}
+.message .nav >li .dropdown-setting {
+    border-left: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    margin-top: 14px !important;
+    position: absolute;
+    border-radius: 4px!important;
+    min-width: 165px!important;
+    width: 165px!important;
+}
+.message .nav >li .dropdown-setting  .theme-bg {
+    margin: 0 5px!important;
+    padding: 0;
+}
+
+.message .nav >li .dropdown-setting .theme-bg div {
+    display: inline-block;
+    float: left;
+}
+#button-bg,#button-bg1,#button-bg2,#button-bg3,#button-bg4,#button-bg5,#button-bg6,#button-bg7,#button-bg8,#button-bg9,
+#button-bg10,#button-bg11,#button-bg12,#button-bg13{
+	border: 4px solid #FFFFFF;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+#button-bg {
+    background: url("../../img/main/small-bg5.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+#button-bg2 {
+    background: url("../../img/main/small-bg2.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+#button-bg3 {
+    background: url("../../img/main/small-bg.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+#button-bg5 {
+    background: url("../../img/main/giftly.png") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+#button-bg6 {
+    background: none repeat scroll 0 0 #2C3E50;
+}
+#button-bg7 {
+    background: url("../../img/main/bg3.png") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+#button-bg8 {
+    background: url("../../img/main/small-bg8.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+#button-bg9 {
+    background: url("../../img/main/small-bg9.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+#button-bg10 {
+    background: url("../../img/main/small-bg10.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+
+#button-bg11 {
+    background: url("../../img/main/small-bg11.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+
+#button-bg12 {
+    background: url("../../img/main/small-bg12.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+
+#button-bg13 {
+    background: url("../../img/main/small-bg13.jpg") repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+}
+
+
+/***************************************页面左侧导航********************************************************/
+#skin-select {
+    height: auto;
+    z-index: 1000;
+    float: left;
+}
+.sidebar-body:before {
+	top:61px;
+}
+/******************************************页面主体*********************************************************/
+.wrap-fluid{
+	width: auto;
+	margin-left: 235px;
+}
+
+.container-fluid {
+    padding-left: 0!important;
+    padding-right: 0!important;
+}
+
+.paper-wrap {
+    background-color: none repeat scroll 0 0 #ffffff;
+    background-position: -1px 0;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(45deg, transparent 20px, $color-green 20px), linear-gradient(135deg, transparent 20px, $color-green 20px), linear-gradient(225deg, transparent 20px, $color-green 20px), linear-gradient(315deg, transparent 20px, $color-green 20px);
+    background-position: bottom left, top left, top right, bottom right;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    padding: 20px;
+    min-height: 1430px;
+}
+
+.paper-wrap:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-width: 0 42px 42px 0;
+    border-style: solid;
+    border-color: #ffffff rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    filter: progid: DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+.bevel.tlbr {
+    background: #f5f5f5;
+    background: -moz-linear-gradient(45deg, #f5f5f5 30px, #f5f5f5 30px), -moz-linear-gradient(135deg, transparent 30px, #f5f5f5 30px), -moz-linear-gradient(225deg, #f5f5f5 30px, #f5f5f5 30px), -moz-linear-gradient(315deg, transparent 30px, #f5f5f5 30px);
+    background: -o-linear-gradient(45deg, #f5f5f5 30px, #f5f5f5 30px), -o-linear-gradient(135deg, transparent 30px, #f5f5f5 30px), -o-linear-gradient(225deg, #f5f5f5 30px, #f5f5f5 30px), -o-linear-gradient(315deg, transparent 30px, #f5f5f5 30px);
+    background: -webkit-linear-gradient(45deg, #f5f5f5 30px, #f5f5f5 30px), -webkit-linear-gradient(135deg, transparent 30px, #f5f5f5 30px), -webkit-linear-gradient(225deg, #f5f5f5 30px, #f5f5f5 30px), -webkit-linear-gradient(315deg, transparent 30px, #f5f5f5 30px);
+}
+
+.bevel.all, .bevel.trbl, .bevel.tlbr, .bevel.tr {
+    background-position: bottom left, bottom right, top right, top left;
+    -moz-background-size: 52% 52%;
+    -webkit-background-size: 52% 52%;
+    background-size: 52% 52%;
+    background-repeat: no-repeat;
+}

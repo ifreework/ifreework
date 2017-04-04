@@ -1,0 +1,159 @@
+<%@ include file="/WEB-INF/jsp/include/head.jsp"%>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<!-- jsp文件头和头部 -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>${pd.SYSNAME}</title>
+<meta name="description" content="" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="stylesheet" href="<%=cssPath%>/main/userImg.css">
+<script src="<%=jsPath%>/bootstrap/dropzone/dropzone.js"></script>
+<script type="text/javascript">
+	var dropz;
+	$().ready(function() {
+		dropz = new Dropzone("#dropzone", {
+			url : "<%=contextPath%>/main/userImgUpload",
+			acceptedFiles : ".jpg,.png",
+			autoProcessQueue : false,
+			params:{"width":100},
+			addedfile : function(file) {
+				readData(file);
+			},
+			uploadprogress:function(file, progress, bytesSent){
+				console.log((bytesSent - this.options.uploadSize)*100/1024);
+				console.log(this);
+				this.options.uploadSize = bytesSent;
+			}
+		});
+		
+		function readData(file){
+			 var reader;
+			 reader = new FileReader;
+		     reader.onload = function(e){
+		    	 var scale = 1;
+		    	 var img = $("<img>").load(function(){
+		    		 var w = this.width;
+					 var h = this.height;
+					 scale = loadImgScale(w,h);
+					 writeDom({src:this.src,width:w*scale,height:h*scale,swidth:w,sheight:h},function(data){
+			    		 afterAddImg(file,data,{width:w*scale,height:h*scale});
+			    	 });
+					 
+					 $(this).remove();
+		    	 });
+		    	 img.attr("src",this.result).hide();
+		     } 
+		     return reader.readAsDataURL(file);
+		}
+		
+		
+		function afterAddImg(file,data,opt){
+			$(".dropzone-upload-text").hide();
+			var div = $("<div>").addClass("dropzone-img-view").append("<div class='dropzone-view-back modal-background'>");
+			div.find(".dropzone-view-back").append("<img>").append("<div class='dropzone-modal'>");
+			div.find(".dropzone-modal").append("<div class='center'>").append("<div class='top'>").append("<div class='bottom'>").append("<div class='left'>").append("<div class='right'>");
+			$("#dropzone").append(div);
+			var pos = initImg(opt);
+			div.find("img").attr("src",data).css(pos);
+			pos.marginTop = (0 - opt.height);
+			div.find(".dropzone-modal").css(opt);
+			div.find(".dropzone-modal").css(pos);
+			
+			var modalOpt = initModalDivPosition(opt);
+			div.find(".top,.bottom").css({width:opt.width,height:modalOpt.tHeight});
+			div.find(".left,.right").css({width:modalOpt.lWidth,height:200,top:modalOpt.cTop});
+			div.find(".center").css({top:modalOpt.cTop,left:modalOpt.cLeft});
+			initPreview();
+			
+			div.find(".center").mousedown(function(event){
+				var x = event.pageX,y = event.pageY;
+				var mdiv = $(".dropzone-modal"),
+						cDiv = $(this),lDiv = mdiv.find(".left"),tDiv = mdiv.find(".top"),
+						bDiv = mdiv.find(".bottom"),rDiv = mdiv.find(".right"); 
+					var cTop = cDiv.position().top,cLeft = cDiv.position().left;
+				
+				
+				
+				$(this).mousemove(function(e){
+					var moveX = e.pageX - x, moveY = e.pageY - y;
+					var aTop = cTop + moveY,aLeft = cLeft + moveX;
+					aTop = aTop < 0 ? 0 : aTop > (opt.height - 200)  ? (opt.height - 200 ) : aTop;
+					aLeft = aLeft < 0 ? 0 : aLeft > (opt.width - 200)  ? (opt.width - 200 ) : aLeft;
+					cDiv.css({top:aTop,left:aLeft });
+					
+					tDiv.css({height:aTop  });
+					bDiv.css({height:(opt.height - 200 - aTop)}  );
+					lDiv.css({top:aTop,width:(aLeft) });
+					rDiv.css({top:aTop,width:(opt.width - 200 - aLeft) });
+				});
+			});
+			$(document).mouseup(function(event){
+				initPreview();
+			});
+			initPreview();
+			$(".img-preview").addClass("modal-background");
+		}
+		
+		//修改图片尺寸，设置宽度最大不超过550，最小不超过380
+		function loadImgScale(w,h){
+			var scale = 1;
+			if(w/h >= 550/380){
+				scale = 550/w;
+			}else{
+				scale = 380/h;
+			}
+			return scale;
+		}
+		
+		//初始化图片位置
+		function initImg(opt){
+			return {marginLeft:(550 - opt.width)/2,marginTop:(380 - opt.height)/2};
+		}
+		
+		function initModalDivPosition(opt){
+			var o = {},w = (opt.width - 200)/2,h=(opt.height - 200)/2;
+			o.cTop = h;
+			o.cLeft = w;
+			o.tHeight = o.bHeight = h;
+			o.lWidth = o.rWidth = w;
+			return o;
+		}
+		
+		function initPreview(){
+			var _center = $(".dropzone-img-view").find(".center"), _top = _center.position().top,_left = _center.position().left,
+				   			 _img = $(".dropzone-img-view").find("img"),_src = _img.attr("src");
+			_center.unbind("mousemove");
+				
+			writeDom({src:_src,width:200,height:200,swidth:200,sheight:200,sx:_left,sy:_top},function(data100){
+				if($(".img-preview").find("img").length == 0 ){
+					$(".img-preview").append("<img class='preview100'><img class='preview50'><img class='preview30'>");
+				}
+				$(".img-preview").find("img").attr("src",data100);
+			});
+		}
+	});
+</script>
+</head>
+<body>
+	<div class="page-body">
+		<div class="row dropzone-panel" >
+			<div class="col9">
+				<div id="dropzone" class="dropzone-body ">
+					<div class="dropzone-upload-text dz-default dz-message">
+						<span>选择图片</span>
+					</div>
+				</div>
+			</div>
+			<div class="col3">
+				<div class="img-list">
+					<div class="img-preview">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

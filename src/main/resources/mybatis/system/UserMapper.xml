@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ifreework.mapper.system.user.UserMapper">
+	<resultMap type="com.ifreework.entity.system.User" id="userResultMap">
+		<id column="USER_ID" property="userId" />
+		<result column="USERNAME" property="userName" />
+		<result column="PASSWORD" property="password" />
+		<result column="NAME" property="name" />
+		<result column="RIGHTS" property="rights" />
+		<result column="ROLE_ID" property="roleId" />
+		<result column="LAST_LOGIN" property="lastLogin" />
+		<result column="IP" property="IP" />
+		<result column="STATUS" property="status" />
+		<result column="BZ" property="bz" />
+		<result column="SKIN" property="skin" />
+		<result column="EMAIL" property="email" />
+		<result column="NUMBER" property="number" />
+		<result column="PHONE" property="phone" />
+		<result column="CITY_CODE" property="cityCode" />
+		<result column="IMG_PATH" property="imgPath" />
+		<result column="IS_ONLINE" property="isOnline" />
+	</resultMap>
+
+
+	<!-- 字段 -->
+	<sql id="Field">
+		USER_ID,
+		USERNAME,
+		PASSWORD,
+		NAME,
+		RIGHTS,
+		ROLE_ID,
+		LAST_LOGIN,
+		IP,
+		STATUS,
+		BZ,
+		SKIN,
+		EMAIL,
+		NUMBER,
+		PHONE,
+		CITY_CODE,
+		IMG_PATH,
+		IS_ONLINE
+	</sql>
+
+	<!-- 判断用户名和密码 -->
+	<select id="getUserInfo" parameterType="pd" resultMap="userResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		SYS_USER
+		where 1=1
+		<if test="username != null and password != null">
+			and USERNAME = #{username} and PASSWORD=#{password}
+		</if>
+		<if test="userId !=null ">
+			and USER_ID = #{ userId }
+		</if>
+	</select>
+	
+		<!-- 判断用户名和密码 -->
+	<select id="getUserInfoByUserName" parameterType="pd" resultMap="userResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		SYS_USER
+		where 1=1
+		and USERNAME = #{username}
+	</select>
+	
+	
+	<select id="queryUserList" parameterType="pd" resultMap="userResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		SYS_USER
+	</select>
+	
+	
+
+	<!-- 修改 -->
+	<update id="update" parameterType="com.ifreework.entity.system.User">
+		update SYS_USER
+		set NAME = #{name},
+		ROLE_ID = #{roleId},
+		NUMBER = #{number},
+		EMAIL = #{email},
+		PHONE = #{phone},
+		CITY_CODE = #{cityCode},
+		SKIN = #{skin},
+		IMG_PATH = #{imgPath},
+		IS_ONLINE = #{isOnline}
+		<if test="password != null and password != ''">
+			,PASSWORD = #{password}
+		</if>
+		where
+		USER_ID = #{userId}
+	</update>
+
+
+</mapper>
