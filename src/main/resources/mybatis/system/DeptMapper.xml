@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ifreework.mapper.system.DeptMapper">
+	<sql id="deptColumns">
+		DEPT_ID,
+		NAME,
+		NAME_EN,
+		BIANMA,
+		PARENT_ID,
+		DEPTH,
+		LEAF,
+		BZ,
+		HEADMAN,
+		TEL,
+		FUNCTIONS,
+		ADDRESS
+	</sql>
+
+	<resultMap type="com.ifreework.entity.system.Dept" id="dept">
+		<id column="DEPT_ID" property="deptId" />
+		<result column="NAME" property="name" />
+		<result column="NAME_EN" property="nameEn" />
+		<result column="BIANMA" property="bianma" />
+		<result column="PARENT_ID" property="parentId" />
+		<result column="BZ" property="bz" />
+		<result column="HEADMAN" property="headman" />
+		<result column="TEL" property="tel" />
+		<result column="FUNCTIONS" property="functions" />
+		<result column="ADDRESS" property="address" />
+		<result column="DEPTH" property="depth" />
+		<result column="LEAF" property="leaf" />
+		<collection property="children" ofType="com.ifreework.entity.system.User"
+			javaType="ArrayList">
+			<id column="USER_ID" property="userId" />
+			<result column="USERNAME" property="userName" />
+			<result column="UNAME" property="name" />
+			<result column="RIGHTS" property="rights" />
+			<result column="ROLE_ID" property="roleId" />
+			<result column="LAST_LOGIN" property="lastLogin" />
+			<result column="IP" property="IP" />
+			<result column="STATUS" property="status" />
+			<result column="BZ" property="bz" />
+			<result column="SKIN" property="skin" />
+			<result column="EMAIL" property="email" />
+			<result column="NUMBER" property="number" />
+			<result column="PHONE" property="phone" />
+			<result column="CITY_CODE" property="cityCode" />
+			<result column="IMG_PATH" property="imgPath" />
+			<result column="IS_ONLINE" property="isOnline" />
+			<result column="signature" property="signature" />
+		</collection>
+	</resultMap>
+
+	<select id="queryContacts" parameterType="pd" resultMap="dept">
+		select
+			d.DEPT_ID,
+			d.NAME,
+			d.NAME_EN,
+			d.BIANMA,
+			d.PARENT_ID,
+			d.DEPTH,
+			d.LEAF,
+			d.BZ,
+			d.HEADMAN,
+			d.TEL,
+			d.FUNCTIONS,
+			d.ADDRESS,
+			u.USER_ID,
+			u.USERNAME,
+			u.PASSWORD,
+			u.NAME uNAME,
+			u.RIGHTS,
+			u.ROLE_ID,
+			u.LAST_LOGIN,
+			u.IP,
+			u.STATUS,
+			u.BZ,
+			u.SKIN,
+			u.EMAIL,
+			u.NUMBER,
+			u.PHONE,
+			u.CITY_CODE,
+			u.IMG_PATH,
+			u.IS_ONLINE,
+			u.SIGNATURE
+		from sys_dept d left join sys_user u on u.DEPT_ID = d.dept_id and u.username != #{username} ;
+	</select>
+
+</mapper>

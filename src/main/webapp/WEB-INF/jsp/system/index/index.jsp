@@ -4,35 +4,47 @@
 <title>${pd.SYSNAME}</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 <link rel="stylesheet" href="<%=cssPath%>/index/index.css">
-<script src="<%=jsPath %>/easyui/jquery.easyui.min.js"></script>
 <script>
 	$().ready(function() {
 		loadCookie();
+		
+		//点击登录按钮，执行登录操作
 		$("#login").click(function(event) {
 			event.preventDefault();
-			if (validate()) {
-				$("#loginForm").form("submit", {
+			submitUserData();
+		});
+		
+		//在页面下按下回车键，执行登录操作
+		$("body").keypress(function(event){
+			console.log(event);
+			if(event.keyCode == 13){//keyCode == 13为回车键
+				submitUserData();
+			}
+		});
+	});
+	
+	
+
+	//登录操作
+	function submitUserData(){
+		if (validate()) {
+			var data = $("#loginForm").serializeJson();
+			ajax({
 					url : "<%=contextPath%>/login",
-					onSubmit : function() {
-						$.messager.progress({border:'thin'}); // 如果表单是无效的则隐藏进度条
-					},
-					success : function(data) {
-						$.messager.progress('close'); // 如果提交成功则隐藏进度条
-						data = $.parseJSON(data);
-						if(data.result == "failed"){
-							showMsg(data.msg);
+					data:data,
+					success : function(result) {
+						console.log(result);
+						if(result.result == "failed"){
+							bootbox.alert(result.msg);
 						}else{
 							changeCookie($("#cookieBox").get(0).checked);
 							location.href="<%=contextPath%>/main"
 						}
 					}
-
-				});
-			}
-		});
-	});
+			});
+		}
+	}
 
 	//如果用户在cookie中保存了数据的话，将自动填充用户名密码
 	function loadCookie(){
@@ -59,23 +71,6 @@
 	}
 	
 	//显示验证提示信息
-	var showTime = 0;
-	function showMsg(html){
-		$("#msg").html(html);
-		$("#msg").show(500);
-		showTime = new Date().getTime();
-		setTimeout("hideMs()", 10000);
-	}
-	
-	function hideMs(){
-		var nowTime =  new Date().getTime();
-		if((nowTime - showTime)/1000 >= 10){
-			$('#msg').hide(500);
-		}else{
-			setTimeout("hideMs()", 10000);
-		}
-		
-	}
 	//保存和修改cookie
 	function changeCookie(checked){
 		if(checked){
@@ -91,31 +86,30 @@
 	
 </script>
 </head>
-<body style="overflow: hidden; background: red;">
+<body>
 	<div class="login_div">
 		<div class="col-xs-12 login_title">登录</div>
 		<form action="" class="login" id="loginForm" method="post">
 			<div class="nav">
 				<div class="nav login_nav">
-					<div class="col-xs-4 login_username">用户名:</div>
-					<div class="col-xs-6 login_usernameInput">
+					<div class="col-xs-2 login_username"></div>
+					<div class="col-xs-8 login_usernameInput">
 						<input type="text" name="username" id="name" value=""
 							placeholder="&nbsp;&nbsp;用户名/手机号" />
 					</div>
 				</div>
 				<div class="nav login_psdNav">
-					<div class="col-xs-4">密&nbsp;&nbsp;&nbsp;码:</div>
-					<div class="col-xs-6">
+					<div class="col-xs-2 login_username"></div>
+					<div class="col-xs-8 login_usernameInput">
 						<input type="password" name="password" id="psd"
 							placeholder="&nbsp;&nbsp;密码" />
 					</div>
 				</div>
 				<div class="col-xs-12 login_cookie">
-					<div class="col-xs-4"></div>
-					<div class="col-xs-6">
+					<div class="col-xs-2"></div>
+					<div class="col-xs-8">
 						<div class="col-xs-6">
-							<label><input type="checkbox" id="cookieBox"
-								style="position: absolute;top:2px;"><span style="position: absolute;left:15px">下次自动登录</span></label>
+							<label><input type="checkbox" id="cookieBox"><span style="position: absolute;left:20px">下次自动登录</span></label>
 						</div>
 						<div class="col-xs-4">
 							<a href="#">忘记密码？</a>
@@ -123,19 +117,18 @@
 					</div>
 				</div>
 				<div class="col-xs-12 login_btn_div">
-					<input type="submit" class="sub_btn" id="login" value="登录" />
-				</div>
-				<div class="col-xs-12 login_msg" >
-					<span  id="msg" style="display: none;"></span>
+					<input type="button" class="btn btn-blue sub_btn" id="login" value="登录" />
 				</div>
 			</div>
 		</form>
 
-		<div class="col-xs-12 barter_btnDiv">
-			<span class="barter_btn">Copyright © Wangyh qq735789026 2199</span>
-		</div>
+		
 	</div>
-
+	
+	<div class="col-xs-12 barter_btnDiv">
+		<span class="barter_btn">版权所有：iFreeWork开发者团队</span>
+		<span class="barter_btn">Copyright © Wangyh qq735789026 2014-2017</span>
+	</div>
 	<img src="<%=imagePath%>/index/9.jpg" width="100%" style="position: absolute;left:0px;">
 </body>
 </html>

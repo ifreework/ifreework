@@ -12,6 +12,7 @@ import com.ifreework.common.entity.Page;
  * @version 1.0
  */
 public class User {
+
 	private java.lang.String userId;
 	private java.lang.String userName;
 	private java.lang.String password;
@@ -29,6 +30,27 @@ public class User {
 	private java.lang.String cityCode;
 	private java.lang.String imgPath;
 	private java.lang.String isOnline;
+	private java.lang.String signature;
+	private java.lang.String deptId;
+	
+	
+
+	public java.lang.String getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(java.lang.String deptId) {
+		this.deptId = deptId;
+	}
+
+	public java.lang.String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(java.lang.String signature) {
+		this.signature = signature;
+	}
+
 	public java.lang.String getBz() {
 		return bz;
 	}
@@ -71,7 +93,6 @@ public class User {
 
 	private Page page; // 分页对象
 	private Role role;
-
 
 	public String getImgPath() {
 		return imgPath;
@@ -297,13 +318,12 @@ public class User {
 		this.skin = skin;
 	}
 
-	
 	/**    
 	 * cityCode    
 	 *    
 	 * @return  the cityCode    
 	*/
-	
+
 	public String getCityCode() {
 		return cityCode;
 	}

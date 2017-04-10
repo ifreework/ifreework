@@ -31,7 +31,7 @@ import com.ifreework.common.controller.BaseControllerSupport;
 import com.ifreework.entity.system.User;
 import com.ifreework.help.HttpRequest;
 import com.ifreework.help.Jurisdiction;
-import com.ifreework.service.UserService;
+import com.ifreework.service.system.UserService;
 import com.ifreework.util.Const;
 import com.ifreework.util.FileUtil;
 import com.ifreework.util.PageData;

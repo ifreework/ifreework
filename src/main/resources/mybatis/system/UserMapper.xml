@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ifreework.mapper.system.user.UserMapper">
+<mapper namespace="com.ifreework.mapper.system.UserMapper">
 	<resultMap type="com.ifreework.entity.system.User" id="userResultMap">
 		<id column="USER_ID" property="userId" />
 		<result column="USERNAME" property="userName" />
@@ -20,6 +20,8 @@
 		<result column="CITY_CODE" property="cityCode" />
 		<result column="IMG_PATH" property="imgPath" />
 		<result column="IS_ONLINE" property="isOnline" />
+		<result column="signature" property="signature" />
+		<result column="DEPT_ID" property="deptId" />
 	</resultMap>
 
 
@@ -41,7 +43,9 @@
 		PHONE,
 		CITY_CODE,
 		IMG_PATH,
-		IS_ONLINE
+		IS_ONLINE,
+		SIGNATURE,
+		DEPT_ID
 	</sql>
 
 	<!-- 判断用户名和密码 -->
@@ -75,6 +79,10 @@
 		<include refid="Field"></include>
 		from
 		SYS_USER
+		where 1 = 1
+		<if test="userName !=null and userName != ''">
+		and username != #{userName}
+		</if>
 	</select>
 	
 	

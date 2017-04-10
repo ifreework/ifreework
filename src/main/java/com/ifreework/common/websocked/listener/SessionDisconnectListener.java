@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import com.ifreework.entity.system.Msg;
+import com.ifreework.help.WebsocketHelp;
 import com.ifreework.util.Const;
 
 public class SessionDisconnectListener implements ApplicationListener<SessionDisconnectEvent> {
@@ -16,5 +18,9 @@ public class SessionDisconnectListener implements ApplicationListener<SessionDis
 		String name = headers.getUser().getName(); // 获取账号名
 		Const.WEBSOCKET_USER_MAP.remove(name);
 		logger.debug(name + " websocket断开连接。");
+		Msg msg = new Msg();
+		msg.setFromUser(name);
+		msg.setHandleType("userOffline");
+		WebsocketHelp.send("/topic/greetings", msg);
 	}
 }

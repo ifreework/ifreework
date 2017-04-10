@@ -9,130 +9,188 @@
 <meta name="description" content="" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-	
-<link rel="stylesheet" href="<%=cssPath%>/main/form.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/animate.min.css">
-<link rel="stylesheet" href="<%=jsPath%>/sidebar/css/sidebar.css">
+<link rel="stylesheet" href="<%=assetsPath %>/css/beyond.min.css"></link>
+
 <link rel="stylesheet" href="<%=cssPath%>/main/style.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/chat.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/shake.css">
-
-<script src="<%=jsPath%>/bootstrap/bootbox/bootbox.js"></script>
-<script src="<%=jsPath%>/sidebar/sidebar.js"></script>
-<script src="<%=jsPath%>/bootstrap/chat/chatwindow.js"></script>
-<script src="<%=jsPath%>/bootstrap/chat/chat.js"></script>
-<script src="<%=jsPath%>/main/websocket/sockjs.js"></script>
-<script src="<%=jsPath%>/main/websocket/stomp.js"></script>
-
-<script type="text/javascript">
-	$().ready(function() {
-		$(".main-container").height(($("body").height() - 50));
-		$("#sidebar").sidebar();
-		$("#user_img").click(function(){
-			var dialog = bootbox.dialog({
-				title: "头像设置",
-				height:485,
-				width:740,
-                message: "<iframe id='userChangeImgDialog' name='userChangeImgDialog'  src='<%=contextPath%>/main/userChangeImg'></iframe>",
-                buttons: {
-                    "确定": {
-                    	className:"btn-primary",
-                        callback: function () {
-                        	var dropzone = window.frames["userChangeImgDialog"].dropz, img = $(window.frames["userChangeImgDialog"].document).find(".dropzone-img-view img"),
-                        	 	cDiv = $(window.frames["userChangeImgDialog"].document).find(".dropzone-img-view .center"),
-                        	 	width=img.width(),height=img.height(),sw = cDiv.width() + 2,sh = cDiv.height() + 2,sx = cDiv.position().left,sy = cDiv.position().top;
-                        	dropzone.options.params = {
-                        		width:width,
-                        		height:height,
-                        		sw:sw,
-                        		sh:sh,
-                        		sx:sx,
-                        		sy:sy
-                        	};
-                        	dropzone.on("success", function(file) {
-                        		$("#userImg").attr("src",$("#userImg").attr("src")  + "?_time=" + new Date().getTime());
-                        		dialog.modal("hide");
-                        	});
-                        	dropzone.processQueue();
-                        	return false;
-                        }
-                    },
-                    "取消": {
-                    	className: "btn-primary",
-                        callback: function () { }
-                    }
-                }
-            });
-
-		});
-		$("#logout").click(function(){
-			bootbox.confirm("确定要退出登录吗？", function (result) {
-                if (result) {
-                   location.href = "<%=contextPath%>/logout";
-                }
-            });
-		});
-		
-		
-		$(".nav .theme-bg div").click(function() {
-			
-			var index = $(this).index() + 1;
-			var _this = this;
-			$.ajax({
-				url : "<%=contextPath%>/main/skinChoose",
-														data : {
-															skin : "body_skin"
-																	+ index
-														},
-														dataType : "json",
-														success : function(data) {
-															if (data.result = "success") {
-																$(_this)
-																		.parent()
-																		.find(
-																				"div")
-																		.removeClass(
-																				"active");
-																$(_this)
-																		.addClass(
-																				"active");
-																$("body")
-																		.removeClass()
-																		.addClass(
-																				"body_skin"
-																						+ index);
-															}
-														}
-													});
-										});
-					});
+<script src="<%=jsPath%>/main/main.js"></script>
+<script>
+$().ready(function(){
+	
+});
 </script>
-</head>
-<body
-	class="${user.skin == null || user.skin == '' ? 'body_skin1' : user.skin }">
+<body class="body-skin1">
 	<!-- 页面导航 navbar -->
 	<%@ include file="/WEB-INF/jsp/system/main/include/top.jsp"%>
 	<!-- /navbar -->
-	
-	
-	<!-- 页面主体Main Container -->
+    	
+	<!-- Main Container -->
 	<div class="main-container container-fluid">
+	
 		<!-- Page Container -->
-		<div class="page-container">
-			<!-- 导航菜单Page Sidebar -->
-			<%@ include file="/WEB-INF/jsp/system/main/include/left.jsp"%>
-			<!-- /Page Sidebar -->
-			<!-- 主体内容Page Content -->
-			<%@ include file="/WEB-INF/jsp/system/main/include/content.jsp"%>
-			<!-- /Page Container -->
+    	<div class="page-container">
+       	<!-- Page Sidebar -->
+           <div class="page-sidebar" id="sidebar">
+			           
+				<!-- Page Sidebar Header-->
+                <div class="sidebar-header-wrapper">
+                   <input type="text" class="searchinput" />
+                   <i class="searchicon fa fa-search"></i>
+                   <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div>
+                </div>
+                <!-- /Page Sidebar Header -->
+                
+				<!-- Sidebar Menu -->
+                <ul class="nav sidebar-menu">
+                
+                	<!--Dashboard-->
+                    <li>
+                        <a href="index.html">
+                            <i class="menu-icon glyphicon glyphicon-home"></i>
+                            <span class="menu-text"> 首页 </span>
+                        </a>
+                    </li>
+                
+	                <!--UI Elements-->
+	                <li class ="active open">
+	                    <a href="#" class="menu-dropdown">
+	                        <i class="menu-icon fa fa-desktop"></i>
+	                        <span class="menu-text"> 系统管理 </span>
+	
+	                        <i class="menu-expand"></i>
+	                    </a>
+	
+	                    <ul class="submenu">
+	                        <li>
+	                            <a href="elements.html">
+	                                <span class="menu-text">用户管理</span>
+	                            </a>
+	                        </li>
+	                        <li>
+	                            <a href="#" class="menu-dropdown">
+	                                <span class="menu-text">
+	                                  	组织机构管理
+	                                </span>
+	                                <i class="menu-expand"></i>
+	                            </a>
+	
+	                            <ul class="submenu">
+	                                <li>
+	                                    <a href="font-awesome.html">
+	                                        <i class="menu-icon fa fa-rocket"></i>
+	                                        <span class="menu-text">Font Awesome</span>
+	                                    </a>
+	                                </li>
+	                                <li>
+	                                    <a href="glyph-icons.html">
+	                                        <i class="menu-icon glyphicon glyphicon-stats"></i>
+	                                        <span class="menu-text">部门管理</span>
+	                                    </a>
+	                                </li>
+	                                <li>
+	                                    <a href="typicon.html">
+	                                        <i class="menu-icon typcn typcn-location-outline"></i>
+	                                        <span class="menu-text">角色管理</span>
+	                                    </a>
+	                                </li>
+	                                <li>
+	                                    <a href="weather-icons.html">
+	                                        <i class="menu-icon wi-day-snow"></i>
+	                                        <span class="menu-text">权限管理</span>
+	                                    </a>
+	                                </li>
+	                            </ul>
+	                        </li>
+	                        <li>
+	                            <a href="tabs.html">
+	                                <span class="menu-text">菜单管理</span>
+	                            </a>
+	                        </li>
+	                        <li>
+	                            <a href="alerts.html">
+	                                <span class="menu-text">系统设置</span>
+	                            </a>
+	                        </li>
+	                        <li>
+	                            <a href="modals.html">
+	                                <span class="menu-text">数据字典</span>
+	                            </a>
+	                        </li>
+	                        <li class ="active">
+	                            <a href="buttons.html">
+	                                <span class="menu-text">Buttons</span>
+	                            </a>
+	                        </liclass>
+	                        <li>
+	                            <a href="nestable-list.html">
+	                                <span class="menu-text"> Nestable List</span>
+	                            </a>
+	                        </li>
+	                        <li>
+	                            <a href="treeview.html">
+	                                <span class="menu-text">Treeview</span>
+	                            </a>
+	                        </li>
+	                    </ul>
+	                </li>
+	                
+	                <!--Tables-->
+                    <li>
+                        <a href="#" class="menu-dropdown">
+                            <i class="menu-icon fa fa-table"></i>
+                            <span class="menu-text"> Tables </span>
+
+                            <i class="menu-expand"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="tables-simple.html">
+                                    <span class="menu-text">Simple & Responsive</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="tables-data.html">
+                                    <span class="menu-text">Data Tables</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+	                
+                
+                </ul>
+                <!-- /Sidebar Menu -->
+           </div>
+    		<!-- /Page Sidebar -->
+    		
+    		<!-- Page Content -->
+            <div class="page-content">
+            
+				<!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-home"></i>
+                            <a href="#">首页</a>
+                        </li>
+                        <li>
+                            <a href="#">系统设置</a>
+                        </li>
+                        <li class="active">用户管理</li>
+                    </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+                
+                <!-- Page Body -->
+                <div class="page-body">
+                	<iframe style="width: 100%;height:800px;" src="http://www.baidu.com"></iframe>
+                </div>
+    		</div>
+    		<!-- /Page Content -->
 		</div>
+		<!-- /Page Container -->
 	</div>
 	<!-- /Main Container -->
 	
-	<%@ include file="/WEB-INF/jsp/system/main/include/chat.jsp"%>
-	<%@ include file="/WEB-INF/jsp/system/main/include/chatWindow.jsp"%>
-	
-	<script src="<%=jsPath%>/main/load.js"></script>
-	<script src="<%=jsPath%>/main/main.js"></script>
 </body>
+
 </html>

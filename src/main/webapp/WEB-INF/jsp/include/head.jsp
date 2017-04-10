@@ -10,6 +10,7 @@
 	String cssPath = contextPath + "/resources/css";
 	String jsPath = contextPath + "/resources/js";
 	String imagePath = contextPath + "/resources/img";
+	String assetsPath = contextPath + "/resources/assets";
 %>
 
 <!DOCTYPE html>
@@ -18,37 +19,31 @@
 	type="image/x-icon" />
 
 <!-- bootstrap css -->
-<link rel="stylesheet" href="<%=cssPath%>/main/font-awesome.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/entypo-icon.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/maki-icons.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/weather-icons.min.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/dripicon.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/open-sans.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/awwwards.css">
+<link rel="stylesheet" href="<%=assetsPath %>/css/bootstrap.min.css"></link>
 
+<link rel="stylesheet" href="<%=assetsPath %>/css/font-awesome.min.css"></link>
+<link href="<%=assetsPath %>/css/weather-icons.min.css" rel="stylesheet" />
 
-<link rel="stylesheet" href="<%=cssPath%>/bootstrap/bootstrap.min.css">
-<link rel="stylesheet"
-	href="<%=cssPath%>/bootstrap/bootstrap-responsive.min.css">
-<link rel="stylesheet" href="<%=cssPath%>/main/loader-style.css">
-
-<link rel="stylesheet" href="<%=cssPath%>/color/color.css">
-<link rel="stylesheet" href="<%=cssPath%>/base.css">
-
-
+<link href="<%=assetsPath %>/css/typicons.min.css" rel="stylesheet" />
+<link href="<%=cssPath %>/base.css" rel="stylesheet" />
 
 <!-- jquery -->
+<script src="<%=assetsPath %>/js/skins.min.js"></script>
 <script type="text/javascript" src="<%=jsPath%>/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=jsPath%>/jquery/jquery.cookie.js"></script>
-<script src="<%=jsPath%>/bootstrap/bootstrap.min.js"></script>
+<script src="<%=assetsPath %>/js/bootstrap.min.js"></script>
+
+<script src="<%=assetsPath%>/js/bootbox/bootbox.js"></script>
+
 <script src="<%=jsPath%>/base.js"></script>
-<script src="<%=jsPath%>/jquery/jquery.extend.js"></script>
+
+
 <script>
 	$().ready(function() {
 		var errorType = getRequestParamByName("errorType");
 		if (errorType == "userIsNull") {
 			if (window == top)
-				$.alert("用户尚未登录或用户登录超时，请重新登录。");
+				bootbox.alert("用户未登录或登录超时，请重新登录。");
 			else
 				top.location.href = location.href;
 		}

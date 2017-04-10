@@ -20,7 +20,34 @@ function getRequestParamByName(name) {
 	return null;
 }
 
-/* common */
+/**
+ * 对jquery ajax的二次封装，添加的请求前后遮罩动画处理
+ * @param opt
+ */
+function ajax(opt){
+	var opts = {
+			type:'POST',
+			dataType : "json",
+			beforeSend : function(){
+				bootbox.load();
+			},
+			error : function(jqXHR, textStatus, errorThrown){
+				if(textStatus == "timeout"){
+					bootbox.alert("网络连接超时，请稍后再试。");
+				}
+				if(textStatus == "error"){
+					bootbox.alert("系统出现异常，请稍后再试。");
+				}
+			},
+			complete : function(xhr, ts){
+				bootbox.unload();
+			}
+		};
+		var  o = $.extend(opts,opt);
+		$.ajax(o);
+}
+
+
 /**
  * canvas图片压缩
  * 
@@ -58,4 +85,66 @@ function writeDom(opt, cbk) {
 		
 	};
 }
+
+
+/**
+ * alert弹出框，load加载遮罩
+ */
+$.extend(bootbox, {
+	alert : function(msg,title,fn) {
+		bootbox.dialog({
+	        message: '<div class="row"><div class="col-md-12"><span class="alert-text">'+ msg +'</span></div></div>',
+	        title: '<i class="typcn typcn-info-outline"></i>&nbsp;&nbsp;' + (title == null || title == "" ? "提示" : title),
+	        className: "modal-darkorange modal-alert",
+	        closeButton : false,
+	        buttons: {
+	            success: {
+	                label: "确定",
+	                className: "btn-default",
+	                	callback: fn
+	                }
+	        }
+		});
+	},
+	load : function(){
+		var loadDiv = $(".loading-container",window.top.window.document);
+		if(loadDiv.length == 0 ){
+			var html = '<div class="loading-container"><div class="loading-progress"><div class="rotator"><div class="rotator"><div class="rotator colored"><div class="rotator"><div class="rotator colored"><div class="rotator colored"></div><div class="rotator"></div></div><div class="rotator colored"></div></div><div class="rotator"></div></div><div class="rotator"></div></div><div class="rotator"></div></div><div class="rotator"></div></div></div>';
+			$("body",window.top.window.document).append(html);	    
+		}else{
+			loadDiv.removeClass("loading-inactive");
+		}
+	},
+	unload : function(){
+		var loadDiv = $(".loading-container",window.top.window.document);
+		loadDiv.addClass("loading-inactive");
+	}
+});
+
+
+/**
+ * 添加jquery组件，将form序列成json返回
+ * @param $
+ */
+(function($){  
+    $.fn.serializeJson=function(){  
+        var serializeObj={};  
+        var array=this.serializeArray();  
+        var str=this.serialize();  
+        $(array).each(function(){  
+            if(serializeObj[this.name]){  
+                if($.isArray(serializeObj[this.name])){  
+                    serializeObj[this.name].push(this.value);  
+                }else{  
+                    serializeObj[this.name]=[serializeObj[this.name],this.value];  
+                }  
+            }else{  
+                serializeObj[this.name]=this.value;   
+            }  
+        });  
+        return serializeObj;  
+    };  
+})(jQuery);  
+
+
 

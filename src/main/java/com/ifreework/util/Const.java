@@ -65,6 +65,8 @@ public class Const {
 	public static final Map<String,Object> WEBSOCKET_USER_MAP = new HashMap<String, Object>();//缓存websocket登录用户
 	public static final Map<String,List<Msg>> MSG_MAP= new HashMap<String,List<Msg>>(); //用于缓存过长的聊天记录
 	
+	
+	
 	public static final String SUCCESS = "10000"; // 成功
 	public static final String PAYING = "10003"; // 用户支付中
 	public static final String ERROR = "20000"; // 系统异常
@@ -89,4 +91,5 @@ public class Const {
 	public static final String TRADE_SUCCESS = "TRADE_SUCCESS";//订单支付成功状态
 	public static final String TRADE_FINISHED = "TRADE_FINISHED";//交易结束，不可退款
 	public static final String WAIT_BUYER_PAY = "WAIT_BUYER_PAY";//等待买家付款
+	
 }
