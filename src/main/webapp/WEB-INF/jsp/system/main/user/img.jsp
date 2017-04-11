@@ -10,7 +10,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <link rel="stylesheet" href="<%=cssPath%>/main/userImg.css">
-<script src="<%=jsPath%>/bootstrap/dropzone/dropzone.js"></script>
+<script src="<%=assetsPath%>/js/dropzone/dropzone.js"></script>
 <script type="text/javascript">
 	var dropz;
 	$().ready(function() {
@@ -138,7 +138,7 @@
 </script>
 </head>
 <body>
-	<div class="page-body">
+	<div class="main-container container-fluid">
 		<div class="row dropzone-panel" >
 			<div class="col9">
 				<div id="dropzone" class="dropzone-body ">

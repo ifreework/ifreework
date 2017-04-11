@@ -1,4 +1,4 @@
-package com.ifreework.controller.system.login;
+package com.ifreework.controller.system;
 
 import java.io.IOException;
 import java.util.ArrayList;

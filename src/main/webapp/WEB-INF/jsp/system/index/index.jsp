@@ -36,11 +36,15 @@
 					success : function(result) {
 						console.log(result);
 						if(result.result == "failed"){
+							bootbox.unload();
 							bootbox.alert(result.msg);
 						}else{
 							changeCookie($("#cookieBox").get(0).checked);
 							location.href="<%=contextPath%>/main"
 						}
+					},
+					complete : function(xhr, ts){
+						
 					}
 			});
 		}

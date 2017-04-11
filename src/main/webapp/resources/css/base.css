@@ -18,8 +18,8 @@ body {
 
 iframe {
 	border: 0;
-	height: 100%;
 	width: 100%;
+	height:100%;
 	overflow: hidden;
 }
 
@@ -38,6 +38,7 @@ b {
 /**************************** alert style ****************************************/
 .modal-alert .modal-body{
 	line-height: 30px;
+	padding: 15px;
 }
 .modal-alert .modal-footer{
 	padding: 8px 0 8px 0;
@@ -58,4 +59,7 @@ b {
 	max-width: 500px;
 }
 
-/***********************************************************************************/
+/******************************** dialog ***************************************************/
+.modal-body{
+	padding: 0px;
+}

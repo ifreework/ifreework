@@ -7,7 +7,7 @@
  * 版权所有    
  *    
  */
-package com.ifreework.controller.system.login;
+package com.ifreework.controller.system;
 
 
 

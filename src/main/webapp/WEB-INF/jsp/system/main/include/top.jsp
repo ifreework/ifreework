@@ -165,19 +165,19 @@
                             </ul>
                             <!--/Tasks Dropdown-->
             			</li>
-            			<li>
+            			<li id="user-manager">
             				<a class="login-area dropdown-toggle" data-toggle="dropdown">
                                 <div class="avatar" title="View your public profile">
                                     <img src="main/userImgDownload">
                                 </div>
                                 <section>
-                                    <h2><span class="profile"><span>管理员</span></span></h2>
+                                    <h2><span class="profile"><span>${user.name }</span></span></h2>
                                 </section>
                             </a>
                             
                             <ul class="pull-right dropdown-menu dropdown-tasks dropdown-arrow dropdown-login">
-                            	<li><a href="#" id="user_img"><b class="fa fa-user"></b><span>编辑头像</span></a></li>
-								<li><a href="#"><b class="fa fa-cog"></b><span>用户设置</span></a></li>
+                            	<li><a href="#" data-id="user-img"><b class="fa fa-user"></b><span>编辑头像</span></a></li>
+								<li><a href="#" data-id="user-edit" data-username="${user.userName }"><b class="fa fa-cog"></b><span>用户设置</span></a></li>
 								<li><a href="#"><b class="fa fa-info-circle"></b><span>&nbsp;&nbsp;帮&nbsp;&nbsp;&nbsp;&nbsp;助&nbsp;&nbsp;</span></a></li>
 								<li><a href="#" id="logout"><b
 										class="fa fa-ban red"></b><span class="red">&nbsp;&nbsp;退&nbsp;&nbsp;&nbsp;&nbsp;出</span></a></li>

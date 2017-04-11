@@ -177,6 +177,7 @@ body:BEFORE {
 .page-sidebar .sidebar-menu>li>a:hover{
 	background: rgba(0, 0, 0, 0.1);
 	border: none;
+	border-top: 1px solid rgba(0, 0, 0, 0.15);
 	color:#f5f5f5;
 }
 .page-sidebar .sidebar-menu>li:last-child>a{
@@ -188,9 +189,11 @@ body:BEFORE {
 }
 
 .page-sidebar .sidebar-menu li.active>a{
-	background: rgba(0, 0, 0, 0);
+	background: rgba(0, 0, 0, 0.1);
 }
-
+.page-sidebar .sidebar-menu li.active.open>a{
+	background: none;
+}
 .page-sidebar .sidebar-menu a .menu-expand{
 	color: #ffffff;
 }
@@ -218,4 +221,26 @@ body:BEFORE {
 .page-sidebar .sidebar-menu li.active>a{
 	color: #ffffff;
 	font-weight: 600;
+}
+
+ .nav .open>a:focus{
+	border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+/******************* sidebar compact **************************/
+.page-sidebar.menu-compact .sidebar-header-wrapper:HOVER .searchinput{
+	background: #ffffff;
+}
+.page-sidebar.menu-compact .sidebar-menu>li:hover>a{
+	background: #ffffff;
+}
+.page-sidebar.menu-compact .sidebar-menu .submenu a{
+	color: #4e5d89;
+}
+
+.page-sidebar.menu-compact .sidebar-menu a .menu-expand{
+	color: #4e5d89;
+}
+/***************************************************************************/
+.page-body{
+	padding: 10px 0px 0px 10px;
 }

@@ -180,9 +180,10 @@
       if (!button.className) {
         if (total <= 2 && index === total-1) {
           // always add a primary to the main option in a two-button dialog
-          button.className = "btn-primary";
+        	button.className = "btn-default";
         } else {
-          button.className = "btn-default";
+            button.className = "btn-primary";
+          
         }
       }
     });
@@ -323,14 +324,14 @@
   exports.confirm = function() {
     var options;
 
-    options = mergeDialogOptions("confirm", ["cancel", "confirm"], ["message", "callback"], arguments);
+    options = mergeDialogOptions("confirm", [ "confirm","cancel"], ["message", "callback"], arguments);
 
     /**
      * overrides; undo anything the user tried to set they shouldn't have
      */
     options.buttons.cancel.callback = options.onEscape = function() {
       return options.callback(false);
-    };
+    };   
 
     options.buttons.confirm.callback = function() {
       return options.callback(true);
@@ -366,14 +367,14 @@
     // just because of 'value' and 'inputType' - can we refactor?
     defaults = {
       className: "bootbox-prompt",
-      buttons: createLabels("cancel", "confirm"),
+      buttons: createLabels( "confirm","cancel"),
       value: "",
       inputType: "text"
     };
 
     options = validateButtons(
       mergeArguments(defaults, arguments, ["title", "callback"]),
-      ["cancel", "confirm"]
+      ["confirm","cancel"]
     );
 
     // capture the user's show value; we always set this to false before
@@ -572,13 +573,15 @@
     options = sanitize(options);
 
     var dialog = $(templates.dialog);
+    var modalDialog = dialog.find(".modal-dialog");
+    var content = dialog.find(".modal-content");
     var body = dialog.find(".modal-body");
     var buttons = options.buttons;
     var buttonStr = "";
     var callbacks = {
       onEscape: options.onEscape
     };
-
+    
     each(buttons, function(key, button) {
 
       // @TODO I don't like this string appending to itself; bit dirty. Needs reworking
@@ -588,6 +591,22 @@
       callbacks[key] = button.callback;
     });
 
+    if(options.width){
+    	modalDialog.width(options.width);
+    }
+    if(options.height){
+    	var height = options.height;
+    	modalDialog.height(height);
+    	if (options.title) {
+    		height = height - 47;
+    	}
+        if (buttonStr.length) {
+        	height = height - 50;
+        }
+    	 body.find(".bootbox-body").height(height);
+    }
+    
+    
     body.find(".bootbox-body").html(options.message);
 
     if (options.animate === true) {

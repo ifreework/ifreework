@@ -20,7 +20,7 @@
 
 <!-- bootstrap css -->
 <link rel="stylesheet" href="<%=assetsPath %>/css/bootstrap.min.css"></link>
-
+<link rel="stylesheet" href="<%=assetsPath %>/css/beyond.min.css"></link>
 <link rel="stylesheet" href="<%=assetsPath %>/css/font-awesome.min.css"></link>
 <link href="<%=assetsPath %>/css/weather-icons.min.css" rel="stylesheet" />
 

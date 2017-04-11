@@ -9,7 +9,7 @@
 <meta name="description" content="" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<link rel="stylesheet" href="<%=assetsPath %>/css/beyond.min.css"></link>
+
 
 <link rel="stylesheet" href="<%=cssPath%>/main/style.css">
 <script src="<%=jsPath%>/main/main.js"></script>
@@ -18,7 +18,7 @@ $().ready(function(){
 	
 });
 </script>
-<body class="body-skin1">
+<body class="body-skin1" >
 	<!-- 页面导航 navbar -->
 	<%@ include file="/WEB-INF/jsp/system/main/include/top.jsp"%>
 	<!-- /navbar -->
@@ -61,7 +61,7 @@ $().ready(function(){
 	
 	                    <ul class="submenu">
 	                        <li>
-	                            <a href="elements.html">
+	                            <a href="#" data-url="http://www.baidu.com">
 	                                <span class="menu-text">用户管理</span>
 	                            </a>
 	                        </li>
@@ -182,7 +182,7 @@ $().ready(function(){
                 
                 <!-- Page Body -->
                 <div class="page-body">
-                	<iframe style="width: 100%;height:800px;" src="http://www.baidu.com"></iframe>
+                	<iframe id="ifm" name="ifm" src="<%=contextPath%>/system/dept"></iframe>
                 </div>
     		</div>
     		<!-- /Page Content -->
