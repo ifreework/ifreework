@@ -114,6 +114,30 @@ $.extend(bootbox, {
 	        }
 		});
 	},
+	confirm : function(msg,title,fn) {
+		window.top.window.bootbox.dialog({
+	        message: '<div class="row"><div class="col-md-12"><span class="confirm-text">'+ msg +'</span></div></div>',
+	        title: '<i class="typcn typcn-info-outline"></i>&nbsp;&nbsp;' + (title == null || title == "" ? "提示" : title),
+	        className: "modal-darkorange modal-confirm",
+	        closeButton : false,
+	        buttons: {
+	            success: {
+	                label: "确定",
+	                className: "btn-default",
+	                callback: function(){
+	                	fn(true);
+	                }
+	            },
+	            cancel: {
+	                label: "取消",
+	                className: "btn-default red",
+	                callback: function(){
+	                	fn(false);
+	                }
+	            }
+	        }
+		});
+	},
 	load : function(){
 		var loadDiv = $(".loading-container",window.top.window.document);
 		if(loadDiv.length == 0 ){

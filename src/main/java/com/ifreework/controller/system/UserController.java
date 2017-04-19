@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,6 +41,22 @@ public class UserController extends BaseControllerSupport {
 	}
 	
 	
+	/**
+	 * 
+	 * @Title: gotoView
+	 * @Description: TODO(根据用户名查询用户信息，并跳转到修改界面)
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView gotoView() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/system/user/list");
+		return mv;
+	}
+	
+	
 	@RequestMapping(value = "/query")
 	@ResponseBody
 	public PageData query(){
@@ -48,6 +65,21 @@ public class UserController extends BaseControllerSupport {
 		pd = new PageData();
 		pd.setPagination(list);
 		return pd;
+	}
+	
+	
+	/**
+	 * 描述：根据用户id，重置用户密码
+	 * @Title: resetPwd
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@RequestMapping(value = "/resetPwd")
+	@ResponseBody
+	public PageData resetPwd(){
+		PageData pd = this.getPageData();
+		return userService.resetPwd(pd);
 	}
 	/**
 	 * 
@@ -80,4 +112,6 @@ public class UserController extends BaseControllerSupport {
 		
 		return pd;
 	}
+	
+	
 }

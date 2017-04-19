@@ -48,6 +48,14 @@ public interface UserService {
 	 */
 	public PageData userImgUpload(MultipartFile file, double width, double height, double sw, double sh, double sx,
 			double sy);
+	/**
+	 * 描述：根据用户id，重置用户密码
+	 * @Title: resetPwd
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public PageData resetPwd(PageData pd);
 	
 	public PageData update(User user);
 	

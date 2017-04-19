@@ -141,6 +141,7 @@ public class SecurityUtil {
 	}
 
 
+	@SuppressWarnings("restriction")
 	public static String encoderPwdByMd5(String str) {
 		// 确定计算方法
 		MessageDigest md5;

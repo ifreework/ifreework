@@ -17,6 +17,8 @@ public class Config {
 	public static final String FTP_USERNAME = "ftp_username"; //ftp用户
 	public static final String FTP_PASSWORD = "ftp_password"; //ftp密码
 	public static final String FTP_PORT = "ftp_port"; //ftp密码
+	
+	public static final String RESET_PWD = "reset_pwd"; //用户初始密码
 	private static Config config;
 	private Map<String,Object> map;
 	

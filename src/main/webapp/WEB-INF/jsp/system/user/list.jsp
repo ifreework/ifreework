@@ -20,6 +20,7 @@ $().ready(function(){
 		serverSide:true, //是否启用服务器模式
 		order:[[1,'asc']],
 		pageLength: 100 ,
+		autoWidth: false,
 		ajax:{
 			url:"<%=contextPath%>/system/user/query",
 			data: function ( d ) {
@@ -30,38 +31,45 @@ $().ready(function(){
             data : "userId",  
             defaultContent : "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
             visible : false, //此列不显示
-            orderable:false
+            orderable:false  //是否进行排序
+        }, {  
+            data : "userNo",  
+            name : "user_no", //列别名，对应数据库中字段名，如果该列不进行排序，可不进行设置 
+            title : "编号",  
+            defaultContent : "" 
         }, {  
             data : "username",  
+            name : "username", //列别名，对应数据库中字段名，如果该列不进行排序，可不进行设置 
             title : "用户名",  
-            defaultContent : "", 
-            name : "username"
+            defaultContent : "" 
+        },{  
+        	data : "personName",  
+        	name : "person_name",
+            title : "姓名",  
+            defaultContent : ""
         }, {  
         	data : "email",  
             title : "电子邮箱",  
             defaultContent : "", 
-            className : "text-center"  ,
             searchable:false,
             orderable:false
         }, {  
         	data : "phone",  
-        	title : "手机",  
+        	title : "联系电话",  
         	defaultContent : "", 
         	searchable:false,
             orderable:false
         }, {  
-        	data : "province.provinceName",  
-        	title : "省份",  
-        	defaultContent : "", 
-        	searchable:false
-        },{  
-        	data : "county",  
-        	title : "详细地址",  
+        	data : "deailAddress",  
+        	title : "家庭住址",  
         	defaultContent : "", 
         	searchable:false,
         	orderable:false,
         	render:function( data, type, row, meta ){
-        		return row.municipality.municipalityName + " " +  data.countyName + " " + row.deailAddress;
+        		var provinceName = row.province.provinceName == null ? "" : row.province.provinceName,
+        			municipalityName = row.municipality.municipalityName == null ? "" : row.municipality.municipalityName,
+        			countyName = row.county.countyName == null ? "" : row.county.countyName;	
+        		return provinceName + " " + municipalityName + " " +  countyName + " " + data;
         	}
         },{  
         	data : "status",  
@@ -69,9 +77,10 @@ $().ready(function(){
         	defaultContent : "", 
         	searchable:false,
         	orderable:false,
+        	className : "text-center",
         	render:function( data, type, row, meta ){
-        		return ' <label> ' +
-	                	   '<input class="checkbox-slider toggle colored-blue" type="checkbox" ' + (data == 1 ? 'checked="checked"' : '') + '>' +
+        		return ' <label class="no-margin-bottom "> ' +
+	                	   '<input class="checkbox-slider toggle colored-blue" type="checkbox" data-userid="' + row.userId + '" onchange="changeStatus(this)" ' + (data == 1 ? 'checked="checked"' : '') + '>' +
 	                	   '<span class="text"></span>' + 
             		   '</label>';
         	}
@@ -82,8 +91,9 @@ $().ready(function(){
         	orderable:false,
         	className : "text-center"  ,
         	render:function( data, type, row, meta ){
-        		return '<a class="btn btn-edit btn-info btn-xs icon-only" title="修改" data-index="' + meta.row + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +
-        			   '<a class="btn btn-delete btn-danger btn-xs icon-only margin-left-10" title="删除" data-index="' + meta.row + '" href="javascript:void(0);"><i class="fa fa-trash-o "></i></a>';
+        		return '<a class="btn btn-edit btn-info btn-xs icon-only" title="修改" data-userid="' + row.userId + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +
+        			   '<a class="btn btn-delete btn-danger btn-xs icon-only margin-left-10" title="删除" data-userid="' + row.userId + '" href="javascript:void(0);"><i class="fa fa-trash-o "></i></a>' + 
+        			   '<a class="btn btn-reset btn-warning btn-xs icon-only margin-left-10" title="重置密码" data-userid="' + row.userId + '" href="javascript:void(0);" onclick="resetPwd(this)"><i class="fa fa-eraser "></i></a>';
         	}
         }]
     }).on('preXhr.dt', function ( e, settings, data ) {//页面发送请求前，显示加载框
@@ -96,6 +106,49 @@ $().ready(function(){
 		dataTable.ajax.reload();
 	});
 });
+
+//用户启用或者停用
+function changeStatus(e){
+	var userId = $(e).data("userid"),
+		data = {userId:userId,status:e.checked ? 1 : 0},
+	    opt = {
+			url : "<%=contextPath%>/system/user/save",
+			data:data,
+			success:function(param){
+				if(param.result === SUCCESS){
+				}else{
+					bootbox.alert("数据异常，设置失败");
+				}
+			}
+	};
+	ajax(opt);
+}
+
+
+//用户启用或者停用
+function resetPwd(e){
+	var userId = $(e).data("userid"),
+		data = {userId:userId},
+	    opt = {
+			url : "<%=contextPath%>/system/user/resetPwd",
+			data:data,
+			success:function(param){
+				if(param.result === SUCCESS){
+					bootbox.alert("密码重置成功");
+				}else{
+					bootbox.alert("数据异常，设置失败");
+				}
+			}
+	};
+	
+	bootbox.confirm("queding?","",function(r){
+		if(r){
+			ajax(opt);
+		}
+	});
+	
+}
+
 </script>
 </head>
 <body>

@@ -151,6 +151,28 @@ public class UserServiceImpl implements UserService {
 		pageData.put("fileName", imgPath);
 		return pageData;
 	}
+	
+	
+	/**
+	 * 描述：根据用户id，重置用户密码
+	 * @Title: resetPwd
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public PageData resetPwd(PageData pd){
+		String userId = pd.getString("userId");
+		if(StringUtil.isEmpty(userId)){
+			pd.setResult(Const.FAILED);
+			return pd;
+		}
+		String resetPwd = Config.init().get(Config.RESET_PWD);
+		resetPwd = StringUtil.isEmpty(resetPwd) ? SecurityUtil.encrypt("1") : SecurityUtil.encrypt(resetPwd);
+		User user = new User();
+		user.setUserId(userId);
+		user.setPassword(resetPwd);
+		return update(user);
+	}
 
 	/**
 	 * 修改用户信息
@@ -215,9 +237,5 @@ public class UserServiceImpl implements UserService {
 	public List<User> queryUserList(PageData pd) {
 		// TODO Auto-generated method stub
 		return userMapper.queryUserList(pd);
-	}
-
-	public static void main(String[] args) {
-		System.out.println("accccyy".compareTo("x"));
 	}
 }

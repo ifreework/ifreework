@@ -47,7 +47,7 @@ b {
 	color: #dcdcdc!important; 
 } 
 /**************************** alert style ****************************************/
-.modal-alert .modal-body{
+.modal-alert .modal-body,.modal-confirm .modal-body{
 	line-height: 30px;
 	padding: 15px;
 }
@@ -55,18 +55,22 @@ b {
 	padding: 8px 0 8px 0;
 	text-align: center;
 }
-.modal-alert .modal-footer .btn{
+.modal-confirm .modal-footer{
+	padding: 8px 10px 8px 0;
+	text-align: right;
+}
+.modal-alert .modal-footer .btn,.modal-confirm .modal-footer .btn{
 	padding-left:30px;
 	padding-right: 30px;
 }
-.modal-alert .alert-text{
+.modal-alert .alert-text,.modal-confirm .alert-text{
 	color: #655757;
 }
-.bootbox.modal.modal-alert{
+.bootbox.modal.modal-alert,.bootbox.modal.modal-confirm{
    background: rgba(0, 0, 0, 0.25);	
 }
  
-.modal-alert  .modal-dialog{
+.modal-alert  .modal-dialog,.modal-confirm  .modal-dialog{
 	max-width: 500px;
 }
 
