@@ -9,479 +9,121 @@
 <meta name="description" content="" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	    <!--Page Related styles-->
+<link href="<%=assetsPath %>/css/dataTables.bootstrap.css" rel="stylesheet" />
+<script src="<%=assetsPath %>/js/datatable/jquery.dataTables.js"></script>
+<script src="<%=assetsPath %>/js/datatable/dataTables.bootstrap.js"></script>
+<script type="text/javascript">
+$().ready(function(){
+	var dataTable = $('#userTab').DataTable({
+		searching:false,//
+		serverSide:true, //是否启用服务器模式
+		order:[[1,'asc']],
+		pageLength: 100 ,
+		ajax:{
+			url:"<%=contextPath%>/system/user/query",
+			data: function ( d ) {
+	      		return $.extend( {}, d, $("#queryForm").serializeJson());
+		    }
+		},
+		columns : [{  
+            data : "userId",  
+            defaultContent : "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
+            visible : false, //此列不显示
+            orderable:false
+        }, {  
+            data : "username",  
+            title : "用户名",  
+            defaultContent : "", 
+            name : "username"
+        }, {  
+        	data : "email",  
+            title : "电子邮箱",  
+            defaultContent : "", 
+            className : "text-center"  ,
+            searchable:false,
+            orderable:false
+        }, {  
+        	data : "phone",  
+        	title : "手机",  
+        	defaultContent : "", 
+        	searchable:false,
+            orderable:false
+        }, {  
+        	data : "province.provinceName",  
+        	title : "省份",  
+        	defaultContent : "", 
+        	searchable:false
+        },{  
+        	data : "county",  
+        	title : "详细地址",  
+        	defaultContent : "", 
+        	searchable:false,
+        	orderable:false,
+        	render:function( data, type, row, meta ){
+        		return row.municipality.municipalityName + " " +  data.countyName + " " + row.deailAddress;
+        	}
+        },{  
+        	data : "status",  
+        	title : "是否启用",  
+        	defaultContent : "", 
+        	searchable:false,
+        	orderable:false,
+        	render:function( data, type, row, meta ){
+        		return ' <label> ' +
+	                	   '<input class="checkbox-slider toggle colored-blue" type="checkbox" ' + (data == 1 ? 'checked="checked"' : '') + '>' +
+	                	   '<span class="text"></span>' + 
+            		   '</label>';
+        	}
+        },{  
+        	title : "",  
+        	defaultContent : "", 
+        	searchable:false,
+        	orderable:false,
+        	className : "text-center"  ,
+        	render:function( data, type, row, meta ){
+        		return '<a class="btn btn-edit btn-info btn-xs icon-only" title="修改" data-index="' + meta.row + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +
+        			   '<a class="btn btn-delete btn-danger btn-xs icon-only margin-left-10" title="删除" data-index="' + meta.row + '" href="javascript:void(0);"><i class="fa fa-trash-o "></i></a>';
+        	}
+        }]
+    }).on('preXhr.dt', function ( e, settings, data ) {//页面发送请求前，显示加载框
+        bootbox.load();
+    }).on('xhr.dt', function ( e, settings, json, xhr ) {//页面发送请求后，关闭加载遮罩
+    	 bootbox.unload();
+    } );
+	
+	$("#query").click(function(){
+		dataTable.ajax.reload();
+	});
+});
+</script>
 </head>
 <body>
 	<div class="main-container container-fluid">
-                    <div class="row">
-                        <div class="col-xs-12 col-md-12">
-                            <div class="widget">
-                                <div class="widget-header ">
-                                    <span class="widget-caption">Simple DataTable</span>
-                                    <div class="widget-buttons">
-                                        <a href="#" data-toggle="maximize">
-                                            <i class="fa fa-expand"></i>
-                                        </a>
-                                        <a href="#" data-toggle="collapse">
-                                            <i class="fa fa-minus"></i>
-                                        </a>
-                                        <a href="#" data-toggle="dispose">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="widget-body">
-                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="group-checkable" data-set="#flip .checkboxes"></span></div>
-                                                </th>
-                                                <th>
-                                                    Username
-                                                </th>
-                                                <th>
-                                                    Email
-                                                </th>
-                                                <th>
-                                                    Points
-                                                </th>
-                                                <th>
-                                                    Joined
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    shuxer
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:shuxer@gmail.com">shuxer@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    120
-                                                </td>
-                                                <td class="center ">
-                                                    12 Jan 2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    looper
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:looper90@gmail.com">looper90@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    120
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2011
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    userwow
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@yahoo.com">userwow@yahoo.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    user1wow
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">userwow@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr class="odd gradeX">
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    restest
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">test@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    foopl
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    19.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    weep
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    19.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    coop
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    19.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    pppol
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    19.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    test
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    19.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    userwow
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">userwow@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    test
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">test@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    goop
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    weep
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    15.11.2011
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    toopl
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    16.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    userwow
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">userwow@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    9.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    tes21t
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">test@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    14.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    fop
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    13.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    kop
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    17.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    vopl
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    19.11.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    userwow
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">userwow@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    wap
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">test@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    12.12.2012
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    test
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    19.12.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    toop
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    17.12.2010
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="checker"><span class=""><input type="checkbox" class="checkboxes" value="1"></span></div>
-                                                </td>
-                                                <td>
-                                                    weep
-                                                </td>
-                                                <td>
-                                                    <a href="mailto:userwow@gmail.com">good@gmail.com</a>
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td class="center ">
-                                                    15.11.2011
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+		<div class="row">
+		    <div class="col-xs-12 col-md-12">
+		        <div class="widget">
+		            <div class="widget-body">
+                    	<div class="table-toolbar">
+                    		<form class="form-horizontal" id="queryForm">
+                    			 <div class="has-feedback row">
+	                            	<label class="col-sm-1 control-label">姓名</label>
+	                            	<div class="col-sm-2">
+		                                <input type="text" class="form-control" name="username" placeholder="姓名/用户名">
+	                            	</div>
+	                            	<div class="col-sm-8">
+	                            		<a id="query" class="btn btn-default" href="javascript:void(0);"><i class="fa fa-search"></i> 查询</a>
+										<a id="add" class="btn btn btn-sky" href="javascript:void(0);"><i class="fa fa-plus"></i> 添加</a>
+	                            	</div>
+	                            </div>
+                    		</form>
                         </div>
-                    </div>
+				        <table class="table table-striped table-bordered table-hover" id="userTab">
+				        </table>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 	</div>
 </body>
 </html>

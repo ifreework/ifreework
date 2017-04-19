@@ -26,7 +26,7 @@ public class Jurisdiction {
 	 * @return
 	 */
 	public static String getUsername(){
-		return getUser().getUserName();
+		return getUser().getUsername();
 	}
 	
 	

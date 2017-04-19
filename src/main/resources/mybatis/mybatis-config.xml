@@ -9,8 +9,6 @@
 	
 	<typeAliases>
 		<typeAlias type="java.util.HashMap" alias="hashMap" />
-		<typeAlias type="com.ifreework.util.PageData" alias="pd"/>
-		<!-- 分页 -->
-		<typeAlias type="com.ifreework.common.entity.Page" alias="Page"/>
+		<typeAlias type="com.ifreework.common.entity.PageData" alias="pd"/>
 	</typeAliases>
 </configuration>

@@ -2,8 +2,10 @@ package com.ifreework.mapper.system;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.User;
-import com.ifreework.util.PageData;
 
 public interface UserMapper {
 	/**
@@ -16,10 +18,9 @@ public interface UserMapper {
 	 */
 	public User getUserInfo(PageData pd );
 	
-	public User getUserInfoByUserName(PageData pd);
-	
-	
-	public List<User> queryUserList(PageData pd );
+	public List<User> queryUserList(PageData pd);
 	
 	public void update(User user);
+	
+	public void add(User user);
 }

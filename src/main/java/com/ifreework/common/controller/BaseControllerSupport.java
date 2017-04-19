@@ -9,9 +9,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ifreework.common.entity.Page;
+import com.ifreework.common.entity.PageData;
 import com.ifreework.help.ServletRequestHelper;
-import com.ifreework.util.PageData;
 
 
 /**
@@ -73,12 +72,6 @@ public class BaseControllerSupport {
 	}
 	
 	
-	/**得到分页列表的信息
-	 * @return
-	 */
-	public Page getPage(){
-		return new Page();
-	}
 	
 	public static void logBefore(Logger logger, String interfaceName){
 		logger.info("");

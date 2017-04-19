@@ -25,7 +25,10 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ifreework.entity.system.Config;
 
 /**
  * @描述： 文件操作工具类，包涵读取文件大小，文件上传、下载、删除等
@@ -38,7 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class FileUtil {
 	
-	
+	private static Logger log = Logger.getLogger(FileUtil.class);
 	public static String getClassPath(){
 		String rootPath=FileUtil.class.getResource("/").getFile().toString();  
 		return rootPath;
@@ -154,11 +157,48 @@ public class FileUtil {
 			if (file.getOriginalFilename().lastIndexOf(".") >= 0) {
 				fileName += file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 			}
-			copyFile(file.getInputStream(), filePath, fileName);
+			if("1".equals(Config.init().get(Config.FTP_ENABLE))){
+				FTPUtil.upload(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)), Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), fileName, filePath, file.getInputStream());
+			}else{
+				filePath += Config.init().get(Config.FILE_PATH);
+				copyFile(file.getInputStream(), filePath, fileName);
+			}
 		} catch (IOException e) {
 			System.out.println(e);
 		}
 		return filePath + "/" + fileName;
+	}
+	
+	/**
+	 * @Title: fileUpload 
+	 * @Description: TODO(文件上传) 
+	 * @param file : 将要上传的文件
+	 * @param
+	 *         filePath ：文件保存路径
+	 * @param fileName ： 文件保存名称 
+	 * @return String
+	 *         新保存的文件名，文件最终保存路径为filePath + fileName @throws
+	 */
+	public static String fileUpload(String filePath, String savePath) {
+		String fileName = UUID.randomUUID().toString().replace("-",""); // 扩展名格式：
+		try {
+			if (filePath.lastIndexOf(".") >= 0) {
+				fileName += filePath.substring(filePath.lastIndexOf("."));
+			}
+			File file = new File(filePath);
+			InputStream in = new FileInputStream(file);
+			if("1".equals(Config.init().get(Config.FTP_ENABLE))){
+				FTPUtil.upload(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)), Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), fileName, savePath, in);
+			}else{
+				savePath += Config.init().get(Config.FILE_PATH);
+				copyFile(in, savePath, fileName);
+			}
+			return savePath + "/" + fileName;
+		} catch (IOException e) {
+			e.printStackTrace();
+			log.error(e);
+		}
+		return null;
 	}
 
 	/**
@@ -271,10 +311,12 @@ public class FileUtil {
 	 */
 	public static void fileDownload(final HttpServletResponse response, String filePath, String fileName)
 			throws IOException {
-
+		if("1".equals(Config.init().get(Config.FTP_ENABLE))){ // 如果ftp服务器已经启用，则先将文件下载到本地
+			filePath = downLoadFormFTP(filePath, fileName);
+		}
+		
 		File file = new File(filePath);
-
-		if (file.exists()) {
+		if (!StringUtil.isEmpty(filePath) &&  file.exists()) {
 			byte[] data = FileUtil.toByteArray(file);
 			fileName = URLEncoder.encode(fileName, "UTF-8");
 			response.reset();
@@ -288,11 +330,25 @@ public class FileUtil {
 		} else {
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter prw = response.getWriter();
-			prw.print("文件" + fileName + "已被删除！");
+			prw.print("文件" + fileName + "已被删除,文件下载失败！");
 			prw.flush();
 			prw.close();
 		}
 		response.flushBuffer();
+	}
+
+
+	private static String downLoadFormFTP(String filePath, String fileName) {
+		String localPath = getRootPath() + "temp";
+		File localFile = new File(localPath);
+		if(!localFile.exists()){
+			localFile.mkdirs();
+		}
+		if(FTPUtil.download(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)), Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), filePath, localPath)){
+			filePath = localPath + "/" + fileName;
+			return filePath;
+		}
+		return "";
 	}
 
 	
@@ -304,27 +360,8 @@ public class FileUtil {
 	 * @throws IOException 
 	 */
 	public static void fileDownload(final HttpServletResponse response, String filePath) throws IOException {
-
 		File file = new File(filePath);
-
-		if (file.exists()) {
-			byte[] data = FileUtil.toByteArray(file);
-			response.reset();
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
-			response.addHeader("Content-Length", "" + data.length);
-			response.setContentType("application/octet-stream;charset=UTF-8");
-			OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
-			outputStream.write(data);
-			outputStream.flush();
-			outputStream.close();
-		} else {
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter prw = response.getWriter();
-			prw.print("文件" + filePath + "已被删除！");
-			prw.flush();
-			prw.close();
-		}
-		response.flushBuffer();
+		fileDownload(response, filePath, file.getName());
 	}
 
 	/**

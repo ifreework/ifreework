@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +29,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ifreework.common.controller.BaseControllerSupport;
+import com.ifreework.common.entity.PageData;
+import com.ifreework.entity.system.Config;
 import com.ifreework.entity.system.User;
 import com.ifreework.help.HttpRequest;
 import com.ifreework.help.Jurisdiction;
 import com.ifreework.service.system.UserService;
 import com.ifreework.util.Const;
 import com.ifreework.util.FileUtil;
-import com.ifreework.util.PageData;
 import com.ifreework.util.PropertiesUtil;
 import com.ifreework.util.StringUtil;
 
@@ -77,7 +79,7 @@ public class LoginController extends BaseControllerSupport {
 	public ModelAndView gotoIndexView() {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-		String sysName = PropertiesUtil.getProperty(FileUtil.getRootPath() + Const.SYSTEM_CONFIG, "systemName");
+		String sysName = Config.init().get(Config.SYSTEM_NAME);
 		pd.put("SYSNAME", sysName); // 读取系统名称
 		mv.addObject("pd", pd);
 		User user = Jurisdiction.getUser();
@@ -116,36 +118,10 @@ public class LoginController extends BaseControllerSupport {
 		User user = Jurisdiction.getUser();
 		mv.addObject("user",user);
 		
-		String sysName = PropertiesUtil.getProperty(FileUtil.getRootPath() + Const.SYSTEM_CONFIG, "systemName");
+		String sysName = Config.init().get(Config.SYSTEM_NAME);
 		pd.put("SYSNAME", sysName); // 读取系统名称
 		mv.setViewName("/system/main/main");
 		return mv;
-	}
-
-	/**
-	 * 
-	 * @Title: getWeather @Description: TODO(获取天气预报) @param @return @throws
-	 */
-	@RequestMapping(value = "/main/getWeather")
-	@ResponseBody
-	public String getWeather() {
-		String weather_server = PropertiesUtil.getProperty(FileUtil.getRootPath() + Const.SYSTEM_CONFIG,
-				"weather_server");
-		User user = Jurisdiction.getUser();
-		String cityCode = user.getCityCode();
-		String url = weather_server + cityCode;
-		System.out.println(url);
-		String html = HttpRequest.sendPost(url, "");
-		return getBodyHtml(html);
-	}
-
-	private String getBodyHtml(String html) {
-		if (!StringUtil.isEmpty(html)) {
-			html = html.substring(html.indexOf("<body"));
-			html = html.substring(html.indexOf(">") + 1);
-			html = html.substring(0, html.indexOf("<script"));
-		}
-		return html;
 	}
 
 	/**
@@ -227,7 +203,7 @@ public class LoginController extends BaseControllerSupport {
 		User user = Jurisdiction.getUser();
 		String skin = pd.getString("skin");
 		user.setSkin(skin);
-		pd = userService.updateUser(user);
+		pd = userService.update(user);
 		return pd;
 	}
 	

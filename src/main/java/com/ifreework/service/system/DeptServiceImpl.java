@@ -7,12 +7,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.Dept;
 import com.ifreework.entity.system.User;
 import com.ifreework.help.Jurisdiction;
 import com.ifreework.mapper.system.DeptMapper;
 import com.ifreework.util.Const;
-import com.ifreework.util.PageData;
 
 /**
  * 
@@ -67,7 +67,7 @@ public class DeptServiceImpl implements DeptService {
 	private void onOrOffLine(Dept dept, List<User> users) {
 		int onLineNum = 0;
 		for(User user : users){
-			if (Const.WEBSOCKET_USER_MAP.containsKey(user.getUserName())) {
+			if (Const.WEBSOCKET_USER_MAP.containsKey(user.getUsername())) {
 				user.setIsOnline("1");
 				onLineNum++;
 			}
@@ -92,7 +92,7 @@ public class DeptServiceImpl implements DeptService {
 			public int compare(User o1, User o2) {
 				int t = o2.getIsOnline().compareTo(o1.getIsOnline());
 				if(t == 0) {
-					return o2.getName().compareTo(o1.getName());
+					return o2.getPersonName().compareTo(o1.getPersonName());
 				} 
 				return t;
 			}

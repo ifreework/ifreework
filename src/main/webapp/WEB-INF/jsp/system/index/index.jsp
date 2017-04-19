@@ -35,12 +35,12 @@
 					data:data,
 					success : function(result) {
 						console.log(result);
-						if(result.result == "failed"){
-							bootbox.unload();
-							bootbox.alert(result.msg);
-						}else{
+						if(result.result == SUCCESS){
 							changeCookie($("#cookieBox").get(0).checked);
 							location.href="<%=contextPath%>/main"
+						}else{
+							bootbox.unload();
+							bootbox.alert(result.msg);
 						}
 					},
 					complete : function(xhr, ts){
@@ -64,11 +64,11 @@
 	//验证用户名密码是否为空
 	function validate() {
 		if (isNull($("#name").val())) {
-			showMsg("请输入用户名或者手机号。");
+			sanshuo(0,$("#name"));
 			return false;
 		}
 		if (isNull($("#psd").val())) {
-			showMsg("请输入用户密码。");
+			sanshuo(0,$("#psd"));
 			return false;
 		}
 		return true;
@@ -87,6 +87,25 @@
 	}
 	
 	
+	//用户名密码没有输入错误提示
+	function sanshuo(m,targe){
+		if(m <= 50){
+			var t = m%2;
+			if(t == 0 ){
+				targe.css({
+					borderColor:"#cccccc"
+				});
+			}else{
+				targe.css({
+					borderColor:"#da1a1a"
+				});
+			}
+			setTimeout(function(){
+				sanshuo(m + 1,targe)
+			},100);
+		}
+	}
+
 	
 </script>
 </head>

@@ -181,3 +181,7 @@ input{
 	opacity : 1;
 	margin-right: 5px;
 }
+
+.error{
+	border: 1px solid #b33d3d;
+}

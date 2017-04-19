@@ -24,6 +24,7 @@ function InitiateSideMenu() {
 	
 	$(".sidebar-menu").on("click",function(t) {
 		var i = $(t.target).closest("a"),//获取点击的a标签
+		ul = i.closest("ul"),
 		u,
 		r,
 		f;
@@ -31,6 +32,8 @@ function InitiateSideMenu() {
 			if (!i.hasClass("menu-dropdown")){
 				var url = i.data("url");
 				if(!isNull(url)){
+					ul.find("li.active").removeClass("active");
+					i.closest("li").addClass("active");
 					var nowTime = new Date().getTime();
 					if(url.indexOf("?")!=-1) {
 						url += "&_time=" + nowTime;
@@ -39,14 +42,14 @@ function InitiateSideMenu() {
 					}
 					window.frames['ifm'].location.href = url;
 				}
-			} //如果点击的a标签含有下拉菜单，则显示下拉菜单
-				
-			if (r = i.next().get(0), !$(r).is(":visible")) {
-				if (f = $(r.parentNode).closest("ul"), n && f.hasClass("sidebar-menu")) return;
-				f.find("> .open > .submenu").each(function() {
-					this == r || $(this.parentNode).hasClass("active") || $(this).slideUp(200).parent().removeClass("open")
-				})
-			}
+			} else {//如果点击的a标签含有下拉菜单，则显示下拉菜单
+				if (r = i.next().get(0), !$(r).is(":visible")) {
+					if (f = $(r.parentNode).closest("ul"), n && f.hasClass("sidebar-menu")) return;
+					f.find("> .open > .submenu").each(function() {
+						this == r || $(this.parentNode).hasClass("active") || $(this).slideUp(200).parent().removeClass("open")
+					})
+				}
+			} 
 			return n && $(r.parentNode.parentNode).hasClass("sidebar-menu") ? !1 : ($(r).slideToggle(200).parent().toggleClass("open"), !1)
 		}
 	})
@@ -110,7 +113,10 @@ function initUserDropDown(){
     	} else if( id === "user-edit"){
     		var username = i.data("username");
     		openUserEdit(username);
+    	} else if( id === "logout"){
+    		 location.href = "logout";
     	}
+    	
     	
     });
 }

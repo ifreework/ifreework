@@ -624,6 +624,10 @@ public class StringUtil {
 		return dest;
 	}
 
+	
+	public static boolean isNull(String str){
+		return str == null || "".equals(str);
+	}
 	public static void main(String[] args) {
 
 	}

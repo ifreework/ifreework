@@ -12,6 +12,7 @@ package com.ifreework.service.system;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,18 +26,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ifreework.common.entity.PageData;
+import com.ifreework.entity.system.Config;
 import com.ifreework.entity.system.User;
 import com.ifreework.help.Jurisdiction;
 import com.ifreework.mapper.system.UserMapper;
 import com.ifreework.util.Const;
 import com.ifreework.util.FileUtil;
 import com.ifreework.util.ImageUtil;
-import com.ifreework.util.PageData;
 import com.ifreework.util.PropertiesUtil;
 import com.ifreework.util.SecurityUtil;
 import com.ifreework.util.StringUtil;
-
-import net.sourceforge.pinyin4j.PinyinHelper;
 
 /**
  * 描述：
@@ -63,14 +63,11 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 
-	 * @Title: getUserInfoByUserName
-	 * @Description: TODO(通过用户名获取用户信息)
-	 * @param 
-	 * @return   
-	 * @throws
+	 * @Title: getUserInfoByUserName @Description:
+	 *         TODO(通过用户名获取用户信息) @param @return @throws
 	 */
 	public User getUserInfoByUserName(PageData pd) {
-		return userMapper.getUserInfoByUserName(pd);
+		return userMapper.getUserInfo(pd);
 	}
 
 	/**
@@ -80,36 +77,39 @@ public class UserServiceImpl implements UserService {
 	 */
 	public PageData validateUserByNameAndPwd(PageData pd) {
 		// TODO Auto-generated method stub
-		PageData pageDate = new PageData();
 		String username = pd.getString("username");
 		String pwd = pd.getString("password");
 		Session session = Jurisdiction.getSession();
 
 		if (!StringUtil.isEmpty(username) && !StringUtil.isEmpty(pwd)) {
-			pwd = SecurityUtil.encrypt(pwd);
-			pd.put("password", pwd);
 			User user = userMapper.getUserInfo(pd);
 			if (user != null) {
-				session.setAttribute(Const.SESSION_USER, user); // 把用户信息放session中
-				session.removeAttribute(Const.SESSION_SECURITY_CODE); // 清除登录验证码的session
-				// shiro加入身份验证
-				Subject subject = SecurityUtils.getSubject();
-				UsernamePasswordToken token = new UsernamePasswordToken(username, pwd);
-				try {
-					subject.login(token);
-					pageDate.put("result", "success");
-					pageDate.put("msg", "登录成功！");
-				} catch (AuthenticationException e) {
-					pageDate.put("result", "failed");
-					pageDate.put("msg", "身份验证失败！");
+				pwd = SecurityUtil.encrypt(pwd);
+				if (pwd.equals(user.getPassword())) {
+					String status = user.getStatus();
+					if ("1".equals(status)) {
+						session.setAttribute(Const.SESSION_USER, user); // 把用户信息放session中
+						// shiro加入身份验证
+						Subject subject = SecurityUtils.getSubject();
+						UsernamePasswordToken token = new UsernamePasswordToken(username, pwd);
+						try {
+							subject.login(token);
+							pd.setResult(Const.SUCCESS);
+						} catch (AuthenticationException e) {
+							pd.setResult(Const.FAILED);
+							pd.setMsg("登录认证失败。");
+						}
+						return pd;
+					}
+					pd.setResult(Const.FAILED);
+					pd.setMsg("该用户暂未启用，请与管理员联系。");
+					return pd;
 				}
-			} else {
-				pageDate.put("result", "failed");
-				pageDate.put("msg", "用户名或密码错误，请重新输入！");
 			}
-
 		}
-		return pageDate;
+		pd.setResult(Const.FAILED);
+		pd.setMsg("用户名或者密码错误，请重新输入。");
+		return pd;
 	}
 
 	/**
@@ -121,7 +121,9 @@ public class UserServiceImpl implements UserService {
 	public PageData userImgUpload(MultipartFile file, double width, double height, double sw, double sh, double sx,
 			double sy) {
 		PageData pageData = new PageData();
-		String imgPath = "";
+		String rootPath = "";
+		String imgPath = ""; 
+		String localPath = "";
 		try {
 			Map<String, Integer> map = ImageUtil.getImgXY(file.getInputStream());
 			int oW = map.get("width"), oH = map.get("height");
@@ -130,16 +132,17 @@ public class UserServiceImpl implements UserService {
 			sx = sx * oW / width;
 			sy = sy * oH / height;
 
-			imgPath = PropertiesUtil.getProperty(FileUtil.getRootPath() + Const.SYSTEM_CONFIG, "userImgSavePath");
 			User user = Jurisdiction.getUser();
-			imgPath += "/" + user.getUserName();
-
-			imgPath = ImageUtil.cutImage(file.getInputStream(), imgPath, file.getOriginalFilename(), (int) sx, (int) sy,
+			imgPath += "/" + user.getUsername();
+			rootPath = FileUtil.getRootPath() + "temp";
+			
+			localPath = ImageUtil.cutImage(file.getInputStream(), rootPath + imgPath, file.getOriginalFilename(), (int) sx, (int) sy,
 					(int) sw, (int) sh);
-			ImageUtil.changeImge(imgPath, imgPath + ".offLine");
+			ImageUtil.changeImge(localPath, localPath + ".offLine");
+			FileUtil.fileUpload(localPath + ".offLine", imgPath);
+			imgPath = FileUtil.fileUpload(localPath, imgPath);
 			user.setImgPath(imgPath);
-
-			updateUser(user);
+			update(user);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -151,31 +154,39 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 修改用户信息
+	 * 
 	 * @param user
-	 * @return 
+	 * @return
 	 */
-	public PageData updateUser(User user) {
+	public PageData update(User user) {
 		PageData pd = new PageData();
 		userMapper.update(user);
-		pd.put("result", "success");
+		pd.setResult(Const.SUCCESS);
+		return pd;
+	}
+
+	/**
+	 * 新增用户信息
+	 */
+	public PageData add(User user) {
+		PageData pd = new PageData();
+		userMapper.add(user);
+		pd.setResult(Const.SUCCESS);
 		return pd;
 	}
 
 	/**
 	 * 
-	 * @Title: queryContacts
-	 * @Description: TODO(获取所用联系人和在线联系人信息)
-	 * @param 
-	 * @return   
-	 * @throws
+	 * @Title: queryContacts @Description:
+	 *         TODO(获取所用联系人和在线联系人信息) @param @return @throws
 	 */
 	public Map<String, Object> queryContacts(PageData pd) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		pd.put("userName", Jurisdiction.getUser().getUserName());
+		pd.put("username", Jurisdiction.getUser().getUsername());
 		List<User> list = queryUserList(pd);
 		int onLineNum = 0;
 		for (User user : list) {
-			if (Const.WEBSOCKET_USER_MAP.containsKey(user.getUserName())) {
+			if (Const.WEBSOCKET_USER_MAP.containsKey(user.getUsername())) {
 				user.setIsOnline("1");
 				onLineNum++;
 			}
@@ -187,9 +198,9 @@ public class UserServiceImpl implements UserService {
 			 */
 			public int compare(User o1, User o2) {
 				int t = o2.getIsOnline().compareTo(o1.getIsOnline());
-				if(t == 0) {
-					return o2.getName().compareTo(o1.getName());
-				} 
+				if (t == 0) {
+					return o2.getPersonName().compareTo(o1.getPersonName());
+				}
 				return t;
 			}
 		});
@@ -205,7 +216,7 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userMapper.queryUserList(pd);
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println("accccyy".compareTo("x"));
 	}

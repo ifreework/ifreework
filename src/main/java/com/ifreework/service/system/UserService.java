@@ -15,8 +15,8 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.User;
-import com.ifreework.util.PageData;
 
 
 /**        
@@ -49,7 +49,9 @@ public interface UserService {
 	public PageData userImgUpload(MultipartFile file, double width, double height, double sw, double sh, double sx,
 			double sy);
 	
-	public PageData updateUser(User user);
+	public PageData update(User user);
+	
+	public PageData add(User user);
 	
 	/**
 	 * 

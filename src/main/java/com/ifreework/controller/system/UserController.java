@@ -1,14 +1,19 @@
 package com.ifreework.controller.system;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ifreework.common.controller.BaseControllerSupport;
+import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.User;
 import com.ifreework.service.system.UserService;
-import com.ifreework.util.PageData;
+import com.ifreework.util.StringUtil;
 
 /**
  * 
@@ -35,6 +40,15 @@ public class UserController extends BaseControllerSupport {
 	}
 	
 	
+	@RequestMapping(value = "/query")
+	@ResponseBody
+	public PageData query(){
+		PageData pd = this.getPageData();
+		List<User> list = userService.queryUserList(pd);
+		pd = new PageData();
+		pd.setPagination(list);
+		return pd;
+	}
 	/**
 	 * 
 	 * @Title: gotoView
@@ -51,5 +65,19 @@ public class UserController extends BaseControllerSupport {
 		mv.addObject("user",user);
 		mv.setViewName("/system/user/edit");
 		return mv;
+	}
+	
+	
+	@RequestMapping(value = "/save")
+	@ResponseBody
+	public PageData save(@ModelAttribute( "user" ) User user){
+		PageData pd;
+		if(StringUtil.isEmpty(user.getUserId())){
+			pd = userService.add(user);
+		}else{
+			pd = userService.update(user);
+		}
+		
+		return pd;
 	}
 }

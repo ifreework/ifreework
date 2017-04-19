@@ -106,7 +106,7 @@ $().ready(function(){
 	                            </a>
 	                        </li>
 	                        <li>
-	                            <a href="alerts.html">
+	                            <a href="#" data-url="<%=contextPath%>/system/config">
 	                                <span class="menu-text">系统设置</span>
 	                            </a>
 	                        </li>

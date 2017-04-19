@@ -25,6 +25,14 @@ function getRequestParamByName(name) {
  * @param opt
  */
 function ajax(opt){
+	
+	var time = new Date().getTime();
+	if(opt.data == null){
+		opt.data = {_time:time};
+	} else {
+		opt.data._time = time;
+	}
+	
 	var opts = {
 			type:'POST',
 			dataType : "json",
@@ -92,7 +100,7 @@ function writeDom(opt, cbk) {
  */
 $.extend(bootbox, {
 	alert : function(msg,title,fn) {
-		bootbox.dialog({
+		window.top.window.bootbox.dialog({
 	        message: '<div class="row"><div class="col-md-12"><span class="alert-text">'+ msg +'</span></div></div>',
 	        title: '<i class="typcn typcn-info-outline"></i>&nbsp;&nbsp;' + (title == null || title == "" ? "提示" : title),
 	        className: "modal-darkorange modal-alert",
