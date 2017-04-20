@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ifreework.common.email.entity.MailBean;
+import com.ifreework.common.email.helper.MailSend;
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.Config;
 import com.ifreework.entity.system.User;
@@ -161,7 +163,7 @@ public class UserServiceImpl implements UserService {
 	 * @throws
 	 */
 	public PageData resetPwd(PageData pd){
-		String userId = pd.getString("userId");
+		final String userId = pd.getString("userId");
 		if(StringUtil.isEmpty(userId)){
 			pd.setResult(Const.FAILED);
 			return pd;
@@ -171,7 +173,22 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setUserId(userId);
 		user.setPassword(resetPwd);
-		return update(user);
+		pd = update(user);
+		if(Const.SUCCESS.equals(pd.getResult())){
+			//开辟新线程发送密码重置邮件，避免出现邮件发送错误导致修改数据误报
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					User user = Jurisdiction.getUser(userId);
+					MailBean mailBean = new MailBean(user.getEmail(),
+							"密码重置通知", "您的密码已经重置成功！");
+					MailSend h = new MailSend(mailBean);
+					h.sendMail();
+				}
+			}).start();
+		}
+		return pd;
 	}
 
 	/**

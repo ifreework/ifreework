@@ -6,7 +6,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.User;
+import com.ifreework.mapper.system.UserMapper;
 import com.ifreework.util.Const;
 
 
@@ -53,4 +55,14 @@ public class Jurisdiction {
 		Subject currentUser = SecurityUtils.getSubject();  
 		return currentUser.getSession();
 	}
+	
+	
+	public static User getUser(String userId){
+		PageData pd = new PageData();
+		pd.put("userId", userId);
+		UserMapper userMapper = SpringHelper.getBean("userMapper", UserMapper.class);
+		User user = userMapper.getUserInfo(pd);
+		return user;
+	}
+	
 }

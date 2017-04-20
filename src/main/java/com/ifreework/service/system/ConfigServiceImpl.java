@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.util.StringUtil;
 import com.ifreework.common.entity.PageData;
+import com.ifreework.entity.system.Config;
 import com.ifreework.mapper.system.ConfigMapper;
 import com.ifreework.util.Const;
 
@@ -34,6 +35,7 @@ public class ConfigServiceImpl  implements ConfigService {
 			config.put("configValue", pd.get(key));
 			configMapper.update(config);
 		}
+		Config.reset();
 		resultData.setResult(Const.SUCCESS);
 		return resultData;
 	}

@@ -142,7 +142,7 @@ public class FTPUtil {
 		FTPClient ftp = new FTPClient();
 		try {
 			if (validate(url, port, username, password, remotePath, ftp, true)) {
-				ftp.setFileType(FTP.BINARY_FILE_TYPE);  
+				ftp.setFileType(FTP.BINARY_FILE_TYPE);
 				status = ftp.storeFile(fileName, in);
 				log.debug(status ? (fileName + " upload Success!") : (fileName + " upload Failed!"));
 			}
@@ -151,9 +151,8 @@ public class FTPUtil {
 		} catch (Exception e) {
 			if (e instanceof ConnectException) {
 				log.error("Remote " + url + ":" + port + " can't connect!");
-			} else {
-				log.error(e);
 			}
+			log.error(e);
 			return false;
 		} finally {
 			if (ftp.isConnected()) {
@@ -200,7 +199,7 @@ public class FTPUtil {
 			throws IOException {
 		if (!StringUtil.isEmpty(remotePath)) {
 			File remotePathFile = new File(remotePath);
-			String path = remotePathFile.getPath() ;
+			String path = remotePathFile.getPath();
 			for (String dir : path.split("\\\\")) {
 				if (!StringUtil.isEmpty(dir)) {
 					if (createDir) {
@@ -215,7 +214,6 @@ public class FTPUtil {
 		return true;
 	}
 
-	
 	/**
 	 * Description: 从FTP服务器下载文件 @Version. Jul , :: PM by
 	 * 崔红保（cuihongbao@d-heaven.com）创建
@@ -237,7 +235,7 @@ public class FTPUtil {
 	 * @return
 	 */
 	public static boolean download(String url, int port, String username, String password, String filePath,
-			 String localPath) {
+			String localPath) {
 		File file = new File(filePath);
 		String fileName = file.getName();
 		if (fileName.indexOf(".") < 0) { // 如果不是文件，则直接返回下载失败
@@ -246,8 +244,7 @@ public class FTPUtil {
 		}
 		return download(url, port, username, password, file.getParent(), file.getName(), localPath);
 	}
-	
-	
+
 	/**
 	 * Description: 从FTP服务器下载文件 @Version. Jul , :: PM by
 	 * 崔红保（cuihongbao@d-heaven.com）创建
@@ -285,9 +282,8 @@ public class FTPUtil {
 		} catch (Exception e) {
 			if (e instanceof ConnectException) {
 				log.error("Remote " + url + ":" + port + " can't connect!");
-			} else {
-				log.error(e);
 			}
+			log.error(e);
 			return false;
 		} finally {
 			if (ftp.isConnected()) {

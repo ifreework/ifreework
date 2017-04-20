@@ -9,16 +9,28 @@ import com.ifreework.help.SpringHelper;
 import com.ifreework.mapper.system.ConfigMapper;
 
 public class Config {
+	public static final String SYSTEM_NAME = "system_name"; //系统名称
+	
+	public static final String BUTTON_AUTH_ENABLE = "button_auth_enable"; //是否启用按钮权限
 	
 	public static final String FILE_PATH = "file_path"; //文件保存路径，如果开启ftp服务，则为ftp服务器路径
-	public static final String SYSTEM_NAME = "system_name"; //系统名称
 	public static final String FTP_ENABLE = "ftp_enable";  // 是否启用ftp服务器
-	public static final String BUTTON_AUTH_ENABLE = "button_auth_enable"; //是否启用按钮权限
 	public static final String FTP_USERNAME = "ftp_username"; //ftp用户
 	public static final String FTP_PASSWORD = "ftp_password"; //ftp密码
 	public static final String FTP_PORT = "ftp_port"; //ftp密码
 	
 	public static final String RESET_PWD = "reset_pwd"; //用户初始密码
+	
+	
+	public static final String MAIL_SMTP_HOST = "mail_smtp_host"; //邮箱smtp地址
+	public static final String MAIL_SMTP_PORT = "mail_smtp_port"; //邮箱smtp地址端口
+	public static final String MAIL_SMTP_AUTH = "mail_smtp_auth"; //
+	public static final String MAIL_STORE_PROTOCOL = "mail_store_protocol"; //
+	public static final String MAIL_STORE_HOST = "mail_store_host"; //邮箱pop3地址
+	public static final String MAIL_STORE_PORT = "mail_store_port"; //邮箱pop3地址端口
+	public static final String MAIL_USER = "mail_user"; //邮箱用户名
+	public static final String MAIL_PASSWORD = "mail_password"; //邮箱密码
+	
 	private static Config config;
 	private Map<String,Object> map;
 	
@@ -49,6 +61,10 @@ public class Config {
 	
 	public String get(String key){
 		return (String) map.get(key);
+	}
+	
+	public static void reset(){
+		config = null;
 	}
 }
 

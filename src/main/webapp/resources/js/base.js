@@ -123,7 +123,7 @@ $.extend(bootbox, {
 	        buttons: {
 	            success: {
 	                label: "确定",
-	                className: "btn-default",
+	                className: "btn-default green",
 	                callback: function(){
 	                	fn(true);
 	                }
