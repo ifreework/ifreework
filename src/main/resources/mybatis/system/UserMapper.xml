@@ -42,6 +42,22 @@
 	</resultMap>
 
 
+	<resultMap type="java.util.HashMap" id="resourceMap">
+		<id column="RESOURCE_ID" property="resourceId" />
+		<result column="PARENT_ID" property="parentId" />
+		<result column="RESOURCE_ORDER" property="resourceOrder" />
+		<result column="IS_LEAF" property="isLeaf" />
+		<result column="RESOURCE_TYPE" property="resourceType" />
+		<result column="RESOURCE_NAME" property="resourceName" />
+		<result column="RESOURCE_URL" property="resourceUrl" />
+		<result column="RESOURCE_FLAG" property="resourceFlag" />
+		<result column="ICON_CLS" property="iconCls" />
+		<result column="PK" property="pk" />
+		<result column="REMARKS" property="remarks" />
+		<collection property="children" ofType="pd" javaType="ArrayList"
+			column="{userId=USER_ID,parentId=RESOURCE_ID}" select="queryMenuByUserId" />
+	</resultMap>
+
 	<!-- 字段 -->
 	<sql id="userColumns">
 		USER_ID,
@@ -166,6 +182,22 @@
 		  from  sys_authority a
 		  where a.resource_id = #{resourceId}
 	</select>
+	
+	
+	<!-- 根据用户id查询用户所具有的菜单 -->
+	<select id="queryMenuByUserId" parameterType="pd" resultMap="resourceMap">
+		select distinct  re.*,#{userId} user_id from (select r.role_id
+		  from sys_role r
+		 start with r.role_id in
+		            (select ur.role_id from sys_user_role ur where ur.user_id = #{userId})
+		connect by prior r.role_id = r.parent_id ) temp_role -- 查询用户所具有的角色与
+		inner join sys_role_authority ra on temp_role.role_id = ra.role_id --查询角色所拥有的权限
+		inner join sys_authority a on ra.authority_pk = a.pk 
+		inner join sys_resource re on a.resource_id = re.resource_id and re.resource_type = 'M' and re.parent_id = #{parentId} --查询权限所对用资源
+		order by re.resource_order
+	</select>
+	
+	
 	
 	<!-- 修改 -->
 	<update id="update" parameterType="com.ifreework.entity.system.User">

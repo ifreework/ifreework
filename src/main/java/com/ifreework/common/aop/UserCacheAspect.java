@@ -43,7 +43,6 @@ public class UserCacheAspect extends BaseCacheAspect<String, User> {
 
 	private String usernameKeyPrefix = UserConstant.USERNAME_KEY_PREFIX.toString(); // 用户名key前缀
 
-
 	/**
 	 * 
 	 * 描述：登录成功后，保存缓存信息，用户修改后，修改缓存信息
@@ -53,7 +52,7 @@ public class UserCacheAspect extends BaseCacheAspect<String, User> {
 	 * @return   
 	 * @throws
 	 */
-	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.update(*)) ")
+	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.update(..))")
 	private void cachePutPointcutByArg() {
 	}
 	
@@ -66,7 +65,7 @@ public class UserCacheAspect extends BaseCacheAspect<String, User> {
 	 * @return   
 	 * @throws
 	 */
-	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.login(*)) ")
+	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.login(..))")
 	private void cachePutPointcutByReturn() {
 	}
 

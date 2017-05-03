@@ -72,4 +72,15 @@ public interface UserService {
 	 */
 	public Map<String,Object> queryContacts(PageData pd);
 	
+	/**
+	 * 
+	 * 描述：通过用户名查询用户所拥有的菜单
+	 * @Title: queryMenuByUserId
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@SuppressWarnings("rawtypes")
+	public List queryMenuByUserId();
+	
 }

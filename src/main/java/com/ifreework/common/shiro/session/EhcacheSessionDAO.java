@@ -74,6 +74,7 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 			logger.error("session or session id is null");
 			return;
 		}
+		logger.debug("delete session : " + session.getId());
 		cache.remove(getKey(session.getId()));
 	}
 
@@ -93,6 +94,7 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 				activies.add(session);
 			}
 		}
+		logger.debug("Active sessions :" + activies);
 		return activies;
 	}
 
@@ -106,6 +108,7 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 	 */
 	@Override
 	public void update(Session session) throws UnknownSessionException {
+		logger.debug("update session : " + session.getId());
 		saveSession(session);
 	}
 
@@ -122,6 +125,7 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 		Serializable sessionId = this.generateSessionId(session);
 		this.assignSessionId(session, sessionId);
 		this.saveSession(session);
+		logger.debug("create session : " + sessionId);
 		return sessionId;
 	}
 

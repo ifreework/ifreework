@@ -39,7 +39,11 @@
 		        }, {  
 		        	data : "iconCls",  
 		        	title : "图标",  
-		        	defaultContent : ""
+		        	defaultContent : "",
+		        	className : "text-center"  ,
+		        	render:function( data, type, row, meta ){
+		        		return data == null || data == "" ? "" : "<i class='" + data + "'></i>";
+		        	}
 		        },  {  
 		        	data : "remarks",  
 		        	title : "说明",  
@@ -119,7 +123,7 @@
 						"<td>" + row.resourceUrl + "</td>" + 
 						"<td>" + row.pk + "</td>" + 
 						"<td>" + row.resourceType + "</td>" + 
-						"<td>" + row.iconCls + "</td>" + 
+						"<td class='text-center'>" + (row.iconCls == null || row.iconCls == "" ? "" : "<i class='" + row.iconCls + "'></i>" ) + "</td>" + 
 						"<td>" + row.remarks + "</td>" + 
 						"<td class='text-center'>" + '<a class="btn btn-add btn-sky btn-xs icon-only" title="新增" data-resourceid="' + row.resourceId + '" href="javascript:void(0);"><i class="fa fa-plus "></i></a>' +
 	        			   		 '<a class="btn btn-edit btn-info btn-xs icon-only margin-left-10" title="修改" data-resourceid="' + row.resourceId + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +

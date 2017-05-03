@@ -15,6 +15,18 @@ public interface UserMapper {
 	
 	public List<User> queryUserList(PageData pd);
 	
+	
+	/**
+	 * 
+	 * 描述：通过用户名查询用户所拥有的菜单
+	 * @Title: queryMenuByUserId
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@SuppressWarnings("rawtypes")
+	public List queryMenuByUserId(PageData pd);
+	
 	/**
 	 * 
 	 * 描述：查询当前用户具有的所有权限

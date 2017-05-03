@@ -21,11 +21,6 @@
 </script>
 <div class="mian">
 	<div class="error_div">
-        <a href="#">返回首页</a>
-        <p id="redirect_info" class="info">5秒后返回首页</p>
-        <script type="text/javascript">
-            curCount=count;
-            InterValObj = window.setInterval(SetRemainTime, 1000);
-        </script>
+        404
     </div>
 </div>

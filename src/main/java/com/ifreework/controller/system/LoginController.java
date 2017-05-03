@@ -11,6 +11,7 @@ package com.ifreework.controller.system;
 
 
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -80,8 +81,7 @@ public class LoginController extends BaseControllerSupport {
 		mv.addObject("pd", pd);
 		User user = UserManager.getUser();
 		if (user != null) {
-			mv.addObject("user",user);
-			mv.setViewName("/system/main/main");
+			return gotoMainView();
 		} else {
 			mv.setViewName("/system/index/index");
 		}
@@ -105,30 +105,27 @@ public class LoginController extends BaseControllerSupport {
 	 * 
 	 * @Title: gotoIndexView @Description: TODO(用户首页跳转) @param @return @throws
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/main")
 	public ModelAndView gotoMainView() {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-		mv.addObject("pd", pd);
+		
 		
 		User user = UserManager.getUser();
-		mv.addObject("user",user);
+		
+		List menuList = userService.queryMenuByUserId();
 		
 		String sysName = Config.init().get(Config.SYSTEM_NAME);
 		pd.put("SYSNAME", sysName); // 读取系统名称
+		
+		mv.addObject("user",user);
+		mv.addObject("pd", pd);
+		mv.addObject("menuList",menuList);
 		mv.setViewName("/system/main/main");
 		return mv;
 	}
 
-	/**
-	 * @Title: error404 @Description: TODO(404错误页面跳转) @param @return @throws
-	 */
-	@RequestMapping(value = "/error/404")
-	public ModelAndView error404() {
-		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("/system/error/404");
-		return mv;
-	}
 
 	@RequestMapping(value = "/main/userChangeImg")
 	public ModelAndView userChangeImg() {

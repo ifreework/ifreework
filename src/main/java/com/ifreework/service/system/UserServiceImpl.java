@@ -315,4 +315,22 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * 
+	 * 描述：通过用户名查询用户所拥有的菜单
+	 * @Title: queryMenuByUserId
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@SuppressWarnings("rawtypes")
+	public List queryMenuByUserId(){
+		PageData pd = new PageData();
+		User user = UserManager.getUser();
+		pd.put("userId", user.getUserId());
+		pd.put("parentId", "0");
+		return userMapper.queryMenuByUserId(pd);
+	}
 }

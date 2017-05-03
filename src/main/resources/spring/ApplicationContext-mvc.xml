@@ -124,9 +124,9 @@
 			<mvc:exclude-mapping path="/websocket"/>  
 			<mvc:exclude-mapping path="/error/**"/>  
 			<bean class="com.ifreework.common.shiro.interceptor.AuthHandlerInterceptor">
-				<property name="unAuthorizedUrl" value="/WEB-INF/jsp/system/error/unauthorized.jsp"></property>
+				<property name="unAuthorizedUrl" value="/error/600"></property>
 				<property name="shiroAuth" ref="userService" />
-			</bean>
+			</bean>                 
 		</mvc:interceptor>
 	</mvc:interceptors>
 
