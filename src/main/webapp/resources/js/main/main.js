@@ -34,13 +34,7 @@ function InitiateSideMenu() {
 				if(!isNull(url)){
 					ul.find("li.active").removeClass("active");
 					i.closest("li").addClass("active");
-					var nowTime = new Date().getTime();
-					if(url.indexOf("?")!=-1) {
-						url += "&_time=" + nowTime;
-					}else{
-						url += "?_time=" + nowTime;
-					}
-					window.frames['ifm'].location.href = url;
+					W.openPage(url);
 				}
 			} else {//如果点击的a标签含有下拉菜单，则显示下拉菜单
 				if (r = i.next().get(0), !$(r).is(":visible")) {
@@ -59,47 +53,17 @@ function InitiateSideMenu() {
 //打开编辑头像界面
 function openUserImg(){
 	var dialog = bootbox.dialog({
+		id:"userImgDialog",
 		title: "头像设置",
-		height:485,
-		width:740,
-        message: "<iframe id='userChangeImgDialog' name='userChangeImgDialog'  src='main/userChangeImg'></iframe>",
-        buttons: {
-            "确定": {
-            	className:"btn-primary",
-                callback: function () {
-                	var dropzone = window.frames["userChangeImgDialog"].dropz, img = $(window.frames["userChangeImgDialog"].document).find(".dropzone-img-view img"),
-                	 	cDiv = $(window.frames["userChangeImgDialog"].document).find(".dropzone-img-view .center"),
-                	 	width=img.width(),height=img.height(),sw = cDiv.width() + 2,sh = cDiv.height() + 2,sx = cDiv.position().left,sy = cDiv.position().top;
-                	dropzone.options.params = {
-                		width:width,
-                		height:height,
-                		sw:sw,
-                		sh:sh,
-                		sx:sx,
-                		sy:sy
-                	};
-                	dropzone.on("success", function(file) {
-                		$("#userImg").attr("src",$("#userImg").attr("src")  + "?_time=" + new Date().getTime());
-                		dialog.modal("hide");
-                	});
-                	dropzone.processQueue();
-                	return false;
-                }
-            },
-            "取消": {
-            	className: "btn-primary",
-                callback: function () { }
-            }
-        }
+		width:700,
+        loadUrl: "main/userChangeImg"
     });
 }
 
 //打开用户编辑界面
 function openUserEdit(username){
-	var url = "system/user/edit?username=" + username,
-	    t = new Date().getTime();
-	url += "&_time=" + t;
-	window.frames['ifm'].location.href = url;
+	var url = "system/user/edit";
+	W.openPage(url,{username:username});
 }
 
 //初始化用户下拉框点击事件
@@ -125,8 +89,9 @@ function initUserDropDown(){
 //当页面大小发生改变时，修改iframe的高度
 function initFrameHeight(){
 	var bodyHeight = $("body").height();
-	console.log("bodyHeight:" +  bodyHeight);
-	$("#ifm").height(bodyHeight - 101);
+	$("#page-body").css({
+		minHeight:bodyHeight - 85
+	});
 }
 
 

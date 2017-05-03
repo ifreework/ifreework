@@ -1,71 +1,55 @@
 package com.ifreework.entity.system;
-/**
- * 
- * 描述：角色    
- * @author：wangyh qq735789026  
- * @创建时间：2016年7月6日 下午4:04:50    
- * @修改人：wangyh    
- * @修改时间：2016年7月6日 下午4:04:50    
- * @version 1.0
- */
-public class Role {
-	private String ROLE_ID;
-	private String ROLE_NAME;
-	private String RIGHTS;
-	private String PARENT_ID;
-	private String ADD_QX;
-	private String DEL_QX;
-	private String EDIT_QX;
-	private String CHA_QX;
+
+
+
+
+public class Role{
 	
-	public String getROLE_ID() {
-		return ROLE_ID;
+	//columns START
+	private java.lang.String roleId;
+	private java.lang.String roleName;
+	private java.lang.String parentId;
+	private java.lang.String isLeaf;
+	private java.lang.String remarks;
+	//columns END
+
+	public void setRoleId(java.lang.String value) {
+		this.roleId = value;
 	}
-	public void setROLE_ID(String rOLE_ID) {
-		ROLE_ID = rOLE_ID;
-	}
-	public String getROLE_NAME() {
-		return ROLE_NAME;
-	}
-	public void setROLE_NAME(String rOLE_NAME) {
-		ROLE_NAME = rOLE_NAME;
-	}
-	public String getRIGHTS() {
-		return RIGHTS;
-	}
-	public void setRIGHTS(String rIGHTS) {
-		RIGHTS = rIGHTS;
-	}
-	public String getPARENT_ID() {
-		return PARENT_ID;
-	}
-	public void setPARENT_ID(String pARENT_ID) {
-		PARENT_ID = pARENT_ID;
-	}
-	public String getADD_QX() {
-		return ADD_QX;
-	}
-	public void setADD_QX(String aDD_QX) {
-		ADD_QX = aDD_QX;
-	}
-	public String getDEL_QX() {
-		return DEL_QX;
-	}
-	public void setDEL_QX(String dEL_QX) {
-		DEL_QX = dEL_QX;
-	}
-	public String getEDIT_QX() {
-		return EDIT_QX;
-	}
-	public void setEDIT_QX(String eDIT_QX) {
-		EDIT_QX = eDIT_QX;
-	}
-	public String getCHA_QX() {
-		return CHA_QX;
-	}
-	public void setCHA_QX(String cHA_QX) {
-		CHA_QX = cHA_QX;
+	
+	public java.lang.String getRoleId() {
+		return this.roleId;
 	}
 	
 	
+	
+	public void setRoleName(java.lang.String value) {
+		this.roleName = value;
+	}
+	public java.lang.String getRoleName() {
+		return this.roleName;
+	}	
+	
+	public void setParentId(java.lang.String value) {
+		this.parentId = value;
+	}
+	public java.lang.String getParentId() {
+		return this.parentId;
+	}	
+	
+	public void setIsLeaf(java.lang.String value) {
+		this.isLeaf = value;
+	}
+	public java.lang.String getIsLeaf() {
+		return this.isLeaf;
+	}	
+	
+	public void setRemarks(java.lang.String value) {
+		this.remarks = value;
+	}
+	public java.lang.String getRemarks() {
+		return this.remarks;
+	}	
 }
+
+

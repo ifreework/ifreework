@@ -884,7 +884,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.base64 = {
         /**
-         * Return true if the input value is a base 64 encoded string.
+         * Return true if the input value is a base 64 encoded string.  是否是base64编码的字符串
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -923,7 +923,7 @@
         },
 
         /**
-         * Return true if the input value is between (strictly or not) two given numbers
+         * Return true if the input value is between (strictly or not) two given numbers  比较数字是否在两个数字之间
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -983,7 +983,7 @@
         },
 
         /**
-         * Check if the number of checked boxes are less or more than a given number
+         * Check if the number of checked boxes are less or more than a given number  checkbox选中数量
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1009,7 +1009,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.creditCard = {
         /**
-         * Return true if the input value is valid credit card number
+         * Return true if the input value is valid credit card number  信用卡号
          * Based on https://gist.github.com/DiegoSalazar/4075533
          *
          * @param {BootstrapValidator} validator The validator plugin instance
@@ -1113,7 +1113,7 @@
         },
 
         /**
-         * Return true if the input value is a valid CVV number.
+         * Return true if the input value is a valid CVV number. CVV银行卡验证
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1223,7 +1223,7 @@
         },
 
         /**
-         * Return true if the input value is valid date
+         * Return true if the input value is valid date  日期
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1244,7 +1244,7 @@
                 return true;
             }
 
-            options.format = options.format || 'MM/DD/YYYY';
+            options.format = options.format || 'YYYY/MM/DD';
 
             var formats    = options.format.split(' '),
                 dateFormat = formats[0],
@@ -1338,7 +1338,7 @@
         },
 
         /**
-         * Return true if the input value is different with given field's value
+         * Return true if the input value is different with given field's value  比较和另外一个字段是否值不相等
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1370,7 +1370,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.digits = {
         /**
-         * Return true if the input value contains digits only
+         * Return true if the input value contains digits only  比较两个值是否相等
          *
          * @param {BootstrapValidator} validator Validate plugin instance
          * @param {jQuery} $field Field element
@@ -1430,7 +1430,7 @@
         },
 
         /**
-         * Return true if and only if the input value is a valid email address
+         * Return true if and only if the input value is a valid email address  邮件地址
          *
          * @param {BootstrapValidator} validator Validate plugin instance
          * @param {jQuery} $field Field element
@@ -1460,7 +1460,7 @@
         },
 
         /**
-         * Validate upload file. Use HTML 5 API if the browser supports
+         * Validate upload file. Use HTML 5 API if the browser supports  验证文件
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1535,7 +1535,7 @@
         },
 
         /**
-         * Return true if the input value is greater than or equals to given number
+         * Return true if the input value is greater than or equals to given number  大于
          *
          * @param {BootstrapValidator} validator Validate plugin instance
          * @param {jQuery} $field Field element
@@ -1558,7 +1558,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.grid = {
         /**
-         * Validate GRId (Global Release Identifier)
+         * Validate GRId (Global Release Identifier)全球版本标识符
          * Examples:
          * - Valid: A12425GABC1234002M, A1-2425G-ABC1234002-M, A1 2425G ABC1234002 M, Grid:A1-2425G-ABC1234002-M
          * - Invalid: A1-2425G-ABC1234002-Q
@@ -1591,7 +1591,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.hex = {
         /**
-         * Return true if and only if the input value is a valid hexadecimal number
+         * Return true if and only if the input value is a valid hexadecimal number  16进制数字
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1616,7 +1616,7 @@
         },
 
         /**
-         * Return true if the input value is a valid hex color
+         * Return true if the input value is a valid hex color  16进制色码
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1641,7 +1641,7 @@
         },
 
         /**
-         * Validate an International Bank Account Number (IBAN)
+         * Validate an International Bank Account Number (IBAN) 国际银行帐号
          * To test it, take the sample IBAN from
          * http://www.nordea.com/Our+services/International+products+and+services/Cash+Management/IBAN+countries/908462.html
          *
@@ -1777,7 +1777,7 @@
         },
 
         /**
-         * Check if input value equals to value of particular one
+         * Check if input value equals to value of particular one  比较两个字段值相等
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1853,7 +1853,7 @@
         },
 
         /**
-         * Return true if the input value is an integer
+         * Return true if the input value is an integer 是否为整数
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -1908,7 +1908,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.isbn = {
         /**
-         * Return true if the input value is a valid ISBN 10 or ISBN 13 number
+         * Return true if the input value is a valid ISBN 10 or ISBN 13 number 国际标准书号
          * Examples:
          * - Valid:
          * ISBN 10: 99921-58-10-7, 9971-5-0210-0, 960-425-059-0, 80-902734-1-6, 85-359-0277-5, 1-84356-028-3, 0-684-84328-5, 0-8044-2957-X, 0-85131-041-9, 0-943396-04-2, 0-9752298-0-X
@@ -1989,9 +1989,9 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.ismn = {
         /**
-         * Validate ISMN (International Standard Music Number)
+         * Validate ISMN (International Standard Music Number) 国际标准音乐号
          * Examples:
-         * - Valid: M230671187, 979-0-0601-1561-5, 979 0 3452 4680 5, 9790060115615
+         * - Valid: M230671187, 979-0-0601-1561-5, 979 0 3452 4680 5, 9790060115615 
          * - Invalid: 9790060115614
          *
          * @see http://en.wikipedia.org/wiki/International_Standard_Music_Number
@@ -2103,7 +2103,7 @@
         },
 
         /**
-         * Return true if the input value is less than or equal to given number
+         * Return true if the input value is less than or equal to given number  小于某个字段的值
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2126,7 +2126,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.mac = {
         /**
-         * Return true if the input value is a MAC address.
+         * Return true if the input value is a MAC address. 物理地址
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2152,7 +2152,7 @@
         },
 
         /**
-         * Check if input value is empty or not
+         * Check if input value is empty or not  不为空
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2175,7 +2175,7 @@
 ;(function($) {
     $.fn.bootstrapValidator.validators.numeric = {
         /**
-         * Validate decimal number
+         * Validate decimal number  是否为数字
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2201,7 +2201,7 @@
         },
 
         /**
-         * Return true if the input value contains a valid US phone number only
+         * Return true if the input value contains a valid US phone number only  是否是电话号码
          *
          * @param {BootstrapValidator} validator Validate plugin instance
          * @param {jQuery} $field Field element
@@ -2226,7 +2226,7 @@
                     // Area code may be delimited with (), & sections may be delimited with . or -
                     // Test: http://regexr.com/38mqi
                     value = value.replace(/\D/g, '');
-                    return (/^(?:(1\-?)|(\+1 ?))?\(?(\d{3})[\)\-\.]?(\d{3})[\-\.]?(\d{4})$/).test(value) && (value.length == 10);
+                    return (/^(?:(1\-?)|(\+1 ?))?\(?(\d{3})[\)\-\.]?(\d{3})[\-\.]?(\d{4})$/).test(value) && (value.length == 11);
             }
         }
     }
@@ -2250,7 +2250,7 @@
         },
 
         /**
-         * Check if the element value matches given regular expression
+         * Check if the element value matches given regular expression  自定义正则
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2278,7 +2278,7 @@
         },
 
         /**
-         * Request a remote server to check the input value
+         * Request a remote server to check the input value  远程地址
          *
          * @param {BootstrapValidator} validator Plugin instance
          * @param {jQuery} $field Field element
@@ -2313,6 +2313,7 @@
                 type: 'POST',
                 url: options.url,
                 dataType: 'json',
+                async:options.async == null ? true : false,
                 data: data
             });
             xhr.then(function(response) {
@@ -2330,7 +2331,7 @@
 ;(function($) {
 	$.fn.bootstrapValidator.validators.siren = {
 		/**
-		 * Check if a string is a siren number
+		 * Check if a string is a siren number  警报数量
 		 *
 		 * @param {BootstrapValidator} validator The validator plugin instance
 		 * @param {jQuery} $field Field element
@@ -2354,7 +2355,7 @@
 ;(function($) {
 	$.fn.bootstrapValidator.validators.siret = {
         /**
-         * Check if a string is a siret number
+         * Check if a string is a siret number 未知
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2394,7 +2395,7 @@
         },
 
         /**
-         * Return true if the input value is valid step one
+         * Return true if the input value is valid step one  验证第一步
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2450,7 +2451,7 @@
         },
 
         /**
-         * Check if a string is a lower or upper case one
+         * Check if a string is a lower or upper case one  验证是否是大写或者小写
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2477,7 +2478,7 @@
     };
 }(window.jQuery));
 ;(function($) {
-    $.fn.bootstrapValidator.validators.stringLength = {
+    $.fn.bootstrapValidator.validators.stringLength = { //字符串长度
         html5Attributes: {
             message: 'message',
             min: 'min',
@@ -2529,7 +2530,7 @@
         },
 
         /**
-         * Return true if the input value is a valid URL
+         * Return true if the input value is a valid URL  URL地址
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -2627,7 +2628,7 @@
         },
 
         /**
-         * Return true if and only if the input value is a valid UUID string
+         * Return true if and only if the input value is a valid UUID string  UUID验证
          *
          * @see http://en.wikipedia.org/wiki/Universally_unique_identifier
          * @param {BootstrapValidator} validator The validator plugin instance
@@ -2663,7 +2664,7 @@
         },
 
         /**
-         * Validate an European VAT number
+         * Validate an European VAT number 欧洲增值税号码
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element
@@ -3870,7 +3871,7 @@
         },
 
         /**
-         * Return true if and only if the input value is a valid country zip code
+         * Return true if and only if the input value is a valid country zip code  邮政编码
          *
          * @param {BootstrapValidator} validator The validator plugin instance
          * @param {jQuery} $field Field element

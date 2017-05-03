@@ -13,6 +13,8 @@ package com.ifreework.util;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 描述：
  * 
@@ -23,23 +25,57 @@ import java.net.UnknownHostException;
  * @version 1.0
  */
 public class IPUtil {
+
 	/**
 	 * 
+	 * 描述：获取本机IP
 	 * @Title: getIp
-	 * @Description: TODO(获取本机IP地址)
-	 * @return String
+	 * @param 
+	 * @return   
+	 * @throws
 	 */
 	public static String getIp() {
 		String ip = "";
 		try {
 			InetAddress inet = InetAddress.getLocalHost();
 			ip = inet.getHostAddress();
-			// System.out.println("本机的ip=" + ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 
 		return ip;
 	}
+	
+	/**
+	 * 
+	 * 描述：获取请求机器IP
+	 * @Title: getIpAddr
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+    public static String getIpAddr(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Forwarded-For");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+        }
+
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
 
 }

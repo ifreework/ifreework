@@ -1,13 +1,49 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>${pd.SYSNAME}</title>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="<%=cssPath%>/index/index.css">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title><%=Config.init().get(Config.SYSTEM_NAME) %></title>
+<link rel="shortcut icon" href="${ imagePath }/system/favicon.ico"
+	type="image/x-icon" />
+
+<!-- bootstrap核心样式 -->	
+<link rel="stylesheet" href="${ cssPath }/bootstrap.min.css"></link>
+<link rel="stylesheet" href="${ cssPath }/ifreework.min.css"></link>
+
+<!-- icon字体样式 -->
+<link rel="stylesheet" href="${ cssPath }/font-awesome.min.css"></link>
+<link rel="stylesheet" href="${ cssPath }/weather-icons.min.css"  />
+<link rel="stylesheet" href="${ cssPath }/typicons.min.css"  />
+
+<!-- jquery,bootstrap插件样式 -->
+
+<!-- 自定义核心样式 -->
+<link rel="stylesheet" href="${ cssPath }/base.css"  />
+<link rel="stylesheet" href="${ cssPath }/main/style.css"  />
+
+<link rel="stylesheet" href="${ cssPath }/index/index.css">
+
+<!-- jquery,bootstrap核心 -->
+<script type="text/javascript" src="${ jsPath }/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${ jsPath }/jquery/jquery.cookie.js"></script>
+<script src="${ jsPath }/bootstrap/bootstrap.min.js"></script>
+
+<!-- jquery,bootstrap插件 -->
+<script src="${ jsPath }/bootstrap/bootbox/bootbox.js"></script>
+
+<!-- 部分自定义方法 -->
+<script src="${ jsPath }/base.js"></script>
+
 <script>
+	var SUCCESS = "<%=Constant.SUCCESS %>"; //前后台统一成功标志
+	var ERROR = "<%=Constant.ERROR %>";  //前后台错误标志
+	var FAILED = "<%=Constant.FAILED %>"; //前后台失败标志
+	
 	$().ready(function() {
-		loadCookie();
+		validateLogin(); //验证是否有登录提示信息
+		loadCookie(); //加载是否有cookie信息
 		
 		//点击登录按钮，执行登录操作
 		$("#login").click(function(event) {
@@ -31,13 +67,13 @@
 		if (validate()) {
 			var data = $("#loginForm").serializeJson();
 			ajax({
-					url : "<%=contextPath%>/login",
+					url : "${contextPath}/login",
 					data:data,
 					success : function(result) {
 						console.log(result);
 						if(result.result == SUCCESS){
 							changeCookie($("#cookieBox").get(0).checked);
-							location.href="<%=contextPath%>/main"
+							location.href="${contextPath}/main"
 						}else{
 							bootbox.unload();
 							bootbox.alert(result.msg);
@@ -64,11 +100,11 @@
 	//验证用户名密码是否为空
 	function validate() {
 		if (isNull($("#name").val())) {
-			sanshuo(0,$("#name"));
+			bootbox.alert("请输入您的用户名。");
 			return false;
 		}
 		if (isNull($("#psd").val())) {
-			sanshuo(0,$("#psd"));
+			bootbox.alert("请输入您的密码。");
 			return false;
 		}
 		return true;
@@ -85,27 +121,16 @@
 			$.cookie('password', '', { expires: -1 });
 		}
 	}
-	
-	
-	//用户名密码没有输入错误提示
-	function sanshuo(m,targe){
-		if(m <= 50){
-			var t = m%2;
-			if(t == 0 ){
-				targe.css({
-					borderColor:"#cccccc"
-				});
-			}else{
-				targe.css({
-					borderColor:"#da1a1a"
-				});
-			}
-			setTimeout(function(){
-				sanshuo(m + 1,targe)
-			},100);
+
+	//验证是否有用户登录提示信息
+	function validateLogin(){
+		var errorType = "${errorType}";
+		if (errorType === "userIsNull") {
+			bootbox.alert("用户未登录或登录超时，请重新登录。","",function(){
+				window.location.href = "${contextPath}";
+			});
 		}
 	}
-
 	
 </script>
 </head>
@@ -135,7 +160,7 @@
 							<label><input type="checkbox" id="cookieBox"><span style="position: absolute;left:20px">下次自动登录</span></label>
 						</div>
 						<div class="col-xs-4">
-							<a href="#">忘记密码？</a>
+							<a href="javascript:void(0)">忘记密码？</a>
 						</div>
 					</div>
 				</div>
@@ -152,6 +177,6 @@
 		<span class="barter_btn">版权所有：iFreeWork开发者团队</span>
 		<span class="barter_btn">Copyright © Wangyh qq735789026 2014-2017</span>
 	</div>
-	<img src="<%=imagePath%>/index/9.jpg" width="100%" style="position: absolute;left:0px;">
+	<img src="${imagePath}/system/9.jpg" width="100%" style="position: absolute;left:0px;">
 </body>
 </html>

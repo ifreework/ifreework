@@ -46,7 +46,11 @@ public class PageData extends HashMap implements Map {
 	 * 描述：获取分页事，每页显示多少条数据 @Title: getLength @param @return @throws
 	 */
 	public Integer getLength() {
-		return (Integer) this.get("length");
+		String length = (String) this.get("length");
+		if(StringUtil.isEmpty(length) ){
+			return null;
+		}
+		return Integer.parseInt(length) < 0 ? 0 : Integer.parseInt(length)  ;
 	}
 
 	/**
@@ -61,7 +65,11 @@ public class PageData extends HashMap implements Map {
 	 * 获取页码 描述： @Title: getStart @param @return @throws
 	 */
 	public Integer getStart() {
-		return (Integer) this.get("start");
+		String start = (String) this.get("start");
+		if(StringUtil.isEmpty(start) ){
+			return null;
+		}
+		return Integer.parseInt(start) == 0 ? 1 : Integer.parseInt(start)    ;
 	}
 
 	/**
@@ -100,8 +108,9 @@ public class PageData extends HashMap implements Map {
 			this.setData(list);
 			this.setRecordsFiltered(i);
 		} else {
-			log.error(list.getClass() + " is not a Page Object!");
+			this.setRecordsFiltered(list.size());
 		}
+		this.setData(list);
 	}
 
 	/**
@@ -115,8 +124,8 @@ public class PageData extends HashMap implements Map {
 	/**
 	 * 设置返回结果 描述： @Title: setResult @param @return @throws
 	 */
-	public void setResult(String result) {
-		this.put("result", result);
+	public void setResult(Object result) {
+		this.put("result", result.toString());
 	}
 
 	/**
@@ -181,6 +190,8 @@ public class PageData extends HashMap implements Map {
 		setColumns(returnMap);
 		setOrder(returnMap);
 		map = returnMap;
+		
+		returnMap.put("length", getLength());
 		log.info("The page param is " + JSON.toJSONString(map));
 	}
 

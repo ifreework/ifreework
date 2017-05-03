@@ -82,7 +82,12 @@
     // show the dialog immediately by default
     show: true,
     // dialog container
-    container: "body"
+    container: "body",
+    height:null,
+    width:null,
+    loadUrl:null ,//请求路径，如果该参数不为空，则从服务器加载数据
+    loadData : {}, //异步请求参数
+    load:null //异步请求成功后回调函数
   };
 
   // our public object; augmented after our private API
@@ -137,8 +142,8 @@
       throw new Error("Please supply an object of options");
     }
 
-    if (!options.message) {
-      throw new Error("Please specify a message");
+    if (!options.message && !options.loadUrl) {
+      throw new Error("Please specify a message or loadUrl");
     }
 
     // make sure any supplied options take precedence over defaults
@@ -591,9 +596,15 @@
       callbacks[key] = button.callback;
     });
 
+    
+    if(options.id){
+    	dialog.attr("id",options.id);
+    }
     if(options.width){
     	modalDialog.width(options.width);
     }
+    
+    
     if(options.height){
     	var height = options.height;
     	modalDialog.height(height);
@@ -606,9 +617,23 @@
     	 body.find(".bootbox-body").height(height);
     }
     
+    if(options.loadUrl){
+    	 var _htm = '<div class="text-center padding-top-20 padding-bottom-20">页面加载中......</div>'
+    	 body.find(".bootbox-body").html(_htm);
+    	 if(!options.loadData){
+    		 options.loadData = {};
+    	 }
+    	 options.loadData._time = new Date().getTime();
+    	
+    	 body.find(".bootbox-body").load(options.loadUrl,options.loadData,function(response,status,xhr){
+    		 if(typeof options.load === "function"){
+    			 options.load(response,status,xhr)
+    		 }
+    	 });
+    }else{
+    	 body.find(".bootbox-body").html(options.message);
+    }
     
-    body.find(".bootbox-body").html(options.message);
-
     if (options.animate === true) {
       dialog.addClass("fade");
     }

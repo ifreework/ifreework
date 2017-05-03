@@ -67,10 +67,7 @@
 		REMARKS
 	</sql>
 
-
-	<!-- 判断用户名和密码 -->
-	<select id="getUserInfo" parameterType="pd" resultMap="userResultMap">
-		SELECT
+	<sql id="userAllColumns">
 			U.USER_ID,
 			U.USERNAME,
 			U.PASSWORD,
@@ -95,46 +92,39 @@
 			P.PROVINCE_NAME,
 			M.MUNICIPALITY_NAME,
 			C.COUNTY_NAME
+	</sql>
+
+	<!-- 判断用户名和密码 -->
+	<select id="getUserById" parameterType="string" resultMap="userResultMap">
+		SELECT
+			<include refid="userAllColumns"></include>
 		FROM
 			SYS_USER U
 		LEFT JOIN DB_PROVINCE P ON U.PROVINCE_ID = P.PROVINCE_ID
 		LEFT JOIN DB_MUNICIPALITY M ON U.MUNICIPALITY_ID = M.MUNICIPALITY_ID
 		LEFT JOIN DB_COUNTY C ON U.COUNTY_ID = C.COUNTY_ID
-		where 1=1
-		<if test="username != null and username != ''">
-			and USERNAME = #{username}
-		</if>
-		<if test="userId !=null and userId != ''">
-			and USER_ID = #{ userId }
-		</if>
+		where USER_ID = #{ userId }
 	</select>
+	
+	
+	<!-- 根据用户名查询获取用户信息 -->
+	<select id="getUserByUserName" parameterType="string" resultMap="userResultMap">
+		SELECT
+			<include refid="userAllColumns"></include>
+		FROM
+			SYS_USER U
+		LEFT JOIN DB_PROVINCE P ON U.PROVINCE_ID = P.PROVINCE_ID
+		LEFT JOIN DB_MUNICIPALITY M ON U.MUNICIPALITY_ID = M.MUNICIPALITY_ID
+		LEFT JOIN DB_COUNTY C ON U.COUNTY_ID = C.COUNTY_ID
+		where  USERNAME = #{username}
+	</select>
+	
+	
+	
 
 	<select id="queryUserList" parameterType="pd" resultMap="userResultMap">
 		SELECT
-			U.USER_ID,
-			U.USERNAME,
-			U.PASSWORD,
-			U.PERSON_NAME,
-			U.RIGHTS,
-			U.ROLE_ID,
-			U.STATUS,
-			U.SKIN,
-			U.EMAIL,
-			U.USER_NO,
-			U.PHONE,
-			U.PROVINCE_ID,
-			U.MUNICIPALITY_ID,
-			U.COUNTY_ID,
-			U.DEAIL_ADDRESS,
-			U.IMG_PATH,
-			U.IS_ONLINE,
-			U.DEPT_ID,
-			U.BIRTHDAY,
-			U.SCHOOL,
-			U.REMARKS,
-			P.PROVINCE_NAME,
-			M.MUNICIPALITY_NAME,
-			C.COUNTY_NAME
+			<include refid="userAllColumns"></include>
 		FROM
 			SYS_USER U
 		LEFT JOIN DB_PROVINCE P ON U.PROVINCE_ID = P.PROVINCE_ID
@@ -153,7 +143,30 @@
 	</select>
 
 
+	<!-- 根据userId查询该用户具有的权限 -->
+	<select id="queryAuthorityByUserName" parameterType="string" resultType="string">
+	    select ra.authority_pk
+	      from sys_role_authority ra
+	     inner join (select role_id
+	                   from (select role_id
+	                           from sys_role r
+	                          start with r.role_id in
+	                                     (select ur.role_id
+	                                        from sys_user_role ur inner join sys_user u 
+	                                         	 on ur.user_id = u.user_id and u.username = #{username})
+	                         connect by prior r.role_id = r.parent_id) t1
+	                  group by t1.role_id) t2
+	        on ra.role_id = t2.role_id
+	</select>
 
+
+	<!-- 根据请求路径查询该用户具有的权限 -->
+	<select id="queryAuthorityByResourceId" parameterType="string" resultType="string">
+	    select a.pk
+		  from  sys_authority a
+		  where a.resource_id = #{resourceId}
+	</select>
+	
 	<!-- 修改 -->
 	<update id="update" parameterType="com.ifreework.entity.system.User">
 		update SYS_USER
@@ -228,7 +241,7 @@
 
 	<insert id="add" parameterType="com.ifreework.entity.system.User">
 		<selectKey keyProperty="userId" resultType="String" order="BEFORE">
-			select UUID()
+			select sys_guid() from dual 
 		</selectKey>
 
 		insert into SYS_USER (

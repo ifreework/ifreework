@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ifreework.entity.system.Msg;
 import com.ifreework.help.WebsocketHelp;
-import com.ifreework.util.Const;
 
 @Controller
 public class GreetingController {
@@ -26,41 +25,41 @@ public class GreetingController {
 
 	@MessageMapping("/greeting")
 	public void handle(String msg) {
-		ObjectMapper mapper = new ObjectMapper();
-		Msg msgObj = null;
-		try {
-			msgObj = mapper.readValue(msg, Msg.class);
-			int length = msgObj.getLength();
-			if (length == 1) {
-				WebsocketHelp.send(msgObj.getToUser(), "/topic/greetings", msg);
-			} else {
-				int order = msgObj.getOrder();
-				List<Msg> msgList = Const.MSG_MAP.get(msgObj.getUuid());
-				if(order == length - 1  ){
-					Collections.sort(msgList);
-					String msgStr = joinStr(msgList);
-					msgStr += msgObj.getMsg();
-					msgObj.setMsg(msgStr);
-					WebsocketHelp.send(msgObj.getToUser(), "/topic/greetings", msgObj);
-					
-				}else{
-					if(msgList == null){
-						msgList = new ArrayList<Msg>();
-						Const.MSG_MAP.put(msgObj.getUuid(), msgList);
-					}
-					msgList.add(msgObj);
-				}     
-			}
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		ObjectMapper mapper = new ObjectMapper();
+//		Msg msgObj = null;
+//		try {
+//			msgObj = mapper.readValue(msg, Msg.class);
+//			int length = msgObj.getLength();
+//			if (length == 1) {
+//				WebsocketHelp.send(msgObj.getToUser(), "/topic/greetings", msg);
+//			} else {
+//				int order = msgObj.getOrder();
+//				List<Msg> msgList = Const.MSG_MAP.get(msgObj.getUuid());
+//				if(order == length - 1  ){
+//					Collections.sort(msgList);
+//					String msgStr = joinStr(msgList);
+//					msgStr += msgObj.getMsg();
+//					msgObj.setMsg(msgStr);
+//					WebsocketHelp.send(msgObj.getToUser(), "/topic/greetings", msgObj);
+//					
+//				}else{
+//					if(msgList == null){
+//						msgList = new ArrayList<Msg>();
+//						Const.MSG_MAP.put(msgObj.getUuid(), msgList);
+//					}
+//					msgList.add(msgObj);
+//				}     
+//			}
+//		} catch (JsonParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (JsonMappingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	private String joinStr(List<Msg> list) {

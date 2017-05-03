@@ -98,8 +98,35 @@
 	<!-- 访问拦截 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/**/**" />
-			<bean class="com.ifreework.common.interceptor.LoginHandlerInterceptor" />
+			<mvc:mapping path="/**"  />
+			<mvc:exclude-mapping path="/resources/**"/>  
+			<bean class="com.ifreework.common.shiro.interceptor.ContextPathInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**"/>  
+			<mvc:exclude-mapping path="/login"/>  
+			<mvc:exclude-mapping path="/logout"/>  
+			<mvc:exclude-mapping path="/error/**"/>  
+			<mvc:exclude-mapping path="/websocket/**"/>  
+			<bean class="com.ifreework.common.shiro.interceptor.LoginHandlerInterceptor">
+				<property name="loginPath" value="/"></property>
+				<property name="successPath" value="/main"></property>
+			</bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**"/>  
+			<mvc:exclude-mapping path="/login"/>  
+			<mvc:exclude-mapping path="/logout"/>  
+			<mvc:exclude-mapping path="/error/**"/>  
+			<mvc:exclude-mapping path="/main"/>  
+			<mvc:exclude-mapping path="/websocket"/>  
+			<mvc:exclude-mapping path="/error/**"/>  
+			<bean class="com.ifreework.common.shiro.interceptor.AuthHandlerInterceptor">
+				<property name="unAuthorizedUrl" value="/WEB-INF/jsp/system/error/unauthorized.jsp"></property>
+				<property name="shiroAuth" ref="userService" />
+			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 

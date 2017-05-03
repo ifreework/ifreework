@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ifreework.common.controller.BaseControllerSupport;
 import com.ifreework.common.entity.PageData;
+import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.service.system.UserService;
 import com.ifreework.util.StringUtil;
@@ -49,7 +49,7 @@ public class UserController extends BaseControllerSupport {
 	 * @return   
 	 * @throws
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping()
 	public ModelAndView gotoView() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("/system/user/list");
@@ -93,7 +93,7 @@ public class UserController extends BaseControllerSupport {
 	public ModelAndView edit() {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-		User user = userService.getUserInfoByUserName(pd);
+		User user = UserManager.getUser();
 		mv.addObject("user",user);
 		mv.setViewName("/system/user/edit");
 		return mv;

@@ -1,84 +1,71 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
-<%@ page import="com.ifreework.entity.system.Config" %>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<!-- jsp文件头和头部 -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta charset="utf-8" />
-<title>部门管理</title>
-<meta name="description" content="" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <script type="text/javascript">
-$().ready(function(){
-	 var bootstrapValidator = $("#saveForm").bootstrapValidator({
-     	message: '数值未通过验证',
-     	fields: {
-     		system_name: {
-                validators: {
-                    notEmpty: {
-                        message: '请填写您的系统名称'
-                    }
-                }
-            },
-            file_path: {
-                validators: {
-                    notEmpty: {
-                        message: '请填写文件上传之后的默认保存地址'
-                    }
-                }
-            }
-     	}
-	}).data('bootstrapValidator');
-	 
-	//是否启用ftp,如果启用ftp，则需要填写ftp相关配置 
-	$("#ftp_enable_checkbox").change(function(){
-		var checked = this.checked;
-		if(checked){
-			$("#ftp_enable").val(1);
-			$(".ftp").show();
-		}else{
-			$("#ftp_enable").val(0);
-			$(".ftp").hide();
-		}
+(function(){
+	$().ready(function(){
+		 var bootstrapValidator = $("#saveForm").bootstrapValidator({
+	     	message: '数值未通过验证',
+	     	fields: {
+	     		system_name: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请填写您的系统名称'
+	                    }
+	                }
+	            },
+	            file_path: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请填写文件上传之后的默认保存地址'
+	                    }
+	                }
+	            }
+	     	}
+		}).data('bootstrapValidator');
+		 
+		//是否启用ftp,如果启用ftp，则需要填写ftp相关配置 
+		$("#ftp_enable_checkbox").change(function(){
+			var checked = this.checked;
+			if(checked){
+				$("#ftp_enable").val(1);
+				$(".ftp").show();
+			}else{
+				$("#ftp_enable").val(0);
+				$(".ftp").hide();
+			}
+		});
+		$("#button_auth_enable_checkbox").change(function(){
+			var checked = this.checked;
+			if(checked){
+				$("#button_auth_enable").val(1);
+			}else{
+				$("#button_auth_enable").val(0);
+			}
+		});
+	    
+	    $("#btn-save").click(function(){
+	    	bootstrapValidator.validate();
+	    	if(bootstrapValidator.isValid()){
+	    		var data = $("#saveForm").serializeJson();
+	    		var opt = {
+	    				url : "${contextPath}/system/config/save",
+	    				data:data,
+	    				success:function(param){
+	    					if(param.result === SUCCESS){
+	    						bootbox.alert("数据保存成功");
+	    					}else{
+	    						bootbox.alert("数据异常，保存失败");
+	    					}
+	    				}
+	    		};
+	    		ajax(opt);
+	    	}
+	    });
 	});
-	$("#button_auth_enable_checkbox").change(function(){
-		var checked = this.checked;
-		if(checked){
-			$("#button_auth_enable").val(1);
-		}else{
-			$("#button_auth_enable").val(0);
-		}
-	});
-    
-    $("#btn-save").click(function(){
-    	bootstrapValidator.validate();
-    	if(bootstrapValidator.isValid()){
-    		var data = $("#saveForm").serializeJson();
-    		var opt = {
-    				url : "<%=contextPath%>/system/config/save",
-    				data:data,
-    				success:function(param){
-    					if(param.result === SUCCESS){
-    						bootbox.alert("数据保存成功");
-    					}else{
-    						bootbox.alert("数据异常，保存失败");
-    					}
-    				}
-    		};
-    		ajax(opt);
-    	}
-    });
-});
+}());
 </script>
 </head>
-<body>
-	<div class="main-container container-fluid">
-    	<div class="row">
-            <div class="col-lg-12 col-sm-12 col-xs-12">
-	            <div class="widget flat radius-bordered">
-	                <div class="widget-body">
+<div class="container-content">
+	<div class="container-body">
 	                    <div id="registration-form">
 	                         <form id="saveForm" method="post" class="form-horizontal">
 
@@ -154,16 +141,10 @@ $().ready(function(){
 	                            	</div>
 	                            </div>
 	                            
-	                            <div class="row text-center">
-	                            	<a class="btn btn-default" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
-	                            </div>
-	                            
 	                        </form>
-	                    </div>
-	                </div>
-	            </div>
             </div>
     	</div>
-    </div>
-</body>
-</html>
+	<div class="text-center container-footer">
+		<a class="btn btn-primary" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
+	</div>
+	</div>

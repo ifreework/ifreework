@@ -1,21 +1,12 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<!-- jsp文件头和头部 -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta charset="utf-8" />
-<title>${pd.SYSNAME}</title>
-<meta name="description" content="" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<link rel="stylesheet" href="<%=cssPath%>/main/userImg.css">
-<script src="<%=assetsPath%>/js/dropzone/dropzone.js"></script>
+<link rel="stylesheet" href="${ cssPath }/main/userImg.css"></link>
+<script src="${ jsPath }/bootstrap/dropzone/dropzone.js"></script>
 <script type="text/javascript">
-	var dropz;
+(function(){
+	var dropzone;
 	$().ready(function() {
-		dropz = new Dropzone("#dropzone", {
-			url : "<%=contextPath%>/main/userImgUpload",
+		dropzone = new Dropzone("#dropzone", {
+			url : "${ contextPath }/main/userImgUpload",
 			acceptedFiles : ".jpg,.png",
 			autoProcessQueue : false,
 			params:{"width":100},
@@ -23,9 +14,13 @@
 				readData(file);
 			},
 			uploadprogress:function(file, progress, bytesSent){
-				console.log((bytesSent - this.options.uploadSize)*100/1024);
-				console.log(this);
+				console.log(file);
+				console.log(progress);
+				console.log(bytesSent);
 				this.options.uploadSize = bytesSent;
+			},
+			processing:function(processingfile ){
+				console.log(processingfile);
 			}
 		});
 		
@@ -134,26 +129,53 @@
 				$(".img-preview").find("img").attr("src",data100);
 			});
 		}
+		
+		function uploadImg(){
+        	var img = $(".dropzone-img-view img"),
+	    	 	cDiv = $(".dropzone-img-view .center"),
+	    	 	width=img.width(),height=img.height(),sw = cDiv.width() + 2,sh = cDiv.height() + 2,sx = cDiv.position().left,sy = cDiv.position().top;
+	    	dropzone.options.params = {
+	    		width:width,
+	    		height:height,
+	    		sw:sw,
+	    		sh:sh,
+	    		sx:sx,
+	    		sy:sy
+	    	};
+	    	dropzone.on("success", function(file) {
+	    		console.log(file);
+	    		$("#userImg").attr("src",$("#userImg").attr("src")  + "?_time=" + new Date().getTime());
+	    		$("#userImgDialog").modal("hide");
+	    	});
+	    	dropzone.processQueue();
+		}
+		
+		
+		$("#btn-save").click(function(){
+			uploadImg();
+		});
 	});
+}());
 </script>
 </head>
 <body>
-	<div class="main-container container-fluid">
-		<div class="row dropzone-panel" >
-			<div class="col9">
-				<div id="dropzone" class="dropzone-body ">
-					<div class="dropzone-upload-text dz-default dz-message">
-						<span>选择图片</span>
-					</div>
+	<div class="row dropzone-panel" >
+		<div class="col9">
+			<div id="dropzone" class="dropzone-body ">
+				<div class="dropzone-upload-text dz-default dz-message">
+					<span>选择图片</span>
 				</div>
 			</div>
-			<div class="col3">
-				<div class="img-list">
-					<div class="img-preview">
-					</div>
+		</div>
+		<div class="col3">
+			<div class="img-list">
+				<div class="img-preview">
 				</div>
 			</div>
 		</div>
 	</div>
+    <div class="text-center page-footer">
+    	<a class="btn btn-primary" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
+    </div>
 </body>
 </html>

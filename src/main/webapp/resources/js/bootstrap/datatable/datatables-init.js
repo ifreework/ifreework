@@ -99,7 +99,7 @@ var InitiateEditableDataTable = function () {
             $('#editabledatatable_new').click(function (e) {
                 e.preventDefault();
                 var aiNew = oTable.fnAddData(['', '', '', '',
-                        '<a href="#" class="btn btn-success btn-xs save"><i class="fa fa-edit"></i> Save</a> <a href="#" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> Cancel</a>'
+                        '<a href="javascript:void(0)" class="btn btn-success btn-xs save"><i class="fa fa-edit"></i> Save</a> <a href="javascript:void(0)" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> Cancel</a>'
                 ]);
                 var nRow = oTable.fnGetNodes(aiNew[0]);
                 editRow(oTable, nRow);
@@ -176,7 +176,7 @@ var InitiateEditableDataTable = function () {
                 jqTds[1].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[1] + '">';
                 jqTds[2].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[2] + '">';
                 jqTds[3].innerHTML = '<input type="text" class="form-control input-small" value="' + aData[3] + '">';
-                jqTds[4].innerHTML = '<a href="#" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> Save</a> <a href="#" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> Cancel</a>';
+                jqTds[4].innerHTML = '<a href="javascript:void(0)" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> Save</a> <a href="javascript:void(0)" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> Cancel</a>';
             }
 
             function saveRow(oTable, nRow) {
@@ -185,7 +185,7 @@ var InitiateEditableDataTable = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate('<a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a> <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>', nRow, 4, false);
+                oTable.fnUpdate('<a href="javascript:void(0)" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a> <a href="javascript:void(0)" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>', nRow, 4, false);
                 oTable.fnDraw();
             }
 
@@ -195,7 +195,7 @@ var InitiateEditableDataTable = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate('<a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a> <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>', nRow, 4, false);
+                oTable.fnUpdate('<a href="javascript:void(0)" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a> <a href="javascript:void(0)" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>', nRow, 4, false);
                 oTable.fnDraw();
             }
         }

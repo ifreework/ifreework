@@ -26,7 +26,7 @@ public class CountyController extends BaseControllerSupport {
 	 * @TODO(用户登录界面跳转，如果已经登录，则跳转到Main页面) 
 	 * @param @return @throws
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes") 
 	@RequestMapping()
 	@ResponseBody
 	public List<Map> query() {

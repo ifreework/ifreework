@@ -1,18 +1,15 @@
 package com.ifreework.service.system;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.github.pagehelper.util.StringUtil;
+import com.ifreework.common.constant.Constant;
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.Config;
 import com.ifreework.mapper.system.ConfigMapper;
-import com.ifreework.util.Const;
 
 
 @Service("configService")
@@ -36,7 +33,7 @@ public class ConfigServiceImpl  implements ConfigService {
 			configMapper.update(config);
 		}
 		Config.reset();
-		resultData.setResult(Const.SUCCESS);
+		resultData.setResult(Constant.SUCCESS);
 		return resultData;
 	}
 

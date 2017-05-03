@@ -1,3 +1,9 @@
+html,body{
+	height:100%;
+}
+#ifm{
+	height:100%;
+}
 /*********************************页面皮肤******************************************/
 body:BEFORE {
 	background: none;	
@@ -166,6 +172,15 @@ body:BEFORE {
 	color:#f3f3f3;
 }
 
+.page-sidebar .sidebar-menu .submenu li.active>a {
+    color: rgb(212, 212, 229);
+}
+.page-sidebar .sidebar-menu a:hover {
+    color: #bae0ab;
+}
+.page-sidebar .sidebar-menu li.open>a {
+    color: #73d58e;
+}
 .page-sidebar .sidebar-menu li.open {
     background-color: rgba(0, 0, 0, 0.1);
 }
@@ -242,5 +257,6 @@ body:BEFORE {
 }
 /***************************************************************************/
 .page-body{
-	padding: 10px 0px 0px 10px;
+	padding: 10px 10px 0px 10px;
+	background: #f5f5f5;
 }

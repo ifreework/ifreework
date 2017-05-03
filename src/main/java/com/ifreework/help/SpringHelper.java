@@ -9,6 +9,7 @@
  */
 package com.ifreework.help;
 
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoader;
 
@@ -37,5 +38,9 @@ public class SpringHelper {
 		T t = null;
 		t = (T) ContextLoader.getCurrentWebApplicationContext().getBean(beanName, clazz);
 		return t;
+	}
+	
+	public static EhCacheManager getEhCacheManager(){
+		return getBean("cacheManager",EhCacheManager.class);
 	}
 }

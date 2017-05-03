@@ -1,24 +1,40 @@
 package com.ifreework.mapper.system;
 
 import java.util.List;
+import java.util.Set;
 
-import org.apache.ibatis.annotations.Param;
 
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.User;
 
 public interface UserMapper {
+	
+	public User getUserById(String userId);
+	
+	public User getUserByUserName(String userName);
+	
+	public List<User> queryUserList(PageData pd);
+	
 	/**
 	 * 
-	 * @Title: getUserInfo
-	 * @Description: TODO(通过用户名密码或者UserId获取用户信息，如果该用户信息不存在，则返回null)
+	 * 描述：查询当前用户具有的所有权限
+	 * @Title: queryAuthorityByUserId
+	 * @param 
+	 * 			userId 
+	 * @return   
+	 * @throws
+	 */
+	public Set<String> queryAuthorityByUserName(String userName);
+	
+	/**
+	 * 
+	 * 描述：根据当前请求路径，获取该请求所需的权限
+	 * @Title: queryAuthorityByUrl
 	 * @param 
 	 * @return   
 	 * @throws
 	 */
-	public User getUserInfo(PageData pd );
-	
-	public List<User> queryUserList(PageData pd);
+	public List<String> queryAuthorityByResourceId(String resourceId);
 	
 	public void update(User user);
 	

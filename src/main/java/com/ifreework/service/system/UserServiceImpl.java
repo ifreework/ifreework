@@ -12,31 +12,35 @@ package com.ifreework.service.system;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ifreework.common.constant.Constant;
+import com.ifreework.common.email.MailSend;
 import com.ifreework.common.email.entity.MailBean;
-import com.ifreework.common.email.helper.MailSend;
 import com.ifreework.common.entity.PageData;
+import com.ifreework.common.manager.UserManager;
+import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.Config;
+import com.ifreework.entity.system.Resource;
 import com.ifreework.entity.system.User;
-import com.ifreework.help.Jurisdiction;
+import com.ifreework.mapper.system.ResourceMapper;
 import com.ifreework.mapper.system.UserMapper;
-import com.ifreework.util.Const;
 import com.ifreework.util.FileUtil;
 import com.ifreework.util.ImageUtil;
-import com.ifreework.util.PropertiesUtil;
 import com.ifreework.util.SecurityUtil;
 import com.ifreework.util.StringUtil;
 
@@ -50,67 +54,63 @@ import com.ifreework.util.StringUtil;
  * @version 1.0
  */
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, ShiroAuthInterface {
 
+	private static Logger log = Logger.getLogger(UserServiceImpl.class);
 	@Autowired
-	UserMapper userMapper;
-
-	public UserMapper getUserMapper() {
-		return userMapper;
-	}
-
-	public void setUserMapper(UserMapper userMapper) {
-		this.userMapper = userMapper;
-	}
+	private UserMapper userMapper;
+	
+	@Autowired
+	private ResourceMapper resourceMapper; 
 
 	/**
 	 * 
 	 * @Title: getUserInfoByUserName @Description:
 	 *         TODO(通过用户名获取用户信息) @param @return @throws
 	 */
-	public User getUserInfoByUserName(PageData pd) {
-		return userMapper.getUserInfo(pd);
+	public User getUserByUserName(String userName) {
+		return userMapper.getUserByUserName(userName);
 	}
 
+	public User getUserById(String userId){ 
+		return userMapper.getUserByUserName(userId);
+	}
 	/**
 	 * 
-	 * @Title: validateUserByNameAndPwd @Description:
-	 *         TODO(登录用户名密码验证) @param @return @throws
+	 * 描述：通过用户名密码验证用户登录是否成功
+	 * @Title: validateUserByNameAndPwd
+	 * @param 
+	 * @return   
+	 * @throws
 	 */
 	public PageData validateUserByNameAndPwd(PageData pd) {
 		// TODO Auto-generated method stub
 		String username = pd.getString("username");
 		String pwd = pd.getString("password");
-		Session session = Jurisdiction.getSession();
-
-		if (!StringUtil.isEmpty(username) && !StringUtil.isEmpty(pwd)) {
-			User user = userMapper.getUserInfo(pd);
-			if (user != null) {
-				pwd = SecurityUtil.encrypt(pwd);
-				if (pwd.equals(user.getPassword())) {
-					String status = user.getStatus();
-					if ("1".equals(status)) {
-						session.setAttribute(Const.SESSION_USER, user); // 把用户信息放session中
-						// shiro加入身份验证
-						Subject subject = SecurityUtils.getSubject();
-						UsernamePasswordToken token = new UsernamePasswordToken(username, pwd);
-						try {
-							subject.login(token);
-							pd.setResult(Const.SUCCESS);
-						} catch (AuthenticationException e) {
-							pd.setResult(Const.FAILED);
-							pd.setMsg("登录认证失败。");
-						}
-						return pd;
-					}
-					pd.setResult(Const.FAILED);
-					pd.setMsg("该用户暂未启用，请与管理员联系。");
-					return pd;
-				}
-			}
+		if (StringUtil.isEmpty(username) || StringUtil.isEmpty(pwd)) {
+			pd.setResult(Constant.FAILED);
+			pd.setMsg("用户名或者密码错误，请重新输入。");
+			return pd;
 		}
-		pd.setResult(Const.FAILED);
-		pd.setMsg("用户名或者密码错误，请重新输入。");
+
+		// shiro加入身份验证
+		Subject subject = SecurityUtils.getSubject();
+		UsernamePasswordToken token = new UsernamePasswordToken(username, SecurityUtil.encrypt(pwd));
+		try {
+			subject.login(token);
+			pd.setResult(Constant.SUCCESS);
+		} catch (LockedAccountException e) {
+			pd.setResult(Constant.FAILED);
+			pd.setMsg("用户暂未启用，请与管理员联系。");
+		} catch (UnknownAccountException e) {
+			pd.setResult(Constant.FAILED);
+			pd.setMsg("用户名或者密码错误，请重新输入。");
+		} catch (Exception e) {
+			log.error(e);
+			e.printStackTrace();
+			pd.setResult(Constant.FAILED);
+			pd.setMsg("系统异常，登录失败，请与管理员联系。");
+		}
 		return pd;
 	}
 
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 			double sy) {
 		PageData pageData = new PageData();
 		String rootPath = "";
-		String imgPath = ""; 
+		String imgPath = "";
 		String localPath = "";
 		try {
 			Map<String, Integer> map = ImageUtil.getImgXY(file.getInputStream());
@@ -134,12 +134,12 @@ public class UserServiceImpl implements UserService {
 			sx = sx * oW / width;
 			sy = sy * oH / height;
 
-			User user = Jurisdiction.getUser();
+			User user = UserManager.getUser();
 			imgPath += "/" + user.getUsername();
 			rootPath = FileUtil.getRootPath() + "temp";
-			
-			localPath = ImageUtil.cutImage(file.getInputStream(), rootPath + imgPath, file.getOriginalFilename(), (int) sx, (int) sy,
-					(int) sw, (int) sh);
+
+			localPath = ImageUtil.cutImage(file.getInputStream(), rootPath + imgPath, file.getOriginalFilename(),
+					(int) sx, (int) sy, (int) sw, (int) sh);
 			ImageUtil.changeImge(localPath, localPath + ".offLine");
 			FileUtil.fileUpload(localPath + ".offLine", imgPath);
 			imgPath = FileUtil.fileUpload(localPath, imgPath);
@@ -153,19 +153,14 @@ public class UserServiceImpl implements UserService {
 		pageData.put("fileName", imgPath);
 		return pageData;
 	}
-	
-	
+
 	/**
-	 * 描述：根据用户id，重置用户密码
-	 * @Title: resetPwd
-	 * @param 
-	 * @return   
-	 * @throws
+	 * 描述：根据用户id，重置用户密码 @Title: resetPwd @param @return @throws
 	 */
-	public PageData resetPwd(PageData pd){
+	public PageData resetPwd(PageData pd) {
 		final String userId = pd.getString("userId");
-		if(StringUtil.isEmpty(userId)){
-			pd.setResult(Const.FAILED);
+		if (StringUtil.isEmpty(userId)) {
+			pd.setResult(Constant.FAILED);
 			return pd;
 		}
 		String resetPwd = Config.init().get(Config.RESET_PWD);
@@ -174,15 +169,14 @@ public class UserServiceImpl implements UserService {
 		user.setUserId(userId);
 		user.setPassword(resetPwd);
 		pd = update(user);
-		if(Const.SUCCESS.equals(pd.getResult())){
-			//开辟新线程发送密码重置邮件，避免出现邮件发送错误导致修改数据误报
+		if (Constant.SUCCESS.equals(pd.getResult())) {
+			// 开辟新线程发送密码重置邮件，避免出现邮件发送错误导致修改数据误报
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					User user = Jurisdiction.getUser(userId);
-					MailBean mailBean = new MailBean(user.getEmail(),
-							"密码重置通知", "您的密码已经重置成功！");
+					User user = UserManager.getUser(userId);
+					MailBean mailBean = new MailBean(user.getEmail(), "密码重置通知", "您的密码已经重置成功！");
 					MailSend h = new MailSend(mailBean);
 					h.sendMail();
 				}
@@ -200,7 +194,7 @@ public class UserServiceImpl implements UserService {
 	public PageData update(User user) {
 		PageData pd = new PageData();
 		userMapper.update(user);
-		pd.setResult(Const.SUCCESS);
+		pd.setResult(Constant.SUCCESS);
 		return pd;
 	}
 
@@ -210,7 +204,7 @@ public class UserServiceImpl implements UserService {
 	public PageData add(User user) {
 		PageData pd = new PageData();
 		userMapper.add(user);
-		pd.setResult(Const.SUCCESS);
+		pd.setResult(Constant.SUCCESS);
 		return pd;
 	}
 
@@ -221,38 +215,104 @@ public class UserServiceImpl implements UserService {
 	 */
 	public Map<String, Object> queryContacts(PageData pd) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		pd.put("username", Jurisdiction.getUser().getUsername());
-		List<User> list = queryUserList(pd);
-		int onLineNum = 0;
-		for (User user : list) {
-			if (Const.WEBSOCKET_USER_MAP.containsKey(user.getUsername())) {
-				user.setIsOnline("1");
-				onLineNum++;
-			}
-		}
-		Collections.sort(list, new Comparator<User>() {
-			/*
-			 * int compare(Student o1, Student o2) 返回一个基本类型的整型， 返回负数表示：o1 小于o2，
-			 * 返回0 表示：o1和o2相等， 返回正数表示：o1大于o2。
-			 */
-			public int compare(User o1, User o2) {
-				int t = o2.getIsOnline().compareTo(o1.getIsOnline());
-				if (t == 0) {
-					return o2.getPersonName().compareTo(o1.getPersonName());
-				}
-				return t;
-			}
-		});
-		map.put("allContacts", list);// 所有联系人信息
-		map.put("onLineNum", onLineNum);// 在线联系人数量
-		map.put("allNum", list.size());// 全部联系人数量
+//		pd.put("username", Jurisdiction.getUser().getUsername());
+//		List<User> list = queryUserList(pd);
+//		int onLineNum = 0;
+//		for (User user : list) {
+//			if (Constant.WEBSOCKET_USER_MAP.containsKey(user.getUsername())) {
+//				user.setIsOnline("1");
+//				onLineNum++;
+//			}
+//		}
+//		Collections.sort(list, new Comparator<User>() {
+//			/*
+//			 * int compare(Student o1, Student o2) 返回一个基本类型的整型， 返回负数表示：o1 小于o2，
+//			 * 返回0 表示：o1和o2相等， 返回正数表示：o1大于o2。
+//			 */
+//			public int compare(User o1, User o2) {
+//				int t = o2.getIsOnline().compareTo(o1.getIsOnline());
+//				if (t == 0) {
+//					return o2.getPersonName().compareTo(o1.getPersonName());
+//				}
+//				return t;
+//			}
+//		});
+//		map.put("allContacts", list);// 所有联系人信息
+//		map.put("onLineNum", onLineNum);// 在线联系人数量
+//		map.put("allNum", list.size());// 全部联系人数量
 		return map;
 
 	}
 
 	@Override
 	public List<User> queryUserList(PageData pd) {
-		// TODO Auto-generated method stub
 		return userMapper.queryUserList(pd);
+	}
+
+	/**
+	 * 
+	 * 描述：查询当前用户具有的所有权限
+	 * @Title: queryAuthorityByUserId
+	 * @param 
+	 * 			userId 
+	 * @return   
+	 * @throws
+	 */
+	@Override
+	public Set<String> queryAuthorityByUserName(String userName) {
+		return userMapper.queryAuthorityByUserName(userName);
+	}
+
+	/**
+	 * 
+	 * 描述：根据当前请求路径，获取该请求所需的权限
+	 * @Title: queryAuthorityByUrl
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public List<String> queryAuthorityByResourceId(String resourceId) {
+		return userMapper.queryAuthorityByResourceId(resourceId);
+	}
+
+	/**
+	 * 
+	 * 描述：验证用户名密码是否正确
+	 * @Title: queryAuthorityByUrl
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Override
+	public User login(String username, String password) {
+		User user = getUserByUserName(username);
+		
+		if (user != null) { // 验证当前用户是否存在
+			if (password.equals(user.getPassword())) { // 验证用户密码是否正确
+				if ("1".equals(user.getStatus())) { // 验证用户是否被启用
+					return user;
+				}
+				throw new LockedAccountException();
+			}
+		}
+		throw new UnknownAccountException();
+	}
+
+
+	/**
+	 * 
+	 * 描述：
+	 * @Title: getResource
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Override
+	public Resource getResource(String res, String flag) {
+
+		if ("M".equals(flag) || "A".equals(flag)) {
+			return resourceMapper.getResourceByUrl(res);
+		}
+		return null;
 	}
 }

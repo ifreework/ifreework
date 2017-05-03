@@ -5,8 +5,8 @@
 		<div class="row paper-top">
 			<div class="col-lg-8 paper-nav">
 				<ul class="breadcrumb">
-					<li><i class="fa fa-home"></i> <a href="#">Home</a></li>
-					<li><a href="#">Form Elements</a></li>
+					<li><i class="fa fa-home"></i> <a href="javascript:void(0)">Home</a></li>
+					<li><a href="javascript:void(0)">Form Elements</a></li>
 					<li class="active">Form Layouts</li>
 				</ul>
 
@@ -19,10 +19,10 @@
 					<i class="wi-day-sunny"></i><span></span>
 				</div>
 				<div id="buttons">
-					<a class="sidebar-toggler" href="#"> <i class="fa fa-arrows-h"></i>
-					</a> <a class="refresh" id="refresh-toggler" href="#"> <i
+					<a class="sidebar-toggler" href="javascript:void(0)"> <i class="fa fa-arrows-h"></i>
+					</a> <a class="refresh" id="refresh-toggler" href="javascript:void(0)"> <i
 						class="glyphicon glyphicon-refresh"></i>
-					</a> <a class="fullscreen" id="fullscreen-toggler" href="#"> <i
+					</a> <a class="fullscreen" id="fullscreen-toggler" href="javascript:void(0)"> <i
 						class="glyphicon glyphicon-fullscreen"></i>
 					</a>
 				</div>

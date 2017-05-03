@@ -29,6 +29,7 @@ import com.ifreework.entity.system.User;
  */
 public interface UserService {
 	
+	public User getUserByUserName(String userName);
 	/**
 	 * 
 	 * @Title: validateUserByNameAndPwd
@@ -71,13 +72,4 @@ public interface UserService {
 	 */
 	public Map<String,Object> queryContacts(PageData pd);
 	
-	/**
-	 * 
-	 * @Title: getUserInfoByUserName
-	 * @Description: TODO(通过用户名获取用户信息)
-	 * @param 
-	 * @return   
-	 * @throws
-	 */
-	public User getUserInfoByUserName(PageData pd);
 }

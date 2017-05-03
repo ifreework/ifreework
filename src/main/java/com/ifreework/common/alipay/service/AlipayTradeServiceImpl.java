@@ -15,12 +15,14 @@ import org.apache.commons.logging.LogFactory;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.AlipayConstants;
 import com.alipay.api.AlipayRequest;
 import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.ifreework.common.alipay.AlipayConstant;
 import com.ifreework.common.alipay.config.AlipayConfigs;
 import com.ifreework.common.alipay.model.AlipayTradeRequest;
 import com.ifreework.common.alipay.request.AlipayTradeCloseRequestBuilder;
@@ -28,7 +30,6 @@ import com.ifreework.common.alipay.request.AlipayTradePrecreateRequestBuilder;
 import com.ifreework.common.alipay.request.AlipayTradeQueryRequestBuilder;
 import com.ifreework.common.alipay.request.RequestBuilder;
 import com.ifreework.common.alipay.utils.AlipayNotify;
-import com.ifreework.util.Const;
 import com.ifreework.util.FileUtil;
 import com.ifreework.util.ImageUtil;
 import com.ifreework.util.PropertiesUtil;
@@ -60,10 +61,10 @@ public class AlipayTradeServiceImpl extends AbsAlipayTradeServiceImpl {
 		res = (AlipayTradePrecreateResponse) getResponse(client, request);
 
 		if (res != null) {
-			if (Const.SUCCESS.equals(res.getCode())) {// 请求二维码成功
-				String imgPath = PropertiesUtil.getProperty(FileUtil.getRootPath() + Const.SYSTEM_CONFIG,
+			if (AlipayConstant.SUCCESS.equals(res.getCode())) {// 请求二维码成功
+				String imgPath = PropertiesUtil.getProperty(FileUtil.getRootPath() ,
 						"userImgSavePath");
-				imgPath += Const.FILEPATHTWODIMENSIONCODE + "alipay";
+				imgPath += "/alipay";
 
 				String fileName = String.format("temp/images%sqr-%s.png", File.separator, res.getOutTradeNo());
 
@@ -75,7 +76,7 @@ public class AlipayTradeServiceImpl extends AbsAlipayTradeServiceImpl {
 			}
 		} else {
 			res = new AlipayTradePrecreateResponse();
-			res.setCode(Const.NETERROR);
+			res.setCode(AlipayConstant.NETERROR.toString());
 			res.setMsg("网络异常，请稍后再试。");
 		}
 
@@ -109,7 +110,7 @@ public class AlipayTradeServiceImpl extends AbsAlipayTradeServiceImpl {
 		}
 		if (res == null) {
 			res = new AlipayTradeQueryResponse();
-			res.setCode(Const.NETERROR);
+			res.setCode(AlipayConstant.NETERROR.toString());
 			res.setMsg("网络异常，请稍后再试。");
 		}
 
@@ -158,7 +159,7 @@ public class AlipayTradeServiceImpl extends AbsAlipayTradeServiceImpl {
 		}
 		if (res == null) {
 			res = new AlipayTradeCloseResponse();
-			res.setCode(Const.NETERROR);
+			res.setCode(AlipayConstant.NETERROR.toString());
 			res.setMsg("网络异常，请稍后再试。");
 		}
 		return res;
@@ -172,7 +173,7 @@ public class AlipayTradeServiceImpl extends AbsAlipayTradeServiceImpl {
 			if (verify(request, alipayConfigs)) {
 				response.getWriter().print("success");
 				String trade_status = request.getParameter("trade_status");
-				return Const.TRADE_SUCCESS.equals(trade_status);
+				return AlipayConstant.TRADE_SUCCESS.equals(trade_status);
 			}
 		} catch (Exception e) {
 			log.error(e);

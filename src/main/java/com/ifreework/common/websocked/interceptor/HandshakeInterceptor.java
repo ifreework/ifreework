@@ -8,8 +8,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
+import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
-import com.ifreework.help.Jurisdiction;
 
 /**
  * 描述：websocked握手拦截器
@@ -34,7 +34,7 @@ public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Map<String, Object> attributes) throws Exception {
 		logger.debug("GOMA ===> Before Handshake");
-		User user = Jurisdiction.getUser();
+		User user = UserManager.getUser();
 		if (user != null) {
 			return super.beforeHandshake(request, response, wsHandler, attributes);
 		}

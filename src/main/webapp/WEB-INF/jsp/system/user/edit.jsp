@@ -1,15 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<!-- jsp文件头和头部 -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta charset="utf-8" />
-<title>部门管理</title>
-<meta name="description" content="" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <script type="text/javascript">
+(function(){
 $().ready(function(){
 	 var bootstrapValidator = $("#saveForm").bootstrapValidator({
      	message: '数值未通过验证',
@@ -79,7 +70,7 @@ $().ready(function(){
 		placeholder: "省",
         allowClear: true,
 		ajax: {
-		    url: "<%=contextPath%>/db/province",
+		    url: "${ contextPath }/db/province",
 		    delay: 250,
 		    dataType: 'json',
 			data: function (params) {
@@ -107,7 +98,7 @@ $().ready(function(){
         allowClear: true,
         disabled : ${user.municipalityId == null || user.municipalityId == ""},
 		ajax: {
-		    url: "<%=contextPath%>/db/municipality",
+		    url: "${ contextPath }/db/municipality",
 		    delay: 250,
 		    dataType: 'json',
 			data: function (params) {
@@ -136,7 +127,7 @@ $().ready(function(){
         allowClear: true,
         disabled : ${user.countyId == null || user.countyId == ""},
 		ajax: {
-		    url: "<%=contextPath%>/db/county",
+		    url: "${ contextPath }/db/county",
 		    delay: 250,
 		    dataType: 'json',
 			data: function (params) {
@@ -166,12 +157,11 @@ $().ready(function(){
     $('#remarks').autosize({ append: "\n" });
     
     $("#btn-save").click(function(){
-    	alert(1);
     	bootstrapValidator.validate();
     	if(bootstrapValidator.isValid()){
     		var data = $("#saveForm").serializeJson();
     		var opt = {
-    				url : "<%=contextPath%>/system/user/save",
+    				url : "${ contextPath }/system/user/save",
     				data:data,
     				success:function(param){
     					if(param.result === SUCCESS){
@@ -187,125 +177,117 @@ $().ready(function(){
     	}
     });
 });
+}());
 </script>
-</head>
-<body>
-	<div class="main-container container-fluid">
-    	<div class="row">
-            <div class="col-lg-12 col-sm-12 col-xs-12">
-	            <div class="widget flat radius-bordered">
-	                <div class="widget-body">
-	                    <div id="registration-form">
-	                         <form id="saveForm" method="post" class="form-horizontal">
-
-	                            <div class="form-title">
-	                                	帐号：${user.username}
-	                            </div>
-	                            <div class="form-group has-feedback row">
-	                            	<label class="col-sm-2 control-label">姓名</label>
-	                            	<div class="col-sm-9">
-	                            		<span class="input-icon icon-left">
-		                            		<i class="fa fa-user circular"></i>
-		                                    <input type="text" class="form-control" name="personName" placeholder="姓名" value="${user.personName }">
-                                    	</span>
-	                            	</div>
-	                               
-	                            </div>
-	                            <div class="form-group has-feedback row">
-	                            	<label class="col-sm-2 control-label">邮箱</label>
-	                            	<div class="col-sm-9">
-	                            		<span class="input-icon icon-left">
-		                            		<i class="fa fa-envelope circular"></i>
-		                                    <input type="text" class="form-control" name="email" placeholder="邮箱" value="${user.email }" >
-                                    	</span>
-	                            	</div>
-	                            </div>
-	                            <div class="form-group has-feedback row">
-	                            	<label class="col-sm-2 control-label">联系电话</label>
-	                            	<div class="col-sm-9">
-	                            		<span class="input-icon icon-left">
-		                            		<i class="fa fa-phone circular"></i>
-		                                    <input type="text" class="form-control" name="phone" placeholder="联系电话" value="${user.phone }" >
-                                    	</span>
-	                            	</div>
-	                            </div>
-	                            <div class="form-group has-feedback row">
-	                            	<label class="col-sm-2 control-label">家庭住址</label>
-	                            	<div class="col-sm-3">
-		                            	<select  id="provinceId" name="provinceId" style="width: 100%;" >
-		                            		<c:if test="${ user.provinceId != null && user.provinceId != '' }">
-		                            		<option value="${ user.provinceId}" selected="selected">${ user.province.provinceName}</option>
-		                            		</c:if>
-										</select>
-	                            	</div>
-	                            	<div class="col-sm-3">
-		                            	<select  id="municipalityId" name="municipalityId" style="width: 100%;" >
-		                            	<c:if test="${ user.municipalityId != null && user.municipalityId != '' }">
-		                            	<option value="${ user.municipalityId}" selected="selected">${ user.municipality.municipalityName}</option>
-		                            	</c:if>
-										</select>
-	                            	</div>
-	                            	<div class="col-sm-3">
-		                            	<select  id="countyId" name="countyId" style="width: 100%;" >
-		                            	<c:if test="${ user.countyId != null && user.countyId != '' }">
-		                            	<option value="${ user.countyId}" selected="selected">${ user.county.countyName}</option>
-		                            	</c:if>
-										</select>
-	                            	</div>
-	                            </div>
-	                            <div class="form-group has-feedback row">
-	                            	<label class="col-sm-2 control-label"></label>
-	                            	<div class="col-sm-9">
-	                            		<span class="input-icon icon-left">
-		                            		<i class="fa fa-building-o circular"></i>
-		                                   <input type="text" class="form-control" name="deailAddress" placeholder="详细地址" value="${user.deailAddress }" >
-                                    	</span>
-	                            	</div>
-	                            </div>
-	                            <div class="row">
-	                            	<div class="col-sm-6">
-	                            		<div class="form-group has-feedback row">
-	                            			<label class="col-sm-4 control-label">出生日期</label>
-	                                    	<div class="col-sm-8">
-		                                    	<span class="input-icon icon-left">
-		                                            <input type="text" class="form-control date-picker" name="birthday" id="birthday" placeholder="出生日期" value='<fmt:formatDate value="${user.birthday}" pattern="yyyy/MM/dd"/>'>
-		                                            <i class="fa fa-calendar"></i>
-		                                        </span>
-	                                    	</div>
-	                            		</div>
-	                            		
-	                            	</div>
-	                                  
-	                                <div class="col-sm-5">
-	                            		<div class="form-group has-feedback row">
-	                            			<label class="col-sm-4 control-label">毕业学校</label>
-	                                    	<div class="col-sm-8">
-		                                    	<span class="input-icon icon-left">
-		                                            <input type="text" class="form-control" name="school" placeholder="请填写毕业院校" value="${user.school }">
-		                                            <i class="fa fa-hospital-o circular"></i>
-		                                        </span>
-	                                    	</div>
-	                            		</div>
-	                            	</div>  	
-	                            </div>
-	                            
-	                       		<div class="form-group has-feedback row">
-	                            	<label class="col-sm-2 control-label">个人说明</label>
-	                            	<div class="col-sm-9">
-                                        <textarea class="form-control" id="remarks" name="remarks">${user.remarks }</textarea>
-	                            	</div>
-	                            </div>
-	                            
-	                            <div class="row text-center">
-	                            	<a class="btn btn-default" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
-	                            </div>
-	                            <input type="hidden" name="userId" value="${user.userId }">
-	                        </form>
-	                    </div>
-	                </div>
-	            </div>
-            </div>
-    	</div>
-    </div>
-</body>
-</html>
+<div class="container-content">
+	<div class="container-body">
+		<div id="registration-form">
+			<form id="saveForm" method="post" class="form-horizontal">
+		
+				<div class="form-title">
+						帐号：${user.username}
+				</div>
+				<div class="form-group has-feedback row">
+					<label class="col-sm-2 control-label">姓名</label>
+					<div class="col-sm-9">
+						<span class="input-icon icon-left">
+						<i class="fa fa-user circular"></i>
+						 <input type="text" class="form-control" name="personName" placeholder="姓名" value="${user.personName }">
+						</span>
+					</div>
+				   
+				</div>
+				<div class="form-group has-feedback row">
+					<label class="col-sm-2 control-label">邮箱</label>
+					<div class="col-sm-9">
+						<span class="input-icon icon-left">
+						<i class="fa fa-envelope circular"></i>
+						 <input type="text" class="form-control" name="email" placeholder="邮箱" value="${user.email }" >
+						</span>
+					</div>
+				</div>
+				<div class="form-group has-feedback row">
+					<label class="col-sm-2 control-label">联系电话</label>
+					<div class="col-sm-9">
+						<span class="input-icon icon-left">
+						<i class="fa fa-phone circular"></i>
+						 <input type="text" class="form-control" name="phone" placeholder="联系电话" value="${user.phone }" >
+						</span>
+					</div>
+				</div>
+				<div class="form-group has-feedback row">
+					<label class="col-sm-2 control-label">家庭住址</label>
+					<div class="col-sm-3">
+					<select  id="provinceId" name="provinceId" style="width: 100%;" >
+						<c:if test="${ user.provinceId != null && user.provinceId != '' }">
+						<option value="${ user.provinceId}" selected="selected">${ user.province.provinceName}</option>
+						</c:if>
+				</select>
+					</div>
+					<div class="col-sm-3">
+					<select  id="municipalityId" name="municipalityId" style="width: 100%;" >
+					<c:if test="${ user.municipalityId != null && user.municipalityId != '' }">
+					<option value="${ user.municipalityId}" selected="selected">${ user.municipality.municipalityName}</option>
+					</c:if>
+				</select>
+					</div>
+					<div class="col-sm-3">
+					<select  id="countyId" name="countyId" style="width: 100%;" >
+					<c:if test="${ user.countyId != null && user.countyId != '' }">
+					<option value="${ user.countyId}" selected="selected">${ user.county.countyName}</option>
+					</c:if>
+				</select>
+					</div>
+				</div>
+				<div class="form-group has-feedback row">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<span class="input-icon icon-left">
+						<i class="fa fa-building-o circular"></i>
+						<input type="text" class="form-control" name="deailAddress" placeholder="详细地址" value="${user.deailAddress }" >
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group has-feedback row">
+							<label class="col-sm-4 control-label">出生日期</label>
+							<div class="col-sm-8">
+							<span class="input-icon icon-left">
+								 <input type="text" class="form-control date-picker" name="birthday" id="birthday" placeholder="出生日期" value='<fmt:formatDate value="${user.birthday}" pattern="yyyy/MM/dd"/>'>
+								 <i class="fa fa-calendar"></i>
+							 </span>
+							</div>
+						</div>
+						
+					</div>
+					  
+					<div class="col-sm-5">
+						<div class="form-group has-feedback row">
+							<label class="col-sm-4 control-label">毕业学校</label>
+							<div class="col-sm-8">
+							<span class="input-icon icon-left">
+								 <input type="text" class="form-control" name="school" placeholder="请填写毕业院校" value="${user.school }">
+								 <i class="fa fa-hospital-o circular"></i>
+							 </span>
+							</div>
+						</div>
+					</div>  	
+				</div>
+				
+				<div class="form-group has-feedback row">
+					<label class="col-sm-2 control-label">个人说明</label>
+					<div class="col-sm-9">
+						   <textarea class="form-control" id="remarks" name="remarks">${user.remarks }</textarea>
+					</div>
+				</div>
+				
+		
+				<input type="hidden" name="userId" value="${user.userId }">
+			</form>
+		</div>
+		<div class="text-center container-footer">
+			<a class="btn btn-default" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
+		</div>
+	</div>
+</div>

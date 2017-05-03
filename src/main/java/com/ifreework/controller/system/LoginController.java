@@ -18,26 +18,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ifreework.common.constant.Constant;
 import com.ifreework.common.controller.BaseControllerSupport;
 import com.ifreework.common.entity.PageData;
+import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.Config;
 import com.ifreework.entity.system.User;
-import com.ifreework.help.HttpRequest;
-import com.ifreework.help.Jurisdiction;
 import com.ifreework.service.system.UserService;
-import com.ifreework.util.Const;
 import com.ifreework.util.FileUtil;
-import com.ifreework.util.PropertiesUtil;
 import com.ifreework.util.StringUtil;
 
 /**
@@ -75,14 +71,14 @@ public class LoginController extends BaseControllerSupport {
 	 * @TODO(用户登录界面跳转，如果已经登录，则跳转到Main页面) 
 	 * @param @return @throws
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping()
 	public ModelAndView gotoIndexView() {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
 		String sysName = Config.init().get(Config.SYSTEM_NAME);
 		pd.put("SYSNAME", sysName); // 读取系统名称
 		mv.addObject("pd", pd);
-		User user = Jurisdiction.getUser();
+		User user = UserManager.getUser();
 		if (user != null) {
 			mv.addObject("user",user);
 			mv.setViewName("/system/main/main");
@@ -115,7 +111,7 @@ public class LoginController extends BaseControllerSupport {
 		PageData pd = this.getPageData();
 		mv.addObject("pd", pd);
 		
-		User user = Jurisdiction.getUser();
+		User user = UserManager.getUser();
 		mv.addObject("user",user);
 		
 		String sysName = Config.init().get(Config.SYSTEM_NAME);
@@ -159,20 +155,19 @@ public class LoginController extends BaseControllerSupport {
 	@RequestMapping(value = "/main/userImgDownload")
 	@ResponseBody
 	public String userImgDownload() throws Exception{
-		PageData pd = this.getPageData();
-		User user;
-		if(StringUtil.isEmpty(pd.getString("username"))){
-			user = Jurisdiction.getUser();
-		}else{
-			user = userService.getUserInfoByUserName(pd);
-		}
-		
-		HttpServletResponse res = this.getHttpServletResponse();
-		String imgPath = user.getImgPath();
-		if(StringUtil.isEmpty(imgPath)){
-			imgPath = FileUtil.getRootPath() + "resources/img/main/defeat.jpg";
-		}
-		FileUtil.fileDownload(res, imgPath);
+//		PageData pd = this.getPageData();
+//		User user = null;
+//		String username = pd.getString("username");
+//		if(StringUtil.isEmpty(username)){
+//			user = UserManager.getUser();
+//		}
+//		
+//		HttpServletResponse res = this.getHttpServletResponse();
+//		String imgPath = user.getImgPath();
+//		if(StringUtil.isEmpty(imgPath)){
+//			imgPath = FileUtil.getRootPath() + "resources/img/main/defeat.jpg";
+//		}
+//		FileUtil.fileDownload(res, imgPath);
 		return null;
 	}
 
@@ -200,7 +195,7 @@ public class LoginController extends BaseControllerSupport {
 	@ResponseBody
 	public PageData skinChoose(){
 		PageData pd = this.getPageData();
-		User user = Jurisdiction.getUser();
+		User user = UserManager.getUser();
 		String skin = pd.getString("skin");
 		user.setSkin(skin);
 		pd = userService.update(user);
@@ -236,20 +231,11 @@ public class LoginController extends BaseControllerSupport {
 	 */
 	@RequestMapping(value="/logout")
 	public ModelAndView logout(){
-		if(Jurisdiction.getUser() == null ){
-			return gotoIndexView();                                                                             
-		}
-		String USERNAME = Jurisdiction.getUsername();	//当前登录的用户名
-		logger.debug( USERNAME+"退出系统");
-		Session session = Jurisdiction.getSession();	//以下清除session缓存
-		session.removeAttribute(Const.SESSION_USER);
-		session.removeAttribute(USERNAME + Const.SESSION_ROLE_RIGHTS);
-		session.removeAttribute(USERNAME + Const.SESSION_allmenuList);
-		session.removeAttribute(USERNAME + Const.SESSION_menuList);
-		session.removeAttribute(USERNAME + Const.SESSION_QX);
-		session.removeAttribute(Const.SESSION_userpds);
-		session.removeAttribute(Const.SESSION_USERNAME);
-		session.removeAttribute(Const.SESSION_USERROL);
+//		if(UserManager.getUser() == null ){
+//			return gotoIndexView();                                                                             
+//		}
+//		String USERNAME = UserManager.getUsername();	//当前登录的用户名
+//		logger.debug( USERNAME+"退出系统");
 		//shiro销毁登录
 		Subject subject = SecurityUtils.getSubject(); 
 		subject.logout();

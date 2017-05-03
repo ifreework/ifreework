@@ -7,20 +7,19 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import com.ifreework.entity.system.Msg;
 import com.ifreework.help.WebsocketHelp;
-import com.ifreework.util.Const;
 
 public class SessionDisconnectListener implements ApplicationListener<SessionDisconnectEvent> {
 	Logger logger = Logger.getLogger(getClass());
 
 	@Override
 	public void onApplicationEvent(SessionDisconnectEvent event) {
-		StompHeaderAccessor headers = StompHeaderAccessor.wrap(event.getMessage()); // 获取消息头
-		String name = headers.getUser().getName(); // 获取账号名
-		Const.WEBSOCKET_USER_MAP.remove(name);
-		logger.debug(name + " websocket断开连接。");
-		Msg msg = new Msg();
-		msg.setFromUser(name);
-		msg.setHandleType("userOffline");
-		WebsocketHelp.send("/topic/greetings", msg);
+//		StompHeaderAccessor headers = StompHeaderAccessor.wrap(event.getMessage()); // 获取消息头
+//		String name = headers.getUser().getName(); // 获取账号名
+//		Const.WEBSOCKET_USER_MAP.remove(name);
+//		logger.debug(name + " websocket断开连接。");
+//		Msg msg = new Msg();
+//		msg.setFromUser(name);
+//		msg.setHandleType("userOffline");
+//		WebsocketHelp.send("/topic/greetings", msg);
 	}
 }

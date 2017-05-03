@@ -23,6 +23,8 @@
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
+	<aop:aspectj-autoproxy />
+	
 	<!-- 数据库管理 -->
 	<bean name="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -36,6 +38,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:config/jdbc.properties</value>
+				<value>classpath:config/shiro.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -82,6 +85,10 @@
 				rollback-for="java.lang.Exception" />
 			<tx:method name="insert*" propagation="REQUIRED" read-only="false"
 				rollback-for="java.lang.Exception" />
+			<tx:method name="add*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="edit*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
 			<tx:method name="update*" propagation="REQUIRED" read-only="false"
 				rollback-for="java.lang.Exception" />
 			<tx:method name="save*" propagation="REQUIRED" read-only="false"
@@ -96,7 +103,7 @@
 	<!-- 事物控制 -->
 	<aop:config>
 		<aop:pointcut id="pc"
-			expression="execution(* com.iframework.service..*(..))" />
+			expression="execution(* com.ifreework.service..*(..))" />
 		<aop:advisor pointcut-ref="pc" advice-ref="txAdvice" />
 	</aop:config>
 
@@ -110,11 +117,11 @@
 		<property name="plugins">
 	        <array>
 	            <bean class="com.github.pagehelper.PageInterceptor">
-	                <!-- 这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置 -->
+	                <!-- 分页插件 -->
 	                <property name="properties">
 	                    <value>
-	                        helperDialect=mysql
 	                        reasonable=true
+	                        pageSizeZero=true
 	                        supportMethodsArguments=true
 	                        params=count=countSql;pageNum=start;pageSize=length
 	                        autoRuntimeDialect=true
@@ -132,32 +139,6 @@
 
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory" />
-	</bean>
-
-
-	<!-- ================ Shiro start ================ -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<property name="realm" ref="ShiroRealm" />
-	</bean>
-
-	<!-- 項目自定义的Realm -->
-	<bean id="ShiroRealm" class="com.ifreework.common.interceptor.shiro.ShiroRealm"></bean>
-
-	<!-- Shiro Filter -->
-	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-		<property name="securityManager" ref="securityManager" />
-
-		<property name="loginUrl" value="/" />
-
-		<property name="successUrl" value="/main/index" />
-
-		<property name="unauthorizedUrl" value="/login_toLogin" />
-
-		<property name="filterChainDefinitions">
-			<value>
-				/resources/** = anon
-			</value>
-		</property>
 	</bean>
 
 </beans>

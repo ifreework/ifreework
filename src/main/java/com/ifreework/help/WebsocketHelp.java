@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import com.ifreework.util.Const;
 
 public class WebsocketHelp {
 
@@ -31,10 +30,10 @@ public class WebsocketHelp {
 	 * @throws
 	 */
 	public static void send(String url, Object msg) {
-		Set<String> set = Const.WEBSOCKET_USER_MAP.keySet();
-		for(String name : set){
-			send(name,url,msg);
-		}
+//		Set<String> set = Constant.WEBSOCKET_USER_MAP.keySet();
+//		for(String name : set){
+//			send(name,url,msg);
+//		}
 	}
 
 	/**
