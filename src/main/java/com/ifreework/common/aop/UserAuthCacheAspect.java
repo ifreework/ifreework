@@ -5,13 +5,18 @@
  */
 package com.ifreework.common.aop;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import com.ifreework.common.constant.UserConstant;
+import com.ifreework.common.manager.UserManager;
+import com.ifreework.entity.system.User;
+import com.ifreework.entity.system.UserRole;
 
 import java.util.Arrays;
 
@@ -67,12 +72,9 @@ public class UserAuthCacheAspect extends BaseCacheAspect<String, Object> {
 		setCacheName("sys-authCache");
 	}
 
-	private String userPermissionsPrefix = UserConstant.USER_PERMISSIONS_PREFIX.toString();
+	private String userPermissionsPrefix = UserConstant.USER_PERMISSIONS_PREFIX.toString();  //用户拥有角色缓存key前缀
 	private String resourcePermissionsPrefix = UserConstant.RESOURCE_PERMISSIONS_PREFIX.toString();
 
-	public void setCacheName(String cacheName) {
-		this.cacheName = cacheName;
-	}
 
 	public String getUserPermissionsPrefix() {
 		return userPermissionsPrefix;
@@ -91,14 +93,38 @@ public class UserAuthCacheAspect extends BaseCacheAspect<String, Object> {
 	}
 
 
+	private String getUserPermissionsKey(String username) {
+		return userPermissionsPrefix + username;
+	}
+	
+	private String getResourcePermissionsKey(String resourceId) {
+		return resourcePermissionsPrefix + resourceId;
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * 描述：切点，通过resourceId获取权限时
+	 * @Title: authCacheAuthorityByResourcePointcut
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.queryAuthorityByResourceId(..))")
 	private void authCacheAuthorityByResourcePointcut() {
 	}
-
-	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.queryAuthorityByUserName(..))")
-	private void authCacheAuthorityByUsernamePointcut() {
-	}
-
+	
+	/**
+	 * 
+	 * 描述：如果缓存中包涵该用户所拥有的权限，则从缓存中获取，
+	 *       如果没有该权限，则调用原方法，并将查询结果保存在缓存中
+	 * @Title: queryAuthorityByUserName
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	@Around(value = "authCacheAuthorityByUsernamePointcut()")
 	public Object queryAuthorityByUserName(ProceedingJoinPoint joinPoint) throws Throwable {
 		String username = (String) joinPoint.getArgs()[0];
@@ -113,7 +139,28 @@ public class UserAuthCacheAspect extends BaseCacheAspect<String, Object> {
 		return obj;
 
 	}
+
+	/**
+	 * 
+	 * 描述：切点，通过用户名获取用户拥有的权限时
+	 * @Title: authCacheAuthorityByUsernamePointcut
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.queryAuthorityByUserName(..))")
+	private void authCacheAuthorityByUsernamePointcut() {
+	}
 	
+	/**
+	 * 
+	 * 描述：如果缓存中包涵该资源所对应的资源，则从缓存中获取，
+	 *       如果没有该权限，则调用原方法，并将查询结果保存在缓存中
+	 * @Title: queryAuthorityByUserName
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	@Around(value = "authCacheAuthorityByUsernamePointcut()")
 	public Object queryAuthorityByResourceId(ProceedingJoinPoint joinPoint) throws Throwable {
 		String resourceId = (String) joinPoint.getArgs()[0];
@@ -129,11 +176,78 @@ public class UserAuthCacheAspect extends BaseCacheAspect<String, Object> {
 
 	}
 
-	private String getUserPermissionsKey(String username) {
-		return userPermissionsPrefix + username;
+	/**
+	 * 
+	 * 描述：切点，当用户修改角色时，重置用户缓存
+	 * @Title: authCacheAuthorityByUsernamePointcut
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Pointcut(value = "execution(*  com.ifreework.mapper.system.UserRoleMapper.add(..))" + 
+					  "|| execution(*  com.ifreework.mapper.system.UserRoleMapper.delete(..))")
+	private void resetCacheAuthorityByUsernamePointcut() {
 	}
 	
-	private String getResourcePermissionsKey(String resourceId) {
-		return resourcePermissionsPrefix + resourceId;
+	/**
+	 * 
+	 * 描述：修改用户角色前，先清除该用户对应的缓存
+	 * @Title: queryAuthorityByUserName
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Before(value = "resetCacheAuthorityByUsernamePointcut()")
+	public void resetCacheAuthorityByUsername(JoinPoint joinPoint) throws Throwable {
+		UserRole ur = (UserRole) joinPoint.getArgs()[0];
+		User user = UserManager.getUser(ur.getUserId());
+		String key = getUserPermissionsKey(user.getUsername());
+		Object obj = remove(key);
+		log.debug("cacheName:" + cacheName + ", method:remove, hit key:" + key + ",value:" + obj);
+	}
+
+	
+	/**
+	 * 
+	 * 描述：切点，清除全部缓存
+	 * 该方法在执行以下操作时执行
+	 * 1、com.ifreework.service.system.RoleAuthorityServiceImpl.save(PageData pd) 
+	 * 2、com.ifreework.service.system.RoleServiceImpl.add(Role role) || update || delete
+	 * 3、com.ifreework.service.system.ResourceServiceImpl.add(Resource resource, String addArray) || update || delete
+	 * 4、com.ifreework.service.system.OperationServiceImpl.add(Operation operation) || update || delete
+	 * @Title: authCacheAuthorityByUsernamePointcut
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Pointcut(value = "execution(*  com.ifreework.service.system.RoleAuthorityServiceImpl.save(..))" + 
+	 
+					    "|| execution(*  com.ifreework.service.system.RoleServiceImpl.add(..))" + 
+						"|| execution(*  com.ifreework.service.system.RoleServiceImpl.update(..))" + 
+						"|| execution(*  com.ifreework.service.system.RoleServiceImpl.delete(..))" + 
+						
+						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.add(..))" + 
+						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.update(..))" + 
+						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.delete(..))" + 
+						
+						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.add(..))" + 
+						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.update(..))" + 
+						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.delete(..))") 
+	private void resetCachePointcut() {
+	}
+	
+	
+	/**
+	 * 
+	 * 描述：清除全部缓存
+	 * @Title: resetCache
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Before(value = "resetCachePointcut()")
+	public void resetCache() throws Throwable {
+		 clear();
+		log.debug("cacheName:" + cacheName + " clear");
 	}
 }
