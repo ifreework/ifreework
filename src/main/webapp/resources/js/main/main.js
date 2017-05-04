@@ -103,7 +103,10 @@ function _pageLoaded(){
 	$(window).resize(initFrameHeight);
 }
 
-document.addEventListener('DOMContentLoaded', _pageLoaded, false);
+
+$().ready(function(){
+	_pageLoaded();
+});
 
 /*
  * //# sourceMappingURL=beyond.min.js.map
