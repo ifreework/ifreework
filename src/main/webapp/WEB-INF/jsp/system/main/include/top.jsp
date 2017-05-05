@@ -5,23 +5,19 @@
 			<div class="navbar-header pull-left">
 				<a href="javascript:void(0)" class="navbar-brand">
 					<small>
-                        <img alt="" src="resources/img/system/Logo_48px.png">
-                        <span class="logo-text">iFreeWork</span>
+                        <img alt="" src="${imagePath}/ui/logo.png">
                     </small>
                 </a>
 			</div>
             <!-- /Navbar Barnd -->
     	
-			<!-- Sidebar Collapse -->
-            <div class="sidebar-collapse" id="sidebar-collapse">
-                <i class="collapse-icon fa fa-bars"></i>
-            </div>
-            <!-- /Sidebar Collapse -->
-    	
     		<!-- Account Area and Settings --->
             <div class="navbar-header pull-right">
             	<div class="navbar-account">
             		<ul class="account-area">
+            			<li class="sidebar-collapse" id="sidebar-collapse">
+            				<i class="collapse-icon fa fa-bars"></i>
+            			</li>
             			<li>
             				 <a class=" dropdown-toggle" data-toggle="dropdown" title="Help" href="javascript:void(0)">
                              	<i class="icon fa fa-warning"></i>

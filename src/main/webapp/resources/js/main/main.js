@@ -32,7 +32,7 @@ function InitiateSideMenu() {
 			if (!i.hasClass("menu-dropdown")){
 				var url = i.data("url");
 				if(!isNull(url)){
-					ul.find("li.active").removeClass("active");
+					$(".sidebar-menu").find("li.active").removeClass("active");
 					i.closest("li").addClass("active");
 					W.openPage(url);
 				}
@@ -89,6 +89,7 @@ function initUserDropDown(){
 //当页面大小发生改变时，修改iframe的高度
 function initFrameHeight(){
 	var bodyHeight = $("body").height();
+	console.log(bodyHeight);
 	$("#page-body").css({
 		minHeight:bodyHeight - 85
 	});
