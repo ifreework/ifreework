@@ -1,4 +1,4 @@
-package com.ifreework.help;
+package com.ifreework.common.manager;
 
 import java.util.List;
 import java.util.Set;
@@ -6,7 +6,7 @@ import java.util.Set;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 
-public class WebsocketHelp {
+public class WebsocketManager {
 
 	/**
 	 * @Title: getSimpMessagingTemplate
@@ -16,7 +16,7 @@ public class WebsocketHelp {
 	 * @throws
 	 */
 	public static SimpMessagingTemplate getSimpMessagingTemplate() {
-		SimpMessagingTemplate t = SpringHelper.getBean("brokerMessagingTemplate", SimpMessagingTemplate.class);
+		SimpMessagingTemplate t = SpringManager.getBean("brokerMessagingTemplate", SimpMessagingTemplate.class);
 		return t;
 	}
 

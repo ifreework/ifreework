@@ -7,32 +7,43 @@
  * 版权所有    
  *    
  */
-package com.ifreework.help;
+package com.ifreework.common.manager;
 
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoader;
 
 /**
- * 获取spring中配置的bean 类名称：SpringHelper 类描述： 创建人：王宜华 创建时间：2014-11-18 上午11:27:40
- * 修改人：王宜华 修改时间：2014-11-18 上午11:27:40 修改备注：
  * 
- * @version
- * 
+ * 描述：    通过id获取spring application中的对象
+ * @author：wangyh
+ * @createDate：2017年5月5日
+ * @modify：wangyh    
+ * @modifyDate：2017年5月5日 
+ * @version 1.0
  */
-public class SpringHelper {
+public class SpringManager {
 
 	/**
-	 * 根据beanname获取bean getBean(这里用一句话描述这个方法的作用)
 	 * 
-	 * @param beanName
-	 * @return 参数中文名
-	 * @return 列出方法的返回值列表（如果需要返回值的话）
+	 * 描述：根据beanName获取bean对象
+	 * @Title: getBean
+	 * @param 
+	 * 			beanName 配置中的beanid
+	 * @return   
+	 * @throws
 	 */
 	public static Object getBean(String beanName) {
 		return ContextLoader.getCurrentWebApplicationContext().getBean(beanName);
 	}
 
+	/**
+	 * 
+	 * 描述：根据beanname获取指定的class对象，此处如果对象类型与class不一致，会抛出class case异常
+	 * @Title: getBean
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(String beanName, Class<?> clazz) {
 		T t = null;
@@ -40,6 +51,14 @@ public class SpringHelper {
 		return t;
 	}
 	
+	/**
+	 * 
+	 * 描述：获取ehcahche缓存管理对象
+	 * @Title: getEhCacheManager
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	public static EhCacheManager getEhCacheManager(){
 		return getBean("cacheManager",EhCacheManager.class);
 	}

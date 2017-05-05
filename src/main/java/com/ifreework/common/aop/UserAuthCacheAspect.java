@@ -13,7 +13,8 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import com.ifreework.common.constant.UserConstant;
+import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.manager.BaseCacheManager;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.entity.system.UserRole;
@@ -66,14 +67,14 @@ import java.util.Arrays;
  */
 @Component
 @Aspect
-public class UserAuthCacheAspect extends BaseCacheAspect<String, Object> {
+public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 
 	public UserAuthCacheAspect() {
 		setCacheName("sys-authCache");
 	}
 
-	private String userPermissionsPrefix = UserConstant.USER_PERMISSIONS_PREFIX.toString();  //用户拥有角色缓存key前缀
-	private String resourcePermissionsPrefix = UserConstant.RESOURCE_PERMISSIONS_PREFIX.toString();
+	private String userPermissionsPrefix = EhCacheConstant.USER_PERMISSIONS_PREFIX.toString();  //用户拥有角色缓存key前缀
+	private String resourcePermissionsPrefix = EhCacheConstant.RESOURCE_PERMISSIONS_PREFIX.toString();
 
 
 	public String getUserPermissionsPrefix() {

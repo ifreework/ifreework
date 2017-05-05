@@ -4,7 +4,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
-import com.ifreework.common.constant.UserConstant;
+import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.manager.BaseCacheManager;
 import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.User;
 
@@ -25,7 +26,7 @@ import com.ifreework.entity.system.User;
  */
 @Component
 @Aspect
-public class UserCacheAspect extends BaseCacheAspect<String, User> {
+public class UserCacheAspect extends BaseCacheManager<String, User> {
 
 	private ShiroAuthInterface shiroAuthInterface;// 与数据库同步接口
 
@@ -38,10 +39,10 @@ public class UserCacheAspect extends BaseCacheAspect<String, User> {
 	}
 
 	public UserCacheAspect() {
-		setCacheName(UserConstant.USER_CACHE_NAME.toString()); // 设置缓存地址名称
+		setCacheName(EhCacheConstant.USER_CACHE_NAME.toString()); // 设置缓存地址名称
 	}
 
-	private String usernameKeyPrefix = UserConstant.USERNAME_KEY_PREFIX.toString(); // 用户名key前缀
+	private String usernameKeyPrefix = EhCacheConstant.USERNAME_KEY_PREFIX.toString(); // 用户名key前缀
 
 	/**
 	 * 

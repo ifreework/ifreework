@@ -14,8 +14,8 @@ import org.springframework.stereotype.Controller;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ifreework.common.manager.WebsocketManager;
 import com.ifreework.entity.system.Msg;
-import com.ifreework.help.WebsocketHelp;
 
 @Controller
 public class GreetingController {

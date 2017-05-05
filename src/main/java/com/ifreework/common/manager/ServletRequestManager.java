@@ -1,4 +1,4 @@
-package com.ifreework.help;
+package com.ifreework.common.manager;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -29,8 +29,8 @@ import com.ifreework.util.StringUtil;
  * @修改时间：2016年7月5日 上午11:19:54
  * @version 1.0
  */
-public class ServletRequestHelper {
-	static Logger logger = Logger.getLogger(ServletRequestHelper.class);
+public class ServletRequestManager {
+	static Logger logger = Logger.getLogger(ServletRequestManager.class);
 	private static SimpleDateFormat httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyyy HH:mm:ss z", Locale.US);
 
 	/**

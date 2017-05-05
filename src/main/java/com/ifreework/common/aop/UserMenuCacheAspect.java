@@ -13,7 +13,8 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import com.ifreework.common.constant.UserConstant;
+import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.manager.BaseCacheManager;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.entity.system.UserRole;
@@ -66,13 +67,13 @@ import java.util.Arrays;
  */
 @Component
 @Aspect
-public class UserMenuCacheAspect extends BaseCacheAspect<String, Object> {
+public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
 
 	public UserMenuCacheAspect() {
-		setCacheName(UserConstant.MENU_CACHE_NAME.toString());
+		setCacheName(EhCacheConstant.MENU_CACHE_NAME.toString());
 	}
 
-	private String userMenuPrefix = UserConstant.USER_MENU_PREFIX.toString();  //用户拥有菜单缓存key前缀
+	private String userMenuPrefix = EhCacheConstant.USER_MENU_PREFIX.toString();  //用户拥有菜单缓存key前缀
 	
 	public String getUserMenuPrefix() {
 		return userMenuPrefix;

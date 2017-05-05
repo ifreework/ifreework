@@ -1,4 +1,4 @@
-package com.ifreework.common.aop;
+package com.ifreework.common.manager;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.cache.Cache;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @modifyDate：2017年4月30日 
  * @version 1.0
  */
-public class BaseCacheAspect<K, V> implements InitializingBean {
+public class BaseCacheManager<K, V> implements InitializingBean {
 
     protected final Logger log = Logger.getLogger(getClass());
     @Autowired

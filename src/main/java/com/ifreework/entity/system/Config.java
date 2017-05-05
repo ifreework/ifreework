@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 
-import com.ifreework.help.SpringHelper;
+import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.manager.SpringManager;
 import com.ifreework.mapper.system.ConfigMapper;
 
-public class Config {
+public class Config{
 	public static final String SYSTEM_NAME = "system_name"; //系统名称
 	
 	public static final String BUTTON_AUTH_ENABLE = "button_auth_enable"; //是否启用按钮权限
@@ -47,14 +50,19 @@ public class Config {
 	 * @throws
 	 */
 	public static Config init(){
+		EhCacheManager ehCacheManager = SpringManager.getEhCacheManager();
+		Cache<String,Config> cache = ehCacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
+		config = cache.get(EhCacheConstant.CONFIG_CACHE_KEY_NAME.toString());
+		
 		if(config == null){
-			ConfigMapper configMapper = (ConfigMapper) SpringHelper.getBean("configMapper");
+			ConfigMapper configMapper = (ConfigMapper) SpringManager.getBean("configMapper");
 			List<Map<String,Object>> list = configMapper.queryConfigList();
 			Map<String,Object> map = new HashMap<String,Object>();
 			for(Map<String,Object> item : list ){
 				map.put((String) item.get("CONFIG_KEY"), item.get("CONFIG_VALUE"));
 			}
 			config = new Config(map);
+			cache.put(EhCacheConstant.CONFIG_CACHE_KEY_NAME.toString(), config);
 		}
 		return config;
 	}
@@ -63,8 +71,19 @@ public class Config {
 		return (String) map.get(key);
 	}
 	
+	
+	/**
+	 * 
+	 * 描述：当cache被修改后，清空缓存
+	 * @Title: reset
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	public static void reset(){
-		config = null;
+		EhCacheManager ehCacheManager = SpringManager.getEhCacheManager();
+		Cache<String,Config> cache = ehCacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
+		cache.clear();
 	}
 }
 

@@ -10,7 +10,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ifreework.common.entity.PageData;
-import com.ifreework.help.ServletRequestHelper;
+import com.ifreework.common.manager.ServletRequestManager;
 
 
 /**
@@ -55,7 +55,7 @@ public class BaseControllerSupport {
 	 * @return
 	 */
 	public HttpServletResponse getHttpServletResponse() {
-		return ServletRequestHelper.getHttpServletResponse();
+		return ServletRequestManager.getHttpServletResponse();
 	}
 
 	
@@ -68,7 +68,7 @@ public class BaseControllerSupport {
 	 * @throws
 	 */
 	public void printHttpServletResponse(Object obj) {
-		ServletRequestHelper.printHttpServletResponse(obj);
+		ServletRequestManager.printHttpServletResponse(obj);
 	}
 	
 	
