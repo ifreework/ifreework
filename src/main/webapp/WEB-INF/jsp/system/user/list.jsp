@@ -96,7 +96,7 @@
 	    		 resetPwd(this);
 	    	 });
 	    	 $("#userTab .btn-role").click(function(){
-	    		 W.openPage("${contextPath}/system/userrole",{userId:$(this).data("userid")})
+	    		 W.open("${contextPath}/system/userrole",{userId:$(this).data("userid")},"添加角色");
 	    	 });
 	    } );;
 		
@@ -119,7 +119,7 @@
 					}
 				}
 		};
-		ajax(opt);
+		W.ajax(opt);
 	}
 
 
@@ -141,7 +141,7 @@
 		
 		bootbox.confirm("确定要重置该用户的密码吗?","",function(r){
 			if(r){
-				ajax(opt);
+				W.ajax(opt);
 			}
 		});
 		

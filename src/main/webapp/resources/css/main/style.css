@@ -124,6 +124,7 @@
 }
 
 .page-sidebar .sidebar-menu a{
+	color: #000000;
 	max-width: 218px;
 }
 .page-sidebar .sidebar-menu>li>a {
@@ -159,6 +160,9 @@
 .page-sidebar .sidebar-menu .submenu li.active>a{
 	background: #3eafe0;;
 }
+.page-sidebar .sidebar-menu .submenu>li .submenu>li>a{
+	color: #777777;
+}
  .nav .open>a:focus{
 	border-top: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -167,6 +171,13 @@
 .page-breadcrumbs{
 	background: #edf6fa;
 }
+.breadcrumb>li>a{
+	color: #000;
+}
+.breadcrumb>li.active>a{
+	color: #4b8b6b;
+}
+
 .page-body{
 	padding: 10px 10px 0px 10px;
 	background: #fff;

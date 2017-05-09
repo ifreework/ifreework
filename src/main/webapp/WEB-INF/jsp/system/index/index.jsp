@@ -56,7 +56,7 @@ $(function(){
 	//登录操作
 	function submitUserData(){
 		if (validate()) {
-			ajax({
+			W.ajax({
 				url : "${contextPath}/login",
 				data:{username:$("#username").val(),password:$("#password").val()},
 				success : function(result) {
@@ -68,9 +68,6 @@ $(function(){
 						bootbox.unload();
 						bootbox.alert(result.msg);
 					}
-				},
-				complete : function(xhr, ts){
-						
 				}
 			});
 		}
@@ -78,11 +75,11 @@ $(function(){
 	
 	//验证用户名密码是否为空
 	function validate() {
-		if (isNull($("#username").val())) {
+		if (W.isNull($("#username").val())) {
 			bootbox.alert("请输入您的用户名。");
 			return false;
 		}
-		if (isNull($("#password").val())) {
+		if (W.isNull($("#password").val())) {
 			bootbox.alert("请输入您的密码。");
 			return false;
 		}
@@ -106,7 +103,7 @@ $(function(){
 		var username = $.cookie("username");
 		var pwd = $.cookie("password");
 		
-		if(!isNull(username) && !isNull(pwd)){
+		if(!W.isNull(username) && !W.isNull(pwd)){
 			$("#cookieBox").attr("checked","checked"); 
 			$("#username").val(username);
 			$("#password").val(pwd);

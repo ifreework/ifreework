@@ -27,7 +27,7 @@
 			}], 
 			onclick:function(id){
 				if(id == "authorization"){
-					W.openPage("${ contextPath }/system/role/authorization?treeId=" + $role.data("treeId"));
+					W.open("${ contextPath }/system/role/authorization?treeId=" + $role.data("treeId"),{},"角色授权");
 				}else if(id == "add"){
 					openDialog("${ contextPath }/system/role/add?treeId=" + $role.data("treeId"));
 				}else if(id == "update"){
@@ -113,7 +113,7 @@
 				}
 			}
 		};
-		ajax(opt);
+		W.ajax(opt);
 	}
 	
 	
@@ -131,7 +131,7 @@
 				}
 			}
 		};
-		ajax(opt);
+		W.ajax(opt);
 	}
 }());
 </script>

@@ -28,7 +28,7 @@
 						$(file.previewElement).remove();
 					}
 				}
-				ajax(opt);
+				W.ajax(opt);
 			}
 		});
 	});

@@ -67,23 +67,74 @@
 		<!-- Page Container -->
     	<div class="page-container">
     	
-    	<!-- 页面左边导航 sidebar -->
-    	<%@ include file="/WEB-INF/jsp/system/main/include/left.jsp"%>
+	    	<!-- 页面左边导航 sidebar -->
+	    	<!-- Page Sidebar -->
+       		<div class="page-sidebar" id="sidebar">
+				<!-- Sidebar Menu -->
+                <ul class="nav sidebar-menu">
+                
+                	
+                	<!--Dashboard-->
+                    <li>
+                        <a href="index.html">
+                            <i class="menu-icon glyphicon glyphicon-home"></i>
+                            <span class="menu-text"> 首页 </span>
+                        </a>
+                    </li>
+	                <c:forEach items="${ menuList }" var="menu1">
+	                <li>
+	                	<a href="javascript:void(0)" class="${fn:length(menu1.children) > 0 ? 'menu-dropdown' : '' }" data-url='<c:if test="${menu1.resourceUrl != null && menu1.resourceUrl != '' }">${contextPath }${menu1.resourceUrl }</c:if>'>
+	                		<i class="menu-icon ${menu1.iconCls }"></i>
+	                		<span class="menu-text">${menu1.resourceName }</span>
+	                		<c:if test="${fn:length(menu1.children) > 0 }">
+	                			<i class="menu-expand"></i>
+	                		</c:if>
+	                	</a>
+	                	<c:if test="${fn:length(menu1.children) > 0 }">
+	                	<ul class="submenu">
+	                		 <c:forEach items="${ menu1.children }" var="menu2">
+	                		 <li>
+	                			<a href="javascript:void(0)" class="${fn:length(menu2.children) > 0 ? 'menu-dropdown' : '' }" data-url='<c:if test="${menu2.resourceUrl != null && menu2.resourceUrl != '' }">${contextPath }${menu2.resourceUrl }</c:if>'>
+	                		 		<span class="menu-text">${menu2.resourceName }</span>
+	                		 		<c:if test="${fn:length(menu2.children) > 0 }">
+			                			<i class="menu-expand"></i>
+			                		</c:if>
+	                		 	</a>
+	                		 	<c:if test="${fn:length(menu2.children) > 0 }">
+	                		 	
+	                		 	 <ul class="submenu">
+	                		 	 	 <c:forEach items="${ menu2.children }" var="menu3">
+	                		 	 	 <li>
+	                		 	 	 	<a href="javascript:void(0)" class="${fn:length(menu3.children) > 0 ? 'menu-dropdown' : '' }" data-url='<c:if test="${menu3.resourceUrl != null && menu3.resourceUrl != '' }">${contextPath }${menu3.resourceUrl }</c:if>'>
+	                                        <i class="menu-icon ${menu3.iconCls }"></i>
+	                                        <span class="menu-text">${menu3.resourceName }</span>
+	                                    </a>
+	                		 	 	 </li>
+	                		 	 	 </c:forEach>
+	                		 	 </ul>
+	                		 	</c:if>
+	                		 </li>
+	                		 </c:forEach>
+	                	</ul>
+	                	</c:if>
+					</li>
+					</c:forEach>
+                
+                </ul>
+                <!-- /Sidebar Menu -->
+           </div>
+    		<!-- /Page Sidebar -->
     	
     	    <!-- Page Content -->
             <div class="page-content">
             
 				<!-- Page Breadcrumb -->
                 <div class="page-breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
+                    <ul class="breadcrumb" id="ul-breadcrumb">
+                        <li class="active">
                             <i class="fa fa-home"></i>
                             <a href="javascript:void(0)">首页</a>
                         </li>
-                        <li>
-                            <a href="javascript:void(0)">系统设置</a>
-                        </li>
-                        <li class="active">用户管理</li>
                     </ul>
                 </div>
                 <!-- /Page Breadcrumb -->

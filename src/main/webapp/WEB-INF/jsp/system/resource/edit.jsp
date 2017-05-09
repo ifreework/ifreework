@@ -156,7 +156,7 @@
 	    					}
 	    				}
 	    		};
-	    		ajax(opt);
+	    		W.ajax(opt);
 	    	}
 		}
 		

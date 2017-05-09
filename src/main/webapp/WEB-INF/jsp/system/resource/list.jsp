@@ -80,7 +80,7 @@
 	    } );
 		
 		$("#addRoot").on("click",function(){
-			W.openPage("${contextPath}/system/resource/add");
+			W.open("${contextPath}/system/resource/add",{},"添加根节点");
 		})
 
 	});
@@ -147,7 +147,7 @@
 				 });
 			}
 		};
-		ajax(opt);
+		W.ajax(opt);
 	}
 	
 	
@@ -167,18 +167,18 @@
 	
 	function gotoAdd(e){
 		var resourceId = $(e).data("resourceid");
-		W.openPage("${contextPath}/system/resource/add",{resourceId:resourceId});
+		W.open("${contextPath}/system/resource/add","新增资源",{resourceId:resourceId});
 	}
 	
 	function gotoEdit(e){
 		var resourceId = $(e).data("resourceid");
 		console.log(resourceId);
-		W.openPage("${contextPath}/system/resource/update",{resourceId:resourceId});
+		W.open("${contextPath}/system/resource/update",{resourceId:resourceId},"修改资源");
 	}
 	
 	function gotoDelete(e){
 		var resourceId = $(e).data("resourceid");
-		W.openPage("${contextPath}/system/resource/delete",{resourceId:resourceId});
+		W.open("${contextPath}/system/resource/delete",{resourceId:resourceId},"删除资源");
 	}
 }());
 </script>

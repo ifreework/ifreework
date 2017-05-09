@@ -3,7 +3,7 @@ html,body{
 }
 
 body {
-	color: #333333 !important;
+	color: #000000;
 	font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
 	font-size: 14px !important;
 	line-height: 20px;
@@ -18,7 +18,9 @@ iframe {
 	width: 100%;
 	overflow: hidden;
 }
-
+a{
+	color: #000000;
+}
 a:hover {
 	text-decoration: none !important;
 }
