@@ -83,4 +83,14 @@ public interface UserService {
 	@SuppressWarnings("rawtypes")
 	public List queryMenuByUserId();
 	
+	/**
+	 * 
+	 * 描述：重置密码
+	 * @Title: reset
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public PageData changePwdSave(PageData pd) ;
+	
 }

@@ -58,6 +58,9 @@
 .navbar .account-area .dropdown-menu.dropdown-login.dropdown-arrow:BEFORE{
 	width: 0px!important;	
 }
+.navbar .account-area .dropdown-menu.dropdown-login li{
+	border-bottom: 1px solid #f3f3f3!important;
+}
 
 .navbar .account-area .dropdown-menu.dropdown-login  li a {
     clear: both;

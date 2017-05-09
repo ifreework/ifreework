@@ -92,13 +92,29 @@ public class UserController extends BaseControllerSupport {
 	@RequestMapping(value = "/edit")
 	public ModelAndView edit() {
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = this.getPageData();
 		User user = UserManager.getUser();
 		mv.addObject("user",user);
 		mv.setViewName("/system/user/edit");
 		return mv;
 	}
 	
+	
+	/**
+	 * 
+	 * @Title: reset
+	 * @Description: TODO(跳转到重置密码界面)
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@RequestMapping(value = "/changePwd")
+	public ModelAndView reset() {
+		ModelAndView mv = this.getModelAndView();
+		User user = UserManager.getUser();
+		mv.addObject("user",user);
+		mv.setViewName("/system/user/changePwd");
+		return mv;
+	}
 	
 	@RequestMapping(value = "/save")
 	@ResponseBody
@@ -112,6 +128,15 @@ public class UserController extends BaseControllerSupport {
 		
 		return pd;
 	}
+	
+	@RequestMapping(value = "/changePwdSave")
+	@ResponseBody
+	public PageData changePwdSave(){
+		PageData pd = this.getPageData();
+		return userService.changePwdSave(pd);
+	}
+	
+	
 	
 	
 }

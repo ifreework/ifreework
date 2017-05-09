@@ -174,8 +174,8 @@
                             <ul class="pull-right dropdown-menu dropdown-tasks dropdown-arrow dropdown-login">
                             	<li><a href="javascript:void(0)" data-id="user-img"><b class="fa fa-user"></b><span>编辑头像</span></a></li>
 								<li><a href="javascript:void(0)" data-id="user-edit" data-username="${user.username }"><b class="fa fa-cog"></b><span>用户设置</span></a></li>
+								<li><a href="javascript:void(0)" data-id="password-reset" data-username="${user.username }"><b class="fa fa-cog"></b><span>密码重置</span></a></li>
 								<li><a href="javascript:void(0)"><b class="fa fa-info-circle"></b><span>&nbsp;&nbsp;帮&nbsp;&nbsp;&nbsp;&nbsp;助&nbsp;&nbsp;</span></a></li>
-								<li class="divider"></li>
 								<li><a href="javascript:void(0)" data-id="logout"><b
 										class="glyphicon glyphicon-log-out red"></b><span class="red">&nbsp;&nbsp;退&nbsp;&nbsp;&nbsp;&nbsp;出</span></a></li>
                             </ul>

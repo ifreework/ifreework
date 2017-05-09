@@ -59,9 +59,9 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 	private static Logger log = Logger.getLogger(UserServiceImpl.class);
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	@Autowired
-	private ResourceMapper resourceMapper; 
+	private ResourceMapper resourceMapper;
 
 	/**
 	 * 
@@ -72,9 +72,10 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 		return userMapper.getUserByUserName(userName);
 	}
 
-	public User getUserById(String userId){ 
+	public User getUserById(String userId) {
 		return userMapper.getUserByUserName(userId);
 	}
+
 	/**
 	 * 
 	 * 描述：通过用户名密码验证用户登录是否成功
@@ -186,6 +187,35 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 	}
 
 	/**
+	 * 
+	 * 描述：重置密码
+	 * @Title: reset
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public PageData changePwdSave(PageData pd) {
+		String oldPassword = pd.getString("oldPassWord");
+		String password = pd.getString("password");
+		User user = UserManager.getUser();
+		oldPassword = SecurityUtil.encrypt(oldPassword);
+
+		pd = new PageData();
+		
+		if (oldPassword.equals(user.getPassword())) {
+			User u = new User();
+			u.setPassword(SecurityUtil.encrypt(password));
+			u.setUserId(user.getUserId());
+			update(u);
+			pd.setResult(Constant.SUCCESS);
+		} else {
+			pd.setResult(Constant.FAILED);
+			pd.setMsg("旧密码输入错误，请重新输入");
+		}
+		return pd;
+	}
+
+	/**
 	 * 修改用户信息
 	 * 
 	 * @param user
@@ -215,31 +245,31 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 	 */
 	public Map<String, Object> queryContacts(PageData pd) {
 		Map<String, Object> map = new HashMap<String, Object>();
-//		pd.put("username", Jurisdiction.getUser().getUsername());
-//		List<User> list = queryUserList(pd);
-//		int onLineNum = 0;
-//		for (User user : list) {
-//			if (Constant.WEBSOCKET_USER_MAP.containsKey(user.getUsername())) {
-//				user.setIsOnline("1");
-//				onLineNum++;
-//			}
-//		}
-//		Collections.sort(list, new Comparator<User>() {
-//			/*
-//			 * int compare(Student o1, Student o2) 返回一个基本类型的整型， 返回负数表示：o1 小于o2，
-//			 * 返回0 表示：o1和o2相等， 返回正数表示：o1大于o2。
-//			 */
-//			public int compare(User o1, User o2) {
-//				int t = o2.getIsOnline().compareTo(o1.getIsOnline());
-//				if (t == 0) {
-//					return o2.getPersonName().compareTo(o1.getPersonName());
-//				}
-//				return t;
-//			}
-//		});
-//		map.put("allContacts", list);// 所有联系人信息
-//		map.put("onLineNum", onLineNum);// 在线联系人数量
-//		map.put("allNum", list.size());// 全部联系人数量
+		// pd.put("username", Jurisdiction.getUser().getUsername());
+		// List<User> list = queryUserList(pd);
+		// int onLineNum = 0;
+		// for (User user : list) {
+		// if (Constant.WEBSOCKET_USER_MAP.containsKey(user.getUsername())) {
+		// user.setIsOnline("1");
+		// onLineNum++;
+		// }
+		// }
+		// Collections.sort(list, new Comparator<User>() {
+		// /*
+		// * int compare(Student o1, Student o2) 返回一个基本类型的整型， 返回负数表示：o1 小于o2，
+		// * 返回0 表示：o1和o2相等， 返回正数表示：o1大于o2。
+		// */
+		// public int compare(User o1, User o2) {
+		// int t = o2.getIsOnline().compareTo(o1.getIsOnline());
+		// if (t == 0) {
+		// return o2.getPersonName().compareTo(o1.getPersonName());
+		// }
+		// return t;
+		// }
+		// });
+		// map.put("allContacts", list);// 所有联系人信息
+		// map.put("onLineNum", onLineNum);// 在线联系人数量
+		// map.put("allNum", list.size());// 全部联系人数量
 		return map;
 
 	}
@@ -286,7 +316,7 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 	@Override
 	public User login(String username, String password) {
 		User user = getUserByUserName(username);
-		
+
 		if (user != null) { // 验证当前用户是否存在
 			if (password.equals(user.getPassword())) { // 验证用户密码是否正确
 				if ("1".equals(user.getStatus())) { // 验证用户是否被启用
@@ -297,7 +327,6 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 		}
 		throw new UnknownAccountException();
 	}
-
 
 	/**
 	 * 
@@ -315,8 +344,7 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 		}
 		return null;
 	}
-	
-	
+
 	/**
 	 * 
 	 * 描述：通过用户名查询用户所拥有的菜单
@@ -326,7 +354,7 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 	 * @throws
 	 */
 	@SuppressWarnings("rawtypes")
-	public List queryMenuByUserId(){
+	public List queryMenuByUserId() {
 		PageData pd = new PageData();
 		User user = UserManager.getUser();
 		pd.put("userId", user.getUserId());

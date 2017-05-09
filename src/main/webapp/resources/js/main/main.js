@@ -27,6 +27,8 @@
 			} else if (id === "user-edit") {
 				var username = _a.data("username");
 				openUserEdit(username);
+			} else if (id === "password-reset") {
+				openResetPwd();
 			} else if (id === "logout") {
 				location.href = "logout";
 			}
@@ -40,6 +42,27 @@
 		W.openPage(url,{username:username});
 	}
 	
+	
+	//打开编辑头像界面
+	function openUserImg(){
+		var dialog = bootbox.dialog({
+			id:"userImgDialog",
+			title: "头像设置",
+			width:700,
+	        loadUrl: "main/userChangeImg"
+	    });
+	}
+	
+	
+	//打开修改密码界面
+	function openResetPwd(){
+		var dialog = bootbox.dialog({
+			id:"userImgDialog",
+			title: "密码重置",
+			width:700,
+	        loadUrl: "system/user/changePwd"
+	    });
+	}
 	
 	/**
 	 * 初始化菜单切换按钮
