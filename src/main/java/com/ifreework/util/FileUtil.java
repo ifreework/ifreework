@@ -25,7 +25,8 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ifreework.entity.system.Config;
@@ -40,39 +41,63 @@ import com.ifreework.entity.system.Config;
  * @version 1.0
  */
 public class FileUtil {
-	
-	private static Logger log = Logger.getLogger(FileUtil.class);
-	public static String getClassPath(){
-		String rootPath=FileUtil.class.getResource("/").getFile().toString();  
+
+	private static Logger log = LoggerFactory.getLogger(FileUtil.class);
+
+	public static String getClassPath() {
+		String rootPath = FileUtil.class.getResource("/").getFile().toString();
 		return rootPath;
 	}
-	
-	
-	public static String getRootPath(){
-		String rootPath=FileUtil.class.getResource("/").getFile().toString();  
+
+	/**
+	 * 
+	 * 描述：获取项目根路径
+	 * @Title: getRootPath
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public static String getRootPath() {
+		String rootPath = FileUtil.class.getResource("/").getFile().toString();
 		rootPath = rootPath.substring(0, rootPath.indexOf("WEB-INF"));
 		return rootPath;
 	}
-	
 
 	/**
-	 * @Title: getFilesize
-	 * @Description: TODO(获取文件大小，返回kb,数据保留三位小数，没有文件时返回0)
-	 * @param 文件
-	 * @return Double
-	 * @throws 
-	 * @author:wangyh
+	 * 
+	 * 描述：获取文件大小，单位kb，进制1024
+	 * @Title: getFileSize
+	 * @param 
+	 * @return   
+	 * @throws
 	 */
-	public static Double getFilesize(File file) {
+	public static Double getFileSize(File file) {
 		return Double.valueOf(file.length()) / 1024.000;
 	}
 
+	
 	/**
+	 * 
+	 * @Description:文件复制将文件名称转换为UUID名称
+	 * @Title: getUUIDName
+	 * @param  fileStr 文件名
+	 * @return   
+	 * @throws
+	 */
+	public static String getUUIDName(String fileStr){
+		String fileName = UUID.randomUUID().toString().replace("-", ""); // 扩展名格式：
+		if (fileStr.lastIndexOf(".") >= 0) {
+			fileName += fileStr.substring(fileStr.lastIndexOf("."));
+		}
+		return fileName;
+	}
+	/**
+	 * 
+	 * 描述：将文件转换为字节流返回
 	 * @Title: toByteArray
-	 * @Description: TODO(将文件读取到字节流中)
-	 * @param 文件路径
-	 * @return byte[]
-	 * @throws IOException
+	 * @param 
+	 * @return   
+	 * @throws
 	 */
 	public static byte[] toByteArray(File file) throws IOException {
 
@@ -92,7 +117,7 @@ public class FileUtil {
 			}
 			return bos.toByteArray();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("File to byte has error{}", e);
 			throw e;
 		} finally {
 			try {
@@ -105,11 +130,12 @@ public class FileUtil {
 	}
 
 	/**
+	 * 
+	 * 描述：大文件转换为字节流文件，可提高处理速度
 	 * @Title: BigFiletoByteArray
-	 * @Description: TODO(大文件进行处理的时候，可提高处理速度)
-	 * @param 文件路径
-	 * @return byte[]
-	 * @throws IOException
+	 * @param 
+	 * @return   
+	 * @throws
 	 */
 	public static byte[] BigFiletoByteArray(File file) throws IOException {
 
@@ -129,7 +155,7 @@ public class FileUtil {
 			}
 			return result;
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("File to byte has error{}", e);
 			throw e;
 		} finally {
 			try {
@@ -142,75 +168,55 @@ public class FileUtil {
 	}
 
 	/**
-	 * @Title: fileUpload 
-	 * @Description: TODO(文件上传) 
-	 * @param file : 将要上传的文件
-	 * @param
-	 *         filePath ：文件保存路径
-	 * @param fileName ： 文件保存名称 
-	 * @return String
-	 *         新保存的文件名，文件最终保存路径为filePath + fileName @throws
+	 * 
+	 * 描述：页面文件上传
+	 * @Title: fileUpload
+	 * @param file 页面上传上来的文件
+	 * @param filePath 文件保存路径
+	 * @return   文件保存路径及文件名称
+	 * @throws
 	 */
-	public static String fileUpload(MultipartFile file, String filePath) {
-		String fileName = UUID.randomUUID().toString().replace("-",""); // 扩展名格式：
-		try {
-			if (file.getOriginalFilename().lastIndexOf(".") >= 0) {
-				fileName += file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-			}
-			if("1".equals(Config.init().get(Config.FTP_ENABLE))){
-				FTPUtil.upload(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)), Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), fileName, filePath, file.getInputStream());
-			}else{
-				filePath += Config.init().get(Config.FILE_PATH);
-				copyFile(file.getInputStream(), filePath, fileName);
-			}
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-		return filePath + "/" + fileName;
-	}
-	
-	/**
-	 * @Title: fileUpload 
-	 * @Description: TODO(文件上传) 
-	 * @param file : 将要上传的文件
-	 * @param
-	 *         filePath ：文件保存路径
-	 * @param fileName ： 文件保存名称 
-	 * @return String
-	 *         新保存的文件名，文件最终保存路径为filePath + fileName @throws
-	 */
-	public static String fileUpload(String filePath, String savePath) {
-		String fileName = UUID.randomUUID().toString().replace("-",""); // 扩展名格式：
-		try {
-			if (filePath.lastIndexOf(".") >= 0) {
-				fileName += filePath.substring(filePath.lastIndexOf("."));
-			}
-			File file = new File(filePath);
-			InputStream in = new FileInputStream(file);
-			if("1".equals(Config.init().get(Config.FTP_ENABLE))){
-				FTPUtil.upload(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)), Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), fileName, savePath, in);
-			}else{
-				savePath += Config.init().get(Config.FILE_PATH);
-				copyFile(in, savePath, fileName);
-			}
-			return savePath + "/" + fileName;
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.error(e);
-		}
-		return null;
+	public static String fileUpload(MultipartFile file, String filePath) throws IOException {
+		String fileName = getUUIDName(file.getOriginalFilename());
+		log.debug("Upload file save path is {}/{}",filePath,fileName);
+		return copyFile(file.getInputStream(), filePath, fileName);
 	}
 
 	/**
-	 * @Title: copyFile @Description: TODO(文件复制) @param @return @throws
+	 * 
+	 * 描述：文件上传
+	 * @Title: fileUpload
+	 * @param  filePath 文件路径
+	 * @param  savePath 文件保存路径
+	 * @return   文件保存路径及文件名称
+	 * @throws IOException 
 	 */
-	private static void copyFile(InputStream in, String dir, String realName) throws IOException {
+	public static String fileUpload(String filePath, String savePath) throws IOException {
+		String fileName = getUUIDName(filePath);
+		File file = new File(filePath);
+		InputStream in = new FileInputStream(file);
+		savePath += Config.init().get(Config.FILE_PATH);
+		
+		return copyFile(in, savePath, fileName);
+	}
+
+
+	/**
+	 * 
+	 * @Description:文件复制
+	 * @Title: copyFile
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	private static String copyFile(InputStream in, String dir, String realName) throws IOException {
 		File file = mkdirsmy(dir, realName);
 		FileUtils.copyInputStreamToFile(in, file);
+		return file.getPath();
 	}
 
 	/**
-	 * 判断路径是否存在，否：创建此路径
+	 *判断文件是否存在，否，则创建此文件
 	 * 
 	 * @param dir
 	 *            文件路径
@@ -220,13 +226,7 @@ public class FileUtil {
 	 */
 	public static File mkdirsmy(String dir, String realName) throws IOException {
 		File file = new File(dir, realName);
-		if (!file.exists()) {
-			if (!file.getParentFile().exists()) {
-				file.getParentFile().mkdirs();
-			}
-			file.createNewFile();
-		}
-		return file;
+		return mkdirsmy(file);
 	}
 
 	/**
@@ -262,6 +262,7 @@ public class FileUtil {
 		return file;
 	}
 
+	
 	/**
 	 * @Title: getHtmlPicture
 	 * @Description: TODO(下载网络图片上传到服务器上)
@@ -301,22 +302,22 @@ public class FileUtil {
 		return null;
 	}
 
+
 	/**
+	 * 
+	 * 描述：文件下载
+	 * @Title: fileDownload
 	 * @param response
-	 * @param filePath
-	 *            //文件完整路径(包括文件名和扩展名)
-	 * @param fileName
-	 *            //下载后看到的文件名
-	 * @return 文件名
+	 * @param filePath 将要下载的文件路径
+	 * @param fileName 下载后保存的文件名称
+	 * @return   
+	 * @throws
 	 */
-	public static void fileDownload(final HttpServletResponse response, String filePath, String fileName)
+	public static void fileDownload(HttpServletResponse response, String filePath, String fileName)
 			throws IOException {
-		if("1".equals(Config.init().get(Config.FTP_ENABLE))){ // 如果ftp服务器已经启用，则先将文件下载到本地
-			filePath = downLoadFormFTP(filePath, fileName);
-		}
-		
+
 		File file = new File(filePath);
-		if (!StringUtil.isEmpty(filePath) &&  file.exists()) {
+		if (!StringUtil.isEmpty(filePath) && file.exists()) {
 			byte[] data = FileUtil.toByteArray(file);
 			fileName = URLEncoder.encode(fileName, "UTF-8");
 			response.reset();
@@ -328,6 +329,7 @@ public class FileUtil {
 			outputStream.flush();
 			outputStream.close();
 		} else {
+			log.debug("file {} is deleted!",filePath);
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter prw = response.getWriter();
 			prw.print("文件" + fileName + "已被删除,文件下载失败！");
@@ -338,53 +340,76 @@ public class FileUtil {
 	}
 
 
-	private static String downLoadFormFTP(String filePath, String fileName) {
-		String localPath = getRootPath() + "temp";
-		File localFile = new File(localPath);
-		if(!localFile.exists()){
-			localFile.mkdirs();
-		}
-		if(FTPUtil.download(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)), Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), filePath, localPath)){
-			filePath = localPath + "/" + fileName;
-			return filePath;
-		}
-		return "";
-	}
-
-	
 	/**
+	 * 
+	 * 描述：文件下载，下载后使用默认名称保存
+	 * @Title: fileDownload
 	 * @param response
-	 * @param filePath
-	 *            //文件完整路径(包括文件名和扩展名)
-	 * @return 文件名
-	 * @throws IOException 
+	 * @param filePath 将要下载的文件路径
+	 * @param fileName 下载后保存的文件名称
+	 * @return   
+	 * @throws
 	 */
-	public static void fileDownload(final HttpServletResponse response, String filePath) throws IOException {
+	public static void fileDownload(HttpServletResponse response, String filePath) throws IOException {
 		File file = new File(filePath);
 		fileDownload(response, filePath, file.getName());
 	}
 
+	
+	
+	public static boolean fileDelete(String filePath){
+		if(StringUtil.isEmpty(filePath)){
+			return true;
+		}
+		File file = new File(filePath);
+		return file.delete();
+	}
+
 	/**
+	 * 
+	 * 描述：将文件夹下全部文件压缩成zip
 	 * @Title: zip
-	 * @Description: TODO(将文件夹压缩成zip文件)
 	 * @param inputFileName
-	 *            你要压缩的文件夹(整个完整路径)
+	 *            要压缩的文件夹(整个完整路径)
 	 * @param zipFileName
 	 *            压缩后的文件(整个完整路径)
 	 * @return Boolean
+	 * @return   
+	 * @throws
 	 */
 	public static Boolean zip(String inputFileName, String zipFileName) throws Exception {
-		zip(zipFileName, new File(inputFileName));
+		zip(new File(inputFileName),zipFileName);
 		return true;
 	}
 
-	private static void zip(String zipFileName, File inputFile) throws Exception {
+	/**
+	 * 
+	 * 描述：将文件夹下全部文件压缩成zip
+	 * @Title: zip
+	 * @param inputFileName
+	 *            要压缩的文件夹(整个完整路径)
+	 * @param zipFileName
+	 *            压缩后的文件(整个完整路径)
+	 * @return Boolean
+	 * @return   
+	 * @throws
+	 */
+	public static void zip( File inputFile,String zipFileName) throws Exception {
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFileName));
 		zip(out, inputFile, "");
 		out.flush();
 		out.close();
 	}
 
+	
+	/**
+	 * 
+	 * 描述：将文件夹下全部文件压缩成zip下载
+	 * @Title: zip
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	private static void zip(ZipOutputStream out, File f, String base) throws Exception {
 		if (f.isDirectory()) {
 			File[] fl = f.listFiles();

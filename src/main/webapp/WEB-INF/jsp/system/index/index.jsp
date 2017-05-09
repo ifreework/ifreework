@@ -32,7 +32,7 @@
 
 <!-- 部分自定义方法 -->
 <script src="${ jsPath }/base.js"></script>
-
+<script type="text/javascript" src="${ jsPath }/browser.js"></script>
 <script>
 var SUCCESS = "<%=Constant.SUCCESS %>"; //前后台统一成功标志
 var ERROR = "<%=Constant.ERROR %>";  //前后台错误标志

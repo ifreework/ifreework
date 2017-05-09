@@ -157,8 +157,6 @@
 	});
 }());
 </script>
-</head>
-<body>
 	<div class="row dropzone-panel" >
 		<div class="col9">
 			<div id="dropzone" class="dropzone-body ">
@@ -177,5 +175,3 @@
     <div class="text-center page-footer">
     	<a class="btn btn-primary" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
     </div>
-</body>
-</html>

@@ -165,6 +165,14 @@ public class FTPUtil {
 		}
 	}
 
+	/**
+	 * 
+	 * 描述：验证ftp是否登录成功
+	 * @Title: validate
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
 	private static boolean validate(String url, int port, String username, String password, String remotePath,
 			FTPClient ftp, boolean createDir) throws SocketException, IOException {
 		int reply; // ftp状态码
@@ -276,6 +284,55 @@ public class FTPUtil {
 				status = ftp.retrieveFile(fileName, is);
 				log.debug(status ? (fileName + " download Success!") : (fileName + " download Failed!"));
 				is.close();
+			}
+			ftp.logout();
+			return status;
+		} catch (Exception e) {
+			if (e instanceof ConnectException) {
+				log.error("Remote " + url + ":" + port + " can't connect!");
+			}
+			log.error(e);
+			return false;
+		} finally {
+			if (ftp.isConnected()) {
+				try {
+					ftp.disconnect();
+				} catch (IOException ioe) {
+				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * 描述：删除ftp文件
+	 * @Title: delete
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public static boolean delete(String url, int port, String username, String password, 
+			String filePath) {
+		File file = new File(filePath);
+		return delete(url, port, username, password, file.getParent(), file.getName());
+	}
+	/**
+	 * 
+	 * 描述：删除ftp文件
+	 * @Title: delete
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	public static boolean delete(String url, int port, String username, String password, String remotePath,
+			String fileName) {
+		boolean status = false;
+		FTPClient ftp = new FTPClient();
+		try {
+			if (validate(url, port, username, password, remotePath, ftp, false)) {
+				status = ftp.deleteFile(fileName);
+				log.debug(status ? (fileName + " delete Success!") : (fileName + " delete Failed!"));
 			}
 			ftp.logout();
 			return status;
