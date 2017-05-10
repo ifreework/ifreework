@@ -59,7 +59,8 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 	private static Logger log = Logger.getLogger(UserServiceImpl.class);
 	@Autowired
 	private UserMapper userMapper;
-
+	@Autowired
+	private LoginLogService loginLogService;
 	@Autowired
 	private ResourceMapper resourceMapper;
 
@@ -99,6 +100,8 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 		UsernamePasswordToken token = new UsernamePasswordToken(username, SecurityUtil.encrypt(pwd));
 		try {
 			subject.login(token);
+			loginLogService.add(username);
+			SecurityUtils.getSubject().getSession().setAttribute(Constant.CACHE_USER, username);
 			pd.setResult(Constant.SUCCESS);
 		} catch (LockedAccountException e) {
 			pd.setResult(Constant.FAILED);

@@ -27,6 +27,7 @@
 		<property name="authorizationCachingEnabled" value="false" />
 	</bean>
 
+	
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="ShiroRealm" />
 		<property name="sessionManager" ref="sessionManager"></property>  
@@ -35,7 +36,7 @@
     <bean id="ehcacheSessionDAO" class="com.ifreework.common.shiro.session.EhcacheSessionDAO" >  
     	<constructor-arg name="cacheManager" ref="cacheManager"></constructor-arg>  
     	<constructor-arg name="cacheName" value="shiro-activeSessionCache"></constructor-arg>  
-    	
+    	<property name="loginLogManager" ref="loginLogService" />
     </bean>  
     
         <!-- sessionManager -->  
@@ -56,8 +57,7 @@
         <!-- 定时检查失效的session -->  
         <property name="sessionValidationSchedulerEnabled" value="true" />  
         <property name="sessionIdCookieEnabled" value="true" />  
-       <property name="sessionIdCookie.name" value="jsid"/>  
-  
+        <property name="sessionIdCookie.name" value="jsid"/>  
     </bean>  
     
 	<!-- Shiro Filter -->

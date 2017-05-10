@@ -24,6 +24,10 @@ import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.session.HttpServletSession;
 import org.apache.shiro.web.util.WebUtils;
 
+import com.ifreework.common.constant.Constant;
+import com.ifreework.common.shiro.listener.LoginLogManager;
+import com.ifreework.util.StringUtil;
+
 /**
  * 将shiro的session托管给ehcache进行缓存
  * 描述：    
@@ -37,6 +41,16 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 	private Logger logger = Logger.getLogger(getClass());
 	private Cache<String, Session> cache;
 	private String keyPrefix = "shiro_redis_cache:";
+	private LoginLogManager loginLogManager;
+	
+	
+	public LoginLogManager getLoginLogManager() {
+		return loginLogManager;
+	}
+
+	public void setLoginLogManager(LoginLogManager loginLogManager) {
+		this.loginLogManager = loginLogManager;
+	}
 
 	public EhcacheSessionDAO(String cacheName, CacheManager cacheManager) {
 		cache = cacheManager.getCache(cacheName);
@@ -55,7 +69,7 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 			logger.error("session or session id is null");
 			return;
 		}
-
+		
 		String id = getKey(session.getId());
 		cache.put(id, session);
 	}
@@ -70,10 +84,16 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 	 */
 	@Override
 	public void delete(Session session) {
+		
 		if (session == null || session.getId() == null) {
 			logger.error("session or session id is null");
 			return;
 		}
+		String username = (String) session.getAttribute(Constant.CACHE_USER);
+		if(!StringUtil.isEmpty(username)){
+			loginLogManager.logoutLog(username);
+		}
+		
 		logger.debug("delete session : " + session.getId());
 		cache.remove(getKey(session.getId()));
 	}
