@@ -37,7 +37,7 @@ var W = {
 		return projectName;
 	},
 	
-	arrayToString : function(array) { // 将array转换成json对象
+	jsonArrayToString : function(array) { // 将array转换成json对象
 
 		var str = "[";
 		for (var i = 0; i < array.length; i++) {
@@ -50,6 +50,14 @@ var W = {
 		str += "]";
 		return str;
 
+	},
+	
+	arrayRemove : function(array,obj){ //删除array中的某个对象
+		for(var i = 0; i < array.length ; i++){
+			if(array[i] == obj){
+				array.splice(i,1);
+			}
+		}
 	},
 	
 	openPage : function(url, data) {// 在body中打开新的页面

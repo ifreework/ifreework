@@ -246,7 +246,7 @@ var InitiateRealTimeChart = function () {
 
             // Set up the control widget
 
-            var updateInterval = 70;
+            var updateInterval = 1000;
 
             var plot = $.plot("#realtime-chart", [getRandomData()], {
                 yaxis: {
