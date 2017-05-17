@@ -26,12 +26,11 @@ public class ProvinceController extends BaseControllerSupport {
 	 * @TODO(用户登录界面跳转，如果已经登录，则跳转到Main页面) 
 	 * @param @return @throws
 	 */
-	@SuppressWarnings("rawtypes")
 	@RequestMapping()
 	@ResponseBody
-	public List<Map> query() {
+	public List<Map<String, String>> query() {
 		PageData pd = this.getPageData();
-		List<Map> list =  provinceService.queryProvinceListMap(pd);
+		List<Map<String, String>> list =  provinceService.queryProvinceListMap(pd);
 		return list;
 	}
 

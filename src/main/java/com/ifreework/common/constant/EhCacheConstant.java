@@ -1,6 +1,5 @@
 package com.ifreework.common.constant;
 
-import net.sf.ehcache.CacheManager;
 
 public enum EhCacheConstant {
 	USER_CACHE_NAME("sys-userCache"), //用户信息缓存空间

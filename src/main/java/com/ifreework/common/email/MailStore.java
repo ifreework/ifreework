@@ -1,14 +1,7 @@
 package com.ifreework.common.email;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 
@@ -16,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.ifreework.common.email.entity.MailAuth;
 import com.ifreework.common.email.entity.MailConfig;
+import com.ifreework.common.manager.SysTemConfigManager;
 import com.ifreework.entity.system.Config;
 
 
@@ -50,14 +44,14 @@ public class MailStore {
 	 * @return 列出方法的返回值列表（如果需要返回值的话）
 	 */
 	public static MailStore getInstanse() {
-		String smtpHost = Config.init().get(Config.MAIL_SMTP_HOST);
-		String smtpPort = Config.init().get(Config.MAIL_SMTP_PORT);
-		String smtpAuth = Config.init().get(Config.MAIL_SMTP_AUTH);
-		String storeProtocol = Config.init().get(Config.MAIL_STORE_PROTOCOL);
-		String pop3Host = Config.init().get(Config.MAIL_STORE_HOST);
-		String pop3Port = Config.init().get(Config.MAIL_STORE_PORT);
-		String userName =  Config.init().get(Config.MAIL_USER);
-		String password =  Config.init().get(Config.MAIL_PASSWORD);
+		String smtpHost = SysTemConfigManager.get(Config.MAIL_SMTP_HOST);
+		String smtpPort = SysTemConfigManager.get(Config.MAIL_SMTP_PORT);
+		String smtpAuth = SysTemConfigManager.get(Config.MAIL_SMTP_AUTH);
+		String storeProtocol = SysTemConfigManager.get(Config.MAIL_STORE_PROTOCOL);
+		String pop3Host = SysTemConfigManager.get(Config.MAIL_STORE_HOST);
+		String pop3Port = SysTemConfigManager.get(Config.MAIL_STORE_PORT);
+		String userName =  SysTemConfigManager.get(Config.MAIL_USER);
+		String password =  SysTemConfigManager.get(Config.MAIL_PASSWORD);
 		return new MailStore(new MailConfig(smtpHost,smtpPort, smtpAuth, storeProtocol,
 				pop3Host, pop3Port, new MailAuth( userName, password)));
 	}
@@ -71,12 +65,12 @@ public class MailStore {
 	 * @return 列出方法的返回值列表（如果需要返回值的话）
 	 */
 	public static MailStore getInstanse( MailAuth mailAuth){
-		String smtpHost = Config.init().get(Config.MAIL_SMTP_HOST);
-		String smtpPort = Config.init().get(Config.MAIL_SMTP_PORT);
-		String smtpAuth = Config.init().get(Config.MAIL_SMTP_AUTH);
-		String storeProtocol = Config.init().get(Config.MAIL_STORE_PROTOCOL);
-		String pop3Host = Config.init().get(Config.MAIL_STORE_HOST);
-		String pop3Port = Config.init().get(Config.MAIL_STORE_PORT);
+		String smtpHost = SysTemConfigManager.get(Config.MAIL_SMTP_HOST);
+		String smtpPort = SysTemConfigManager.get(Config.MAIL_SMTP_PORT);
+		String smtpAuth = SysTemConfigManager.get(Config.MAIL_SMTP_AUTH);
+		String storeProtocol = SysTemConfigManager.get(Config.MAIL_STORE_PROTOCOL);
+		String pop3Host = SysTemConfigManager.get(Config.MAIL_STORE_HOST);
+		String pop3Port = SysTemConfigManager.get(Config.MAIL_STORE_PORT);
 		return new MailStore(new MailConfig(smtpHost,smtpPort, smtpAuth, storeProtocol,
 				pop3Host, pop3Port, mailAuth));
 	}
@@ -156,7 +150,6 @@ public class MailStore {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception {
 //		 MailStore mrh =  MailStore.getInstanse("smtp.163.com", "true","25",
 //		 "imap","imap.163.com", "143", new SmtpAuth("evdrm_q", "Evdrm_wyh0819"));

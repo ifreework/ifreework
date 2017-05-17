@@ -5,24 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.DefaultSessionKey;
-import org.apache.shiro.session.mgt.SessionFactory;
-import org.apache.shiro.session.mgt.SessionKey;
-import org.apache.shiro.session.mgt.SimpleSessionFactory;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.apache.shiro.subject.SubjectContext;
-import org.apache.shiro.web.session.HttpServletSession;
-import org.apache.shiro.web.util.WebUtils;
 
 import com.ifreework.common.constant.Constant;
 import com.ifreework.common.shiro.listener.LoginLogManager;

@@ -1,8 +1,5 @@
 package com.ifreework.controller.system;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +7,12 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ifreework.common.manager.WebsocketManager;
 import com.ifreework.entity.system.Msg;
 
 @Controller
 public class GreetingController {
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private SimpMessagingTemplate template;
 
@@ -62,6 +55,7 @@ public class GreetingController {
 //		}
 	}
 
+	@SuppressWarnings("unused")
 	private String joinStr(List<Msg> list) {
 		String msgStr = "";
 		for (Msg m : list) {

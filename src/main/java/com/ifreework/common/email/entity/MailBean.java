@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.mail.BodyPart;
 
+import com.ifreework.common.manager.SysTemConfigManager;
 import com.ifreework.entity.system.Config;
 
 
@@ -74,6 +75,7 @@ public class MailBean {
 	/** 邮件标记 */
 	private String flags = null;
 	/** 邮件是否已读 */
+	@SuppressWarnings("unused")
 	private boolean read = false;
 	/** 是否紧急 */
 	private boolean exigence = false;
@@ -181,7 +183,7 @@ public class MailBean {
 			String subject, String content) {
 		this.to = to;
 		this.subject = subject;
-		this.from = Config.init().get(Config.SYSTEM_NAME);
+		this.from = SysTemConfigManager.get(Config.SYSTEM_NAME);
 		this.content = content;
 		this.cc = "";
 		this.bcc = "";
@@ -370,7 +372,7 @@ public class MailBean {
 	public void setRead(boolean read) {
 		this.read = read;
 	}
-
+	
 	public boolean isExigence() {
 		return exigence;
 	}
@@ -394,4 +396,5 @@ public class MailBean {
 	public void setFolderType(int folderType) {
 		this.folderType = folderType;
 	}
+	
 }

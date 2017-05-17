@@ -33,7 +33,7 @@ public class ProvinceServiceImpl implements ProvinceService {
 		return provinceMapper.queryProvinceList(pd);
 	}
 	
-	public List<Map> queryProvinceListMap(PageData pd){
+	public List<Map<String,String>> queryProvinceListMap(PageData pd){
 		return provinceMapper.queryProvinceListMap(pd);
 	}
 }

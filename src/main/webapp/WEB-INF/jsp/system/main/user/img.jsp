@@ -157,21 +157,25 @@
 	});
 }());
 </script>
-	<div class="row dropzone-panel" >
-		<div class="col9">
-			<div id="dropzone" class="dropzone-body ">
-				<div class="dropzone-upload-text dz-default dz-message">
-					<span>选择图片</span>
+<div class="container-content" >
+	<div class="container-body no-padding">
+		<div class="row dropzone-panel" >
+			<div class="col9">
+				<div id="dropzone" class="dropzone-body ">
+					<div class="dropzone-upload-text dz-default dz-message">
+						<span>选择图片</span>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col3">
-			<div class="img-list">
-				<div class="img-preview">
+			<div class="col3">
+				<div class="img-list">
+					<div class="img-preview">
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-    <div class="text-center page-footer">
+    <div class="text-center container-footer">
     	<a class="btn btn-primary" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
     </div>
+</div>

@@ -8,5 +8,5 @@ import com.ifreework.common.entity.PageData;
 public interface MunicipalityService {
 
 	
-	public List<Map> queryMunicipalityListMap(PageData pd);
+	public List<Map<String,String>> queryMunicipalityListMap(PageData pd);
 }

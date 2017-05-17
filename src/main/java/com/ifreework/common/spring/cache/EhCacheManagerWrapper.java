@@ -9,7 +9,6 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.springframework.cache.support.SimpleValueWrapper;
 
 import java.util.Collection;
 import java.util.Set;
@@ -85,7 +84,8 @@ public class EhCacheManagerWrapper implements CacheManager {
         	return cache.keys();
         }
 
-        @Override
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
         public Collection values() {
             return cache.values();
         }

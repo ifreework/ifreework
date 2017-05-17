@@ -7,14 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.Resource;
-import com.ifreework.entity.system.User;
-import com.ifreework.util.StringUtil;
 
 public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
 	Logger logger = Logger.getLogger(HandlerInterceptorAdapter.class);

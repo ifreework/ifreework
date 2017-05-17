@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ifreework.entity.system.Config;
 
 /**
  * @描述： 文件操作工具类，包涵读取文件大小，文件上传、下载、删除等
@@ -216,7 +215,6 @@ public class FileUtil {
 		String fileName = getUUIDName(filePath);
 		File file = new File(filePath);
 		InputStream in = new FileInputStream(file);
-		savePath += Config.init().get(Config.FILE_PATH);
 		
 		return copyFile(in, savePath, fileName);
 	}

@@ -190,9 +190,15 @@
 	</update>
 
 	<!-- 删除节点时，同步删除该节点下面的子节点 -->
+	<update id="delete" parameterType="string">
+		delete from  SYS_RESOURCE
+		where
+		RESOURCE_ID = #{resourceId}
+	</update>
+	
+	<!-- 删除节点时，同步删除该节点下面的子节点 -->
 	<update id="deleteChildren" parameterType="string">
-		update SYS_RESOURCE
-		set STATUS = '0'
+		delete from  SYS_RESOURCE
 		where
 		PARENT_ID = #{departmentId}
 	</update>

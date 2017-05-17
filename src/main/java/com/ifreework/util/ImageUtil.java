@@ -38,8 +38,10 @@ import org.apache.log4j.Logger;
 
 import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
+
 import com.sun.image.codec.jpeg.JPEGCodec;  
 import com.sun.image.codec.jpeg.JPEGImageEncoder;  
+
 /**
  * 描述： 图片处理工具类
  * 
@@ -49,6 +51,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
  * @修改时间：2016年7月4日 下午2:12:09
  * @version 1.0
  */
+@SuppressWarnings("restriction")
 public class ImageUtil {
 	static Logger logger = Logger.getLogger(ImageUtil.class);
 
@@ -82,7 +85,7 @@ public class ImageUtil {
 	public static Map<String, Integer> getImgXY(String src) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		try {
-			Iterator iterator = ImageIO.getImageReadersByFormatName("jpg");
+			Iterator<ImageReader> iterator = ImageIO.getImageReadersByFormatName("jpg");
 			ImageReader reader = (ImageReader) iterator.next();
 			InputStream in;
 
@@ -90,7 +93,6 @@ public class ImageUtil {
 
 			ImageInputStream iis = ImageIO.createImageInputStream(in);
 			reader.setInput(iis, true);
-			ImageReadParam param = reader.getDefaultReadParam();
 			int imageIndex = 0;
 			int width = reader.getWidth(imageIndex);
 			int height = reader.getHeight(imageIndex);
@@ -152,7 +154,7 @@ public class ImageUtil {
 		String fileName = src.substring(src.lastIndexOf(".") + 1);
 		dest += "/" + UUID.randomUUID().toString().replace("-", "") + "." + fileName;
 		File file = FileUtil.mkdirsmy(dest);
-		Iterator iterator = ImageIO.getImageReadersByFormatName(fileName);
+		Iterator<ImageReader> iterator = ImageIO.getImageReadersByFormatName(fileName);
 		ImageReader reader = (ImageReader) iterator.next();
 		InputStream in = new FileInputStream(src);
 		ImageInputStream iis = ImageIO.createImageInputStream(in);
@@ -181,7 +183,7 @@ public class ImageUtil {
 		String fileName = src.substring(src.lastIndexOf(".") + 1);
 		dest += "/" + UUID.randomUUID().toString().replace("-", "") + "." + fileName;
 		File file = FileUtil.mkdirsmy(dest);
-		Iterator iterator = ImageIO.getImageReadersByFormatName(fileName);
+		Iterator<ImageReader> iterator = ImageIO.getImageReadersByFormatName(fileName);
 		ImageReader reader = (ImageReader) iterator.next();
 		InputStream in = new FileInputStream(src);
 		ImageInputStream iis = ImageIO.createImageInputStream(in);
@@ -218,7 +220,7 @@ public class ImageUtil {
 		String fileName = src.substring(src.lastIndexOf(".") + 1);
 		dest += "/" + UUID.randomUUID().toString().replace("-", "") + "." + fileName;
 		File file = FileUtil.mkdirsmy(dest);
-		Iterator iterator = ImageIO.getImageReadersByFormatName(fileName);
+		Iterator<ImageReader> iterator = ImageIO.getImageReadersByFormatName(fileName);
 		ImageReader reader = (ImageReader) iterator.next();
 		InputStream in = new FileInputStream(src);
 		ImageInputStream iis = ImageIO.createImageInputStream(in);
@@ -255,8 +257,8 @@ public class ImageUtil {
 		dest += "/" + UUID.randomUUID().toString().replace("-", "") + "." + fileName;
 		
 		File file = FileUtil.mkdirsmy(dest);
-		Iterator iterator = ImageIO.getImageReadersByFormatName(fileName);
-		ImageReader reader = (ImageReader) iterator.next();
+		Iterator<ImageReader> iterator = ImageIO.getImageReadersByFormatName(fileName);
+		ImageReader reader =  iterator.next();
 		ImageInputStream iis = ImageIO.createImageInputStream(in);
 		reader.setInput(iis, true);
 		ImageReadParam param = reader.getDefaultReadParam();
@@ -287,7 +289,7 @@ public class ImageUtil {
 		dest += "/" + UUID.randomUUID().toString().replace("-", "");
 		File destFile = FileUtil.mkdirsmy(dest);
 		BufferedImage bufImg = ImageIO.read(srcFile);
-		Image itemp = bufImg.getScaledInstance(w, h, bufImg.SCALE_SMOOTH);
+		Image itemp = bufImg.getScaledInstance(w, h, Image.SCALE_SMOOTH);
 		wr = w * 1.0 / bufImg.getWidth();
 		hr = h * 1.0 / bufImg.getHeight();
 		AffineTransformOp ato = new AffineTransformOp(AffineTransform.getScaleInstance(wr, hr), null);
@@ -312,7 +314,7 @@ public class ImageUtil {
 			wr = 100.0 / (bufImg.getWidth() > bufImg.getHeight() ? bufImg.getWidth() : bufImg.getHeight());
 
 			Image itemp = bufImg.getScaledInstance((int) (bufImg.getWidth() * wr), (int) (bufImg.getHeight() * wr),
-					bufImg.SCALE_SMOOTH);
+					Image.SCALE_SMOOTH);
 			AffineTransformOp ato = new AffineTransformOp(AffineTransform.getScaleInstance(wr, wr), null);
 			itemp = ato.filter(bufImg, null);
 			ImageIO.write((BufferedImage) itemp, dest.substring(dest.lastIndexOf(".") + 1), destFile);
@@ -347,7 +349,6 @@ public class ImageUtil {
 	 * @return   
 	 * @throws
 	 */
-    @SuppressWarnings("restriction")
 	public static void changeImge(File img,File offLineImg) {  
         try {  
         	FileUtil.mkdirsmy(offLineImg);

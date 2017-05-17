@@ -189,7 +189,7 @@ public class ResourceServiceImpl  implements ResourceService {
 	public PageData delete(Resource resource) {
 		// TODO Auto-generated method stub
 		PageData pd = new PageData();
-		resourceMapper.update(resource);  //删除本节点
+		
 		
 		//如果父节点下没有节点后，修改父节点为子节点
 		resource = getResourceById(resource.getResourceId());
@@ -203,6 +203,7 @@ public class ResourceServiceImpl  implements ResourceService {
 		
 		//删除子节点
 		resourceMapper.deleteChildren(resource.getResourceId());
+		resourceMapper.delete(resource.getResourceId());  //删除本节点
 		pd.setResult(Constant.SUCCESS);
 		return pd;
 	}

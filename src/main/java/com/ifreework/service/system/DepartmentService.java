@@ -1,7 +1,6 @@
 package com.ifreework.service.system;
 
 import java.util.List;
-import java.util.Map;
 
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.Department;

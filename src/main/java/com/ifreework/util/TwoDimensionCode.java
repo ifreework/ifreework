@@ -245,26 +245,4 @@ public class TwoDimensionCode {
 		return content;
 	}
 
-	public static void main(String[] args) {
-		String imgPath = "F:/a.png";
-		/*String encoderContent = "Hello 大大、小小,welcome to QRCode!"
-				+ "\nMyblog [ http://sjsky.iteye.com ]"
-				+ "\nEMail [ sjsky007@gmail.com ]";*/
-		
-		String encoderContent = "http://www.baidu.com";
-		TwoDimensionCode handler = new TwoDimensionCode();
-		handler.encoderQRCode(encoderContent, imgPath, "png");
-		// try {
-		// OutputStream output = new FileOutputStream(imgPath);
-		// handler.encoderQRCode(content, output);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		System.out.println("========encoder success");
-
-		//String decoderContent = handler.decoderQRCode(imgPath);
-		System.out.println("解析结果如下：");
-		//System.out.println(decoderContent);
-		System.out.println("========decoder success!!!");
-	}
 }

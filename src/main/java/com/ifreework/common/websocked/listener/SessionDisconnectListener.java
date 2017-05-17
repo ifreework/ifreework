@@ -2,11 +2,8 @@ package com.ifreework.common.websocked.listener;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationListener;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import com.ifreework.common.manager.WebsocketManager;
-import com.ifreework.entity.system.Msg;
 
 public class SessionDisconnectListener implements ApplicationListener<SessionDisconnectEvent> {
 	Logger logger = Logger.getLogger(getClass());

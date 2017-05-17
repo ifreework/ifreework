@@ -5,9 +5,6 @@ import org.apache.shiro.session.SessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ifreework.common.constant.Constant;
-import com.ifreework.common.manager.UserManager;
-
 /**
  * 
  * 描述：    session监听类，监听session创建、停止、过期

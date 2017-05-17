@@ -18,7 +18,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,9 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ifreework.common.constant.Constant;
 import com.ifreework.common.controller.BaseControllerSupport;
 import com.ifreework.common.entity.PageData;
+import com.ifreework.common.manager.SysTemConfigManager;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.Config;
 import com.ifreework.entity.system.User;
@@ -77,7 +76,7 @@ public class LoginController extends BaseControllerSupport {
 	public ModelAndView gotoIndexView() {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-		String sysName = Config.init().get(Config.SYSTEM_NAME);
+		String sysName = SysTemConfigManager.get(Config.SYSTEM_NAME);
 		pd.put("SYSNAME", sysName); // 读取系统名称
 		mv.addObject("pd", pd);
 		User user = UserManager.getUser();
@@ -117,7 +116,7 @@ public class LoginController extends BaseControllerSupport {
 		
 		List menuList = userService.queryMenuByUserId();
 		
-		String sysName = Config.init().get(Config.SYSTEM_NAME);
+		String sysName = SysTemConfigManager.get(Config.SYSTEM_NAME);
 		pd.put("SYSNAME", sysName); // 读取系统名称
 		
 		mv.addObject("user",user);

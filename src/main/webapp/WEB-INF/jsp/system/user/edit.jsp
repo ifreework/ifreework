@@ -287,7 +287,7 @@ $().ready(function(){
 			</form>
 		</div>
 		<div class="text-center container-footer">
-			<a class="btn btn-default" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
+			<a class="btn btn-sky" href="javascript:void(0);" id="btn-save"><i class="fa fa-save"></i>保存</a>
 		</div>
 	</div>
 </div>

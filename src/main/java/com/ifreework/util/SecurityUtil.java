@@ -18,6 +18,7 @@ import sun.misc.BASE64Encoder;
  * @修改时间：2016年7月6日 下午3:03:44    
  * @version 1.0
  */
+@SuppressWarnings("restriction")
 public class SecurityUtil {
 	private static String strDefaultKey = "national";
 
@@ -141,7 +142,6 @@ public class SecurityUtil {
 	}
 
 
-	@SuppressWarnings("restriction")
 	public static String encoderPwdByMd5(String str) {
 		// 确定计算方法
 		MessageDigest md5;

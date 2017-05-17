@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ifreework.common.constant.Constant;
 import com.ifreework.common.entity.PageData;
 import com.ifreework.common.manager.ServletRequestManager;
+import com.ifreework.common.manager.SysTemConfigManager;
 import com.ifreework.entity.system.Attachment;
 import com.ifreework.entity.system.Config;
 import com.ifreework.mapper.system.AttachmentMapper;
@@ -63,7 +64,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 		for (MultipartFile file : files) {
 
 			String filePath = "";
-			if ("1".equals(Config.init().get(Config.FTP_ENABLE))) { // 是否启用ftp上传
+			if ("1".equals(SysTemConfigManager.get(Config.FTP_ENABLE))) { // 是否启用ftp上传
 				filePath = ftpUpload(file);
 			} else { // 未启用ftp的话，将文件保存在本地
 				filePath = localDiskUpload(file);
@@ -93,7 +94,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 	 */
 	private String localDiskUpload(MultipartFile file) throws IOException {
 		String filePath;
-		filePath = Config.init().get(Config.FILE_PATH) + REMOTEPATH;
+		filePath = SysTemConfigManager.get(Config.FILE_PATH) + REMOTEPATH;
 		try {
 			filePath = FileUtil.fileUpload(file, filePath);
 		} catch (IOException e) {
@@ -116,8 +117,8 @@ public class AttachmentServiceImpl implements AttachmentService {
 		String filePath;
 		String fileName = FileUtil.getUUIDName(file.getOriginalFilename());
 
-		FTPUtil.upload(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)),
-				Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), fileName, REMOTEPATH,
+		FTPUtil.upload(SysTemConfigManager.get(Config.FTP_ADDRESS), Integer.parseInt(SysTemConfigManager.get(Config.FTP_PORT)),
+				SysTemConfigManager.get(Config.FTP_USERNAME), SysTemConfigManager.get(Config.FTP_PASSWORD), fileName, REMOTEPATH,
 				file.getInputStream());
 
 		filePath = REMOTEPATH + "/" + fileName;
@@ -154,12 +155,12 @@ public class AttachmentServiceImpl implements AttachmentService {
 			} else {
 				String filePath = attachment.getAttachmentPath();
 
-				if ("1".equals(Config.init().get(Config.FTP_ENABLE))) { // 如果文件保存在ftp服务器，则先将文件下载到本地
-					FTPUtil.download(Config.init().get(Config.FILE_PATH),
-							Integer.parseInt(Config.init().get(Config.FTP_PORT)),
-							Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD), filePath,
-							Config.init().get(Config.FILE_TEMP_PATH) + filePath);
-					filePath = Config.init().get(Config.FILE_TEMP_PATH) + filePath;
+				if ("1".equals(SysTemConfigManager.get(Config.FTP_ENABLE))) { // 如果文件保存在ftp服务器，则先将文件下载到本地
+					FTPUtil.download(SysTemConfigManager.get(Config.FTP_ADDRESS),
+							Integer.parseInt(SysTemConfigManager.get(Config.FTP_PORT)),
+							SysTemConfigManager.get(Config.FTP_USERNAME), SysTemConfigManager.get(Config.FTP_PASSWORD), filePath,
+							SysTemConfigManager.get(Config.FILE_TEMP_PATH) + filePath);
+					filePath = SysTemConfigManager.get(Config.FILE_TEMP_PATH) + filePath;
 				}
 
 				FileUtil.fileDownload(response, filePath, attachment.getAttachmentName());
@@ -204,9 +205,9 @@ public class AttachmentServiceImpl implements AttachmentService {
 		Attachment attachment = attachmentMapper.getAttachmentById(attachmentId);
 		attachmentMapper.delete(attachmentId);
 
-		if ("1".equals(Config.init().get(Config.FTP_ENABLE))) { // 是否启用ftp上传
-			FTPUtil.delete(Config.init().get(Config.FILE_PATH), Integer.parseInt(Config.init().get(Config.FTP_PORT)),
-					Config.init().get(Config.FTP_USERNAME), Config.init().get(Config.FTP_PASSWORD),
+		if ("1".equals(SysTemConfigManager.get(Config.FTP_ENABLE))) { // 是否启用ftp上传
+			FTPUtil.delete(SysTemConfigManager.get(Config.FTP_ADDRESS), Integer.parseInt(SysTemConfigManager.get(Config.FTP_PORT)),
+					SysTemConfigManager.get(Config.FTP_USERNAME), SysTemConfigManager.get(Config.FTP_PASSWORD),
 					attachment.getAttachmentPath());
 
 		} else { // 未启用ftp的话，将文件保存在本地

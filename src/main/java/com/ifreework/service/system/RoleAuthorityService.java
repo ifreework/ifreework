@@ -3,7 +3,6 @@ package com.ifreework.service.system;
 import java.util.List;
 
 import com.ifreework.common.entity.PageData;
-import com.ifreework.entity.system.Role;
 import com.ifreework.entity.system.RoleAuthority;
 
 

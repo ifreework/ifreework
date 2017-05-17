@@ -19,7 +19,6 @@ import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.entity.system.UserRole;
 
-import java.util.Arrays;
 
 /**
  * 用户权限的切面

@@ -18,5 +18,5 @@ public interface ProvinceService {
 	 */
 	public List<Province> queryProvinceList(PageData pd);
 	
-	public List<Map> queryProvinceListMap(PageData pd);
+	public List<Map<String,String>> queryProvinceListMap(PageData pd);
 }

@@ -15,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
-import com.alipay.api.AlipayConstants;
 import com.alipay.api.AlipayRequest;
 import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradeCloseResponse;

@@ -10,8 +10,6 @@
 package com.ifreework.service.system;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -32,6 +29,7 @@ import com.ifreework.common.constant.Constant;
 import com.ifreework.common.email.MailSend;
 import com.ifreework.common.email.entity.MailBean;
 import com.ifreework.common.entity.PageData;
+import com.ifreework.common.manager.SysTemConfigManager;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.Config;
@@ -167,7 +165,7 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 			pd.setResult(Constant.FAILED);
 			return pd;
 		}
-		String resetPwd = Config.init().get(Config.RESET_PWD);
+		String resetPwd = SysTemConfigManager.get(Config.RESET_PWD);
 		resetPwd = StringUtil.isEmpty(resetPwd) ? SecurityUtil.encrypt("1") : SecurityUtil.encrypt(resetPwd);
 		User user = new User();
 		user.setUserId(userId);

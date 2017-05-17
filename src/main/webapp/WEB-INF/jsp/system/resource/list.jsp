@@ -178,7 +178,17 @@
 	
 	function gotoDelete(e){
 		var resourceId = $(e).data("resourceid");
-		W.open("${contextPath}/system/resource/delete","删除资源",{resourceId:resourceId});
+		W.ajax({
+			url : "${contextPath}/system/resource/delete",
+			data: {resourceId:resourceId},
+			success:function(result){
+				if(SUCCESS == result.result){
+					dataTable.ajax.reload();
+				}else{
+					bootbox.alert("数据异常，删除失败");
+				}
+			}
+		});
 	}
 }());
 </script>

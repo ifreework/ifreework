@@ -25,7 +25,7 @@ public class MunicipalityServiceImpl implements MunicipalityService {
 	private MunicipalityMapper municipalityMapper;
 
 	
-	public List<Map> queryMunicipalityListMap(PageData pd){
+	public List<Map<String,String>> queryMunicipalityListMap(PageData pd){
 		return municipalityMapper.queryMunicipalityListMap(pd);
 	}
 }

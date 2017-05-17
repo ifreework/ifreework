@@ -25,7 +25,7 @@ public class CountyServiceImpl implements CountyService {
 	private CountyMapper countyMapper;
 
 	
-	public List<Map> queryCountyListMap(PageData pd){
+	public List<Map<String,String>> queryCountyListMap(PageData pd){
 		return countyMapper.queryCountyListMap(pd);
 	}
 }

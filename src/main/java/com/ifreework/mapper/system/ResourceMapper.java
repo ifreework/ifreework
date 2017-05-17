@@ -20,5 +20,6 @@ public interface ResourceMapper  {
 	
 	public void add(Resource resource);
 	public void update(Resource resource);
+	public void delete(String resourceId);
 	public void deleteChildren(String resourceId);
 }
