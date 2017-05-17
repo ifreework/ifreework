@@ -9,7 +9,6 @@
  */
 package com.ifreework.service.system;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ifreework.common.constant.Constant;
 import com.ifreework.common.entity.PageData;
 import com.ifreework.common.manager.ServletRequestManager;
-import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.Attachment;
 import com.ifreework.entity.system.Config;
 import com.ifreework.mapper.system.AttachmentMapper;
@@ -32,7 +30,6 @@ import com.ifreework.util.FTPUtil;
 import com.ifreework.util.FileUtil;
 import com.ifreework.util.StringUtil;
 
-import io.netty.handler.codec.http.HttpResponse;
 
 /**
  * 
@@ -71,11 +68,13 @@ public class AttachmentServiceImpl implements AttachmentService {
 			} else { // 未启用ftp的话，将文件保存在本地
 				filePath = localDiskUpload(file);
 			}
-
 			Attachment attachment = new Attachment();
 			attachment.setAttachmentPath(filePath);
 			attachment.setAttachmentName(file.getOriginalFilename());
+			attachment.setAttachmentSize(file.getSize());
+			attachment.setAttachmentFormatSize(FileUtil.convertFileSize(file.getSize()));
 			add(attachment);
+			
 			attachmentId += StringUtil.isEmpty(attachmentId) ? attachment.getAttachmentId()
 					: "," + attachment.getAttachmentId();
 		}

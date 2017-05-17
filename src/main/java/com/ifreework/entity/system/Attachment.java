@@ -9,7 +9,12 @@ public class Attachment{
 	private java.lang.String attachmentId;
 	private java.lang.String attachmentName;
 	private java.lang.String attachmentPath;
+	private Long attachmentSize;
+	private String attachmentFormatSize;
 	
+	public Long getAttachmentSize() {
+		return attachmentSize;
+	}
 	//columns END
 	public java.lang.String getAttachmentId() {
 		return attachmentId;
@@ -29,8 +34,16 @@ public class Attachment{
 	public void setAttachmentPath(java.lang.String attachmentPath) {
 		this.attachmentPath = attachmentPath;
 	}
+	public void setAttachmentSize(Long attachmentSize) {
+		this.attachmentSize = attachmentSize;
+	}
+	public String getAttachmentFormatSize() {
+		return attachmentFormatSize;
+	}
+	public void setAttachmentFormatSize(String attachmentFormatSize) {
+		this.attachmentFormatSize = attachmentFormatSize;
+	}
 
-	
 }
 
 

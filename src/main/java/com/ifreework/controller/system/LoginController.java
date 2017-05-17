@@ -11,6 +11,7 @@ package com.ifreework.controller.system;
 
 
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -152,19 +153,13 @@ public class LoginController extends BaseControllerSupport {
 	@RequestMapping(value = "/main/userImgDownload")
 	@ResponseBody
 	public String userImgDownload() throws Exception{
-//		PageData pd = this.getPageData();
-//		User user = null;
-//		String username = pd.getString("username");
-//		if(StringUtil.isEmpty(username)){
-//			user = UserManager.getUser();
-//		}
-//		
-//		HttpServletResponse res = this.getHttpServletResponse();
-//		String imgPath = user.getImgPath();
-//		if(StringUtil.isEmpty(imgPath)){
-//			imgPath = FileUtil.getRootPath() + "resources/img/main/defeat.jpg";
-//		}
-//		FileUtil.fileDownload(res, imgPath);
+		User user = UserManager.getUser();
+		HttpServletResponse res = this.getHttpServletResponse();
+		String imgPath = user.getImgPath();
+		if(StringUtil.isEmpty(imgPath) || !new File(imgPath).exists() ){
+			imgPath = FileUtil.getRootPath() + "resources/img/main/defeat.jpg";
+		}
+		FileUtil.fileDownload(res, imgPath);
 		return null;
 	}
 

@@ -87,7 +87,7 @@
 /******************* sidebar **************************/
 .page-sidebar:before{
 	background: #f0f9fd;
-	top:45px;
+	top:0px;
 	border-right:1px solid rgba(0, 0, 0, 0.1);
 	-webkit-box-shadow: none;;
     -moz-box-shadow: none ;

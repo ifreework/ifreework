@@ -173,12 +173,12 @@
 	function gotoEdit(e){
 		var resourceId = $(e).data("resourceid");
 		console.log(resourceId);
-		W.open("${contextPath}/system/resource/update",{resourceId:resourceId},"修改资源");
+		W.open("${contextPath}/system/resource/update","修改资源",{resourceId:resourceId});
 	}
 	
 	function gotoDelete(e){
 		var resourceId = $(e).data("resourceid");
-		W.open("${contextPath}/system/resource/delete",{resourceId:resourceId},"删除资源");
+		W.open("${contextPath}/system/resource/delete","删除资源",{resourceId:resourceId});
 	}
 }());
 </script>

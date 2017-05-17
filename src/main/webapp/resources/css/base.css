@@ -244,3 +244,227 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 	padding: 15px;
 }
 
+/*******************************************attachments body********************************************************/
+.attachments-body {
+	padding: 10px;
+	border-bottom: 1px solid #ebebeb
+}
+.attachments-body h4 {
+	margin-bottom: 30px;
+	line-height: 1
+}
+.attachments-body h4 span {
+	zoom: 1;
+	filter: alpha(opacity=40);
+	-webkit-opacity: .4;
+	-moz-opacity: .4;
+	opacity: .4
+}
+.attachments-body ul {
+	text-align: left;
+	list-style: none;
+	padding: 0 15px;
+	margin: 0
+}
+.attachments-body ul li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	margin-right: 30px;
+	margin-bottom: 10px
+}
+.attachments-body ul li>div {
+	display: inline-block;
+	vertical-align: top;
+}
+.attachments-body ul li>div img {
+	width:45px;
+	position: relative;
+	display: block;
+	line-height: 1;
+	margin-bottom: 10px
+}
+.attachments-body ul li>div.thumb {
+	position: relative
+}
+
+.attachments-body ul li>div.detail span {
+	line-height: 20px;
+	display: inline-block;
+	max-width:200px;
+	-ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.attachments-body ul li>div.detail span.size{
+	color: #ccc;
+}
+.attachments-body ul li>div.detail span.options{
+	display: block;
+}
+.attachments-body ul li .links {
+	display: block;
+	font-size: 12px;
+	color: #666;
+}
+.attachments-body ul li .links a {
+	color: #666
+}
+
+/****************************************************************************************/
+.detail-container {
+	position: relative;
+	background: #efefef;
+}
+.detail-container .detail-body {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box
+}
+.detail-container .detail-header {
+	position: relative;
+	height: 38px;
+	padding: 0;
+	border-bottom: 1px solid #eee;
+	background-color: #fff
+}
+.detail-container .detail-header .header-buttons {
+	list-style: none;
+	margin-bottom: 0;
+	display: inline-block;
+	float: left;
+	text-align: left;
+	height: 38px;
+	padding: 0 2px 0 7px
+}
+.detail-container .detail-header .header-buttons li {
+	float: left;
+	position: relative;
+	height: 38px;
+	width: 38px;
+	padding: 4px;
+	text-align: center
+}
+.detail-container .detail-header .header-buttons li a {
+	display: block;
+	width: 28px;
+	height: 28px;
+	border: 1px solid #d0d0d0;
+	-webkit-border-radius: 50%;
+	-webkit-background-clip: padding-box;
+	-moz-border-radius: 50%;
+	-moz-background-clip: padding;
+	border-radius: 50%;
+	background-clip: padding-box
+}
+.detail-container .detail-header .header-buttons li a: hover {
+	cursor: pointer;
+	border-color: #2dc3e8
+}
+.detail-container .detail-header .header-buttons li a: hover i {
+	color: #2dc3e8
+}
+.detail-container .detail-header .header-buttons li a i {
+	line-height: 24px;
+	color: #d0d0d0;
+	font-size: 14px
+}
+.detail-container .detail-header .header-buttons li a i.fa {
+	line-height: 28px;
+	font-size: 16px
+}
+.detail-container .detail-header .header-buttons li.search {
+	width: 150px
+}
+.detail-container .detail-header .header-buttons li.search input[type="text"] {
+	border-color: #e5e5e5;
+	-webkit-border-radius: 5px!important;
+	-webkit-background-clip: padding-box!important;
+	-moz-border-radius: 5px!important;
+	-moz-background-clip: padding!important;
+	border-radius: 5px!important;
+	background-clip: padding-box!important
+}
+.detail-container .detail-header .pages {
+	float: right;
+	font-style: italic;
+	line-height: 38px;
+	color: #d0d0d0
+}
+.detail-container .detail-header .draft {
+	float: right;
+	margin-right: 15px;
+	font-style: italic;
+	line-height: 38px;
+	color: #d0d0d0
+}
+.detail-container .detail-header .detail-title {
+	float: left;
+	margin-left: 15px;
+	line-height: 36px;
+	color: #555
+}
+.detail-container .detail-body {
+	position: relative;
+	padding: 0;
+	overflow: hidden
+}
+.detail-container .detail-body .detail-title {
+	background: #f5f5f5;
+	border-spacing: 0;
+	padding: 10px 30px;
+	border-collapse: collapse;
+	border-bottom: 1px solid #ebebeb
+}
+.detail-container .detail-body .detail-info {
+	width: 100%;
+	background: #f5f5f5;
+	display: table;
+	border-spacing: 0;
+	border-collapse: collapse;
+	border-bottom: 1px solid #ebebeb
+}
+.detail-container .detail-body .detail-info .detail-sender,.detail-container .detail-body .detail-info .detail-date {
+	display: table-cell;
+	width: 50%;
+	color: #737373;
+	padding: 8px 10px 7px
+}
+.detail-container .detail-body .detail-info .detail-sender.detail-sender a: hover,.detail-container .detail-body .detail-info .detail-date.detail-sender a: hover {
+	text-decoration: none
+}
+.detail-container .detail-body .detail-info .detail-sender.detail-sender span,.detail-container .detail-body .detail-info .detail-date.detail-sender span {
+	font-weight: bold;
+	color: #fb6e52
+}
+.detail-container .detail-body .detail-info .detail-sender.detail-sender img,.detail-container .detail-body .detail-info .detail-date.detail-sender img {
+	margin-right: 5px;
+	border: 2px solid #e5e5e5
+}
+.detail-container .detail-body .detail-info .detail-sender.detail-date,.detail-container .detail-body .detail-info .detail-date.detail-date {
+	text-align: right
+}
+.detail-container .detail-body .detail-text {
+	border-bottom: 1px solid #ebebeb;
+	padding: 15px 30px;
+}
+.detail-container .detail-body .detail-card {
+	padding: 15px;
+	border-bottom: 1px solid #ebebeb
+}
+.detail-container .detail-body .detail-card h4 {
+	margin-bottom: 30px;
+	line-height: 1
+}
+.detail-container .detail-body .detail-card h4 span {
+	zoom: 1;
+	filter: alpha(opacity=40);
+	-webkit-opacity: .4;
+	-moz-opacity: .4;
+	opacity: .4
+}
+.detail-container .detail-body .detail-card .text{
+	padding: 0 15px;
+}

@@ -6,13 +6,17 @@
 	<sql id="attachmentColumns">
 			ATTACHMENT_ID,
 			ATTACHMENT_NAME,
-			ATTACHMENT_PATH
+			ATTACHMENT_PATH,
+			ATTACHMENT_SIZE,
+			ATTACHMENT_FORMAT_SIZE
 	</sql>
 
 	<resultMap type="com.ifreework.entity.system.Attachment" id="attachment">
 		<id column="ATTACHMENT_ID" property="attachmentId"/>
 		<result column="ATTACHMENT_NAME" property="attachmentName"/>
 		<result column="ATTACHMENT_PATH" property="attachmentPath"/>
+		<result column="ATTACHMENT_SIZE" property="attachmentSize"/>
+		<result column="ATTACHMENT_FORMAT_SIZE" property="attachmentFormatSize"/>
 	</resultMap>
 	
 	
@@ -35,7 +39,9 @@
 		(
 			#{ attachmentId,jdbcType=VARCHAR },
 			#{ attachmentName,jdbcType=VARCHAR },
-			#{ attachmentPath,jdbcType=VARCHAR }
+			#{ attachmentPath,jdbcType=VARCHAR },
+			#{ attachmentSize,jdbcType=BIGINT },
+			#{ attachmentFormatSize,jdbcType=VARCHAR }
 		)
 	</insert>
 
@@ -47,7 +53,13 @@
 	           ATTACHMENT_NAME = #{attachmentName},
 	        </if>  
 	        <if test="attachmentPath != null ">  
-	           ATTACHMENT_PATH = #{attachmentPath}
+	           ATTACHMENT_PATH = #{attachmentPath},
+	        </if>  
+	        <if test="attachmentSize != null ">  
+	           ATTACHMENT_SIZE = #{attachmentSize},
+	        </if>  
+	        <if test="attachmentFormatSize != null ">  
+	           ATTACHMENT_FORMAT_SIZE = #{attachmentFormatSize},
 	        </if>  
 		</trim>
 			where 

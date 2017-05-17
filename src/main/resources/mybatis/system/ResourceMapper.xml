@@ -39,6 +39,7 @@
 		<result column="OPERATION_LEVEL" property="operationLevel"/>
 	</resultMap>
 	
+	
 	<select id="queryResourceList" parameterType="pd" resultMap="resource">
 		select
 		<include refid="resourceColumns" />

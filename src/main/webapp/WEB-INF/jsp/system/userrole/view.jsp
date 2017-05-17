@@ -59,8 +59,8 @@
 						deleteNodes.push(obj);
 					}
 				}
-				addStr = W.arrayToString(addNodes);
-				deleteStr =  W.arrayToString(deleteNodes);
+				addStr = W.jsonArrayToString(addNodes);
+				deleteStr =  W.jsonArrayToString(deleteNodes);
 				var opt = {
 					url : "${ contextPath }/system/userrole/save",
 					data : {addStr:addStr,deleteStr:deleteStr},

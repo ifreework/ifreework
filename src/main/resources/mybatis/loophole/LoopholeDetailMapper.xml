@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ifreework.mapper.loophole.LoopholeDetailMapper">
+	<sql id="loopholeDetailColumns">
+		LOOPHOLE_DETAIL_ID,
+		LOOPHOLE_ID,
+		LOOPHOLE_NAME,
+		LOOPHOLE_LEVEL,
+		QUANTITY
+	</sql>
+
+
+	<resultMap type="com.ifreework.entity.loophole.LoopholeDetail"
+		id="loopholeDetail">
+		<id column="LOOPHOLE_DETAIL_ID" property="loopholeDetailId" />
+		<result column="LOOPHOLE_ID" property="loopholeId" />
+		<result column="LOOPHOLE_NAME" property="loopholeName" />
+		<result column="LOOPHOLE_LEVEL" property="loopholeLevel" />
+		<result column="QUANTITY" property="quantity" />
+	</resultMap>
+
+	<insert id="add" parameterType="com.ifreework.entity.loophole.LoopholeDetail">
+		<selectKey keyProperty="loopholeDetailId" resultType="String"
+			order="BEFORE">
+			select sys_guid() from dual
+		</selectKey>
+
+		insert into LOO_LOOPHOLE_DETAIL (
+		<include refid="loopholeDetailColumns" />
+		)
+		values
+		(
+		#{ loopholeDetailId,jdbcType=VARCHAR },
+		#{ loopholeId,jdbcType=VARCHAR },
+		#{ loopholeName,jdbcType=VARCHAR },
+		#{ loopholeLevel,jdbcType=VARCHAR },
+		#{ quantity,jdbcType=INTEGER }
+		)
+	</insert>
+	<update id="delete" parameterType="com.ifreework.entity.loophole.LoopholeDetail">
+		delete from LOO_LOOPHOLE_DETAIL where
+		<if test=" loopholeDetailId != null and  loopholeDetailId != ''">
+			LOOPHOLE_DETAIL_ID = #{loopholeDetailId}
+		</if>
+		<if test=" loopholeId != null and  loopholeId != ''">
+			LOOPHOLE_ID = #{loopholeId}
+		</if>
+	</update>
+
+</mapper>

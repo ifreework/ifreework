@@ -29,6 +29,7 @@
 <!-- jquery,bootstrap核心 -->
 <script type="text/javascript" src="${ jsPath }/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="${ jsPath }/jquery/jquery.cookie.js"></script>
+
 <script src="${ jsPath }/bootstrap/bootstrap.min.js"></script>
 
 <!-- jquery,bootstrap插件 -->
@@ -39,7 +40,10 @@
 <script src="${ jsPath }/bootstrap/datatable/jquery.dataTables.js"></script>
 <script src="${ jsPath }/bootstrap/datatable/dataTables.bootstrap.js"></script>
 <script src="${ jsPath }/bootstrap/bootbox/bootbox.js"></script>
-
+<script type="text/javascript"
+	src="${ jsPath }/bootstrap/charts/chartjs/Chart.bundle.js"></script>
+	
+	
 <!-- 部分自定义方法 -->
 <script src="${ jsPath }/base.js"></script>
 
