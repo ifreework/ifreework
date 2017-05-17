@@ -11,13 +11,6 @@
 	                        message: '请填写您的系统名称'
 	                    }
 	                }
-	            },
-	            file_path: {
-	                validators: {
-	                    notEmpty: {
-	                        message: '请填写文件上传之后的默认保存地址'
-	                    }
-	                }
 	            }
 	     	}
 		}).data('bootstrapValidator');
@@ -83,6 +76,8 @@
 	                            	</div>
 	                               
 	                            </div>
+	                            
+	                            
 	                            <div class="form-group has-feedback row">
 	                            	<label class="col-sm-2 control-label">是否启用FTP服务</label>
 	                            	<div class="col-sm-9">
@@ -92,7 +87,7 @@
 	                            	</div>
 	                            </div>
 	                            
-	                            <div class="form-group has-feedback row">
+	                            <div class="form-group has-feedback row disk" style="display: <%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "none" : "block"  %>">
 	                            	<label class="col-sm-2 control-label">文件保存地址</label>
 	                            	<div class="col-sm-9">
 	                            		<span class="input-icon icon-left">
@@ -102,7 +97,17 @@
 	                            	</div>
 	                            </div>
 	                            
-	                            <div class="form-group has-feedback row ftp" style="<%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "block" : "none"  %>">
+	                            <div class="form-group has-feedback row ftp" style="display: <%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "block" : "none"  %>">
+	                            	<label class="col-sm-2 control-label">FTP地址</label>
+	                            	<div class="col-sm-9">
+	                            		<span class="input-icon icon-left">
+		                            		<i class="fa fa-phone circular"></i>
+		                                    <input type="text" class="form-control" name="ftp_address" placeholder="FTP地址" value="<%=SysTemConfigManager.get(Config.FTP_ADDRESS)%>" >
+                                    	</span>
+	                            	</div>
+	                            </div>
+	                            
+	                            <div class="form-group has-feedback row ftp" style="display: <%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "block" : "none"  %>">
 	                            	<label class="col-sm-2 control-label">FTP端口号</label>
 	                            	<div class="col-sm-9">
 	                            		<span class="input-icon icon-left">
@@ -112,7 +117,7 @@
 	                            	</div>
 	                            </div>
 	                            
-	                            <div class="form-group has-feedback row ftp" style="<%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "block" : "none"  %>">
+	                            <div class="form-group has-feedback row ftp" style="display: <%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "block" : "none"  %>">
 	                            	<label class="col-sm-2 control-label">FTP用户名</label>
 	                            	<div class="col-sm-9">
 	                            		<span class="input-icon icon-left">
@@ -122,7 +127,7 @@
 	                            	</div>
 	                            </div>
 	                            
-	                            <div class="form-group has-feedback row ftp" style="<%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "block" : "none"  %>">
+	                            <div class="form-group has-feedback row ftp" style="display: <%="1".equals(SysTemConfigManager.get(Config.FTP_ENABLE)) ? "block" : "none"  %>">
 	                            	<label class="col-sm-2 control-label">FTP密码</label>
 	                            	<div class="col-sm-9">
 	                            		<span class="input-icon icon-left">
