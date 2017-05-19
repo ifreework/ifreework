@@ -8,6 +8,10 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.alibaba.fastjson.JSON;
+import com.ifreework.common.constant.Constant;
+import com.ifreework.common.entity.PageData;
+import com.ifreework.common.manager.ServletRequestManager;
 import com.ifreework.util.StringUtil;
 
 
@@ -68,8 +72,19 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter{
 		String username = (String) SecurityUtils.getSubject().getPrincipal();
 		
 		if(StringUtil.isEmpty(username)){ //用户不存在，则跳转到login页面
-			request.setAttribute("errorType", "userIsNull");
-			request.getRequestDispatcher(loginPath).forward(request,response);
+			String type = request.getParameter("_type");
+			if("ajax".equals(type)){
+				PageData pd = new PageData();
+				pd.setResult(Constant.ERROR);
+				pd.put("errorType", "userIsNull");
+				String json = JSON.toJSONString(pd);
+				ServletRequestManager.printHttpServletResponse(json);
+			}else if("windowOpen".equals(type)){
+				request.getRequestDispatcher("/error/userIsNull").forward(request,response);
+			}else{
+				request.setAttribute("errorType", "userIsNull");
+				request.getRequestDispatcher(loginPath).forward(request,response);
+			}
 			return false;		
 		}
 		

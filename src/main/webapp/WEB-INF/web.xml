@@ -102,7 +102,12 @@
 		<error-code>404</error-code>
 		<location>/error/404</location>
 	</error-page>
-
+	
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/error/500</location>
+	</error-page>
+	
 	<!-- 解决include乱码问题 -->
 	<jsp-config>
 		<jsp-property-group>

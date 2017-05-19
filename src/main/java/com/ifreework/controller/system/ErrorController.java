@@ -37,8 +37,12 @@ import com.ifreework.common.controller.BaseControllerSupport;
 @RequestMapping({ "/error" })
 public class ErrorController extends BaseControllerSupport {
 
+
 	/**
-	 * @Title: error404 @Description: TODO(404错误页面跳转) @param @return @throws
+	 * 
+	 * 描述：路径错误页面
+	 * @return 
+	 * @return
 	 */
 	@RequestMapping(value = "/404")
 	public ModelAndView error404() {
@@ -47,13 +51,47 @@ public class ErrorController extends BaseControllerSupport {
 		return mv;
 	}
 	
+	
+
 	/**
-	 * @Title: error404 @Description: TODO(404错误页面跳转) @param @return @throws
+	 * 
+	 * 描述：系统异常跳转界面
+	 * @return
+	 */
+	@RequestMapping(value = "/500")
+	public ModelAndView error500() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/system/error/500");
+		return mv;
+	}
+	
+	
+
+	/**
+	 * 
+	 * 描述：没有权限跳转界面
+	 * @return 
+	 * @return
 	 */
 	@RequestMapping(value = "/600")
 	public ModelAndView error600() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("/system/error/unauthorized");
+		return mv;
+	}
+	
+	
+
+	/**
+	 * 
+	 * 描述：用户登录超时登录界面
+	 * @return 
+	 * @return
+	 */
+	@RequestMapping(value = "/userIsNull")
+	public ModelAndView userIsNull() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/system/error/userIsNull");
 		return mv;
 	}
 }

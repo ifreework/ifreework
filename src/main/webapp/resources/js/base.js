@@ -65,12 +65,18 @@ var W = {
 		bootbox.load();
 		data = W._initData(data);
 		
-		$("#page-body").load(url, data, function() {
+		$("#page-body").load(url, data, function(response,status,xhr) {
 			bootbox.unload();
 			W.historyArray.push({
 				url : url,
 				data : data
 			});
+			if("error" == status){
+				$("#page-body").html(response);
+			}
+			if("timeout" == status){
+				bootbox.alert("请求超时，请检查网络后重新进行连接。");
+			}
 		});
 	},
 	
@@ -123,11 +129,14 @@ var W = {
 		var time = new Date().getTime();
 		if (opt.data == null) {
 			opt.data = {
+				_type : "ajax",
 				_time : time
 			};
 		} else {
+			opt.data._type = "ajax";
 			opt.data._time = time;
 		}
+		
 		opt.showLoad = opt.showLoad = null ? true : opt.showLoad; //是否显示加载遮罩，默认为true
 
 		var opts = {
@@ -139,6 +148,19 @@ var W = {
 				}
 				if(opt.beforeSend){
 					return opt.beforeSend(xhr);
+				}
+			},
+			success:function(result){
+				if(opt.result == "ERROR"){
+					if(result.errorType == "userIsNull"){
+						bootbox.alert("用户登录超时或尚未登录，请重新登录系统","",function(){
+							window.location.reload();
+						});
+					}
+				}else{
+					if(opt.success){
+						return opt.success(result);
+					}
 				}
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
@@ -171,6 +193,7 @@ var W = {
 			data = {};
 		}
 		data._time = nowTime;
+		data._type = "windowOpen";
 		return data;
 	}
 };

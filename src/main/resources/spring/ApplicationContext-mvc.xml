@@ -92,7 +92,10 @@
 	</bean>
 
 	<!-- 异常处理工具类 -->
-	<bean id="exceptionResolver" class="com.ifreework.common.exception.MyExceptionResolver">
+	<bean id="exceptionResolver" class="com.ifreework.common.exception.ExceptionResolver">
+		<property name="errorPath">
+			<value>/system/error/500</value>
+		</property>
 	</bean>
 
 	<!-- 访问拦截 -->
