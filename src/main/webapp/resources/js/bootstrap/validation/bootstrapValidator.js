@@ -2687,7 +2687,7 @@ if (typeof jQuery === 'undefined') {
                 return true;
             }
 
-            options.format = options.format || 'MM/DD/YYYY';
+            options.format = options.format || 'YYYY/MM/DD';
 
             // #683: Force the format to YYYY-MM-DD as the default browser behaviour when using type="date" attribute
             if ($field.attr('type') === 'date') {

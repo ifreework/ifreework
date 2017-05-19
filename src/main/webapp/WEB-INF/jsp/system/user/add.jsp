@@ -28,7 +28,6 @@ $().ready(function(){
                         message: '请填写您的电话号码'
                     },
                     phone:{
-                    	country: 'CN',
                     	message: '电话号码格式不正确，请重新输入'
                     }
                 }
@@ -60,7 +59,7 @@ $().ready(function(){
                         message: '请选择您的出生日期'
                     },
                     date: {
-                    	
+                    	message: '请输入正确的日期格式，例如2017-01-01'
                     }
                 }
             }

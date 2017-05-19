@@ -85,6 +85,10 @@
 
 
 /******************* sidebar **************************/
+.page-sidebar{
+	border-right:1px solid rgba(0, 0, 0, 0.1);
+}
+
 .page-sidebar:before{
 	background: #f0f9fd;
 	top:0px;

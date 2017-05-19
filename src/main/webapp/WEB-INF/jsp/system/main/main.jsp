@@ -33,8 +33,12 @@
 <script src="${ jsPath }/bootstrap/bootstrap.min.js"></script>
 
 <!-- jquery,bootstrap插件 -->
+
 <script src="${ jsPath }/bootstrap/validation/bootstrapValidator.js"></script>
+<script src="${ jsPath }/bootstrap/validation/i18n/zh_CN.js"></script>
+
 <script src="${ jsPath }/bootstrap/datetime/bootstrap-datepicker.js"></script>
+
 <script src="${ jsPath }/bootstrap/select2/select2.js"></script>
 <script src="${ jsPath }/bootstrap/textarea/jquery.autosize.js"></script>
 <script src="${ jsPath }/bootstrap/datatable/jquery.dataTables.js"></script>

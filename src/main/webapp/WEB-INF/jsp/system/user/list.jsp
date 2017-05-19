@@ -79,7 +79,6 @@
 	        	className : "text-center"  ,
 	        	render:function( data, type, row, meta ){
 	        		return '<a class="btn btn-edit btn-info btn-xs icon-only" title="修改" data-userid="' + row.userId + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +
-	        			   '<a class="btn btn-delete btn-danger btn-xs icon-only margin-left-10" title="删除" data-userid="' + row.userId + '" href="javascript:void(0);"><i class="fa fa-trash-o "></i></a>' + 
 	        			   '<a class="btn btn-reset btn-warning btn-xs icon-only margin-left-10" title="重置密码" data-userid="' + row.userId + '" href="javascript:void(0);"><i class="fa fa-eraser "></i></a>' + 
 	        			   '<a class="btn btn-role btn-sky btn-xs icon-only margin-left-10" title="添加角色" data-userid="' + row.userId + '" href="javascript:void(0);"><i class="fa  fa-female "></i></a>';
 	        	}
