@@ -1,10 +1,17 @@
 package com.ifreework.entity.db;
 
+import java.io.Serializable;
 
-
-
-public class County {
+public class County implements Serializable {
 	
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = -5832064023445515174L;
 	//columns START
 	private Integer countyId;
 	private String countyName;

@@ -1,6 +1,18 @@
 package com.ifreework.entity.system;
 
-public class Msg implements Comparable<Msg> {
+import java.io.Serializable;
+
+public class Msg implements Comparable<Msg>, Serializable {
+
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = 2631404580841504676L;
+
 
 	@Override
 	public int compareTo(Msg msg) {

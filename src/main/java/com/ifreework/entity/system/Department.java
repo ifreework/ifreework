@@ -1,7 +1,17 @@
 package com.ifreework.entity.system;
 
-public class Department {
+import java.io.Serializable;
+
+public class Department implements Serializable {
 	
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = 5876289493599066877L;
 	//columns START
 	private java.lang.String departmentId;
 	private java.lang.String parentId;

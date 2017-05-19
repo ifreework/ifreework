@@ -1,5 +1,7 @@
 package com.ifreework.common.entity;
 
+import java.io.Serializable;
+
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -11,7 +13,15 @@ import com.alibaba.fastjson.JSON;
  * @editTime：2017年4月17日 下午5:23:05    
  * @version 1.0
  */
-public class Column {
+public class Column implements Serializable  {
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = -5041978990883042405L;
 	private String data; //字段名称
 	private String name; //字段对应的数据库中的字段名
 	private boolean orderable = false; //是否进行排序

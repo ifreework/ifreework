@@ -37,9 +37,18 @@ import com.ifreework.util.StringUtil;
  * @version 1.0
  */
 @SuppressWarnings("rawtypes")
-public class PageData extends HashMap implements Map {
+public class PageData extends HashMap implements Map  {
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = 4182182477954304064L;
+
 	private static final Logger log = Logger.getLogger(PageData.class);
-	private static final long serialVersionUID = 1L;
+	
 	private static final String[] COLUMN_FIELDS = { "data", "name" };
 
 	/**

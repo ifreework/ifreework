@@ -1,5 +1,7 @@
 package com.ifreework.entity.db;
 
+import java.io.Serializable;
+
 /**
  * 
  * 描述：全国省份
@@ -9,7 +11,15 @@ package com.ifreework.entity.db;
  * @editTime：2017年4月11日 下午11:15:37    
  * @version 1.0
  */
-public class Province {
+public class Province implements Serializable{
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = -3389701940492562513L;
 	private String provinceId;//省份编码
 	private String provinceName;//省份名称
 	

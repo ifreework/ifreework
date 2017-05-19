@@ -3,7 +3,7 @@ package com.ifreework.common.manager;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.cache.CacheManager;
 
 import com.ifreework.common.constant.EhCacheConstant;
 import com.ifreework.entity.system.User;
@@ -38,8 +38,8 @@ public class UserManager {
 			return null;
 		}
 		
-		EhCacheManager manager = SpringManager.getEhCacheManager();
-		Cache<String,User> cache = manager.getCache(EhCacheConstant.USER_CACHE_NAME.toString());
+		CacheManager cacheManager = SpringManager.getCacheManager();
+		Cache<String,User> cache = cacheManager.getCache(EhCacheConstant.USER_CACHE_NAME.toString());
 		return cache.get(EhCacheConstant.USERNAME_KEY_PREFIX + username);
 	}
 	

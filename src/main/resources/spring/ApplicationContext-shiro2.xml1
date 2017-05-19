@@ -14,32 +14,12 @@
            http://www.springframework.org/schema/tx 
            classpath:org/springframework/transaction/config/spring-tx-4.3.xsd">
 
+
+    <!-- ehcache -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
+    </bean>
     
-	<!-- shiro redisManager -->
-	<bean id="redisManager" class="com.ifreework.common.redis.RedisManager">
-		<constructor-arg name="host" value="127.0.0.1"/>
-		<constructor-arg  name="port" value="6379"/>
-		<constructor-arg  name="expire" value="0"/>
-		
-		<!-- optional properties:
-		<property name="timeout" value="10000"/>
-		<property name="password" value="123456"/>
-		-->
-	</bean>
-	
-	
-	<!-- cacheManager -->
-	<bean id="cacheManager" class="com.ifreework.common.redis.RedisCacheManager">
-		<property name="redisManager" ref="redisManager" />
-	</bean>
-	
-	
-	<!-- redisSessionDAO -->
-	<bean id="redisSessionDAO" class="com.ifreework.common.shiro.session.RedisSessionDAO">
-		<property name="cacheManager" ref="cacheManager" />
-	</bean>
-	    
-	    
 	<!-- 項目自定义的Realm -->
 	<bean id="ShiroRealm" class="com.ifreework.common.shiro.realm.ShiroRealm">
 		<property name="shiroAuth" ref="userService" />
@@ -53,7 +33,12 @@
 		<property name="sessionManager" ref="sessionManager"></property>  
 	</bean>
 
-
+    <bean id="ehcacheSessionDAO" class="com.ifreework.common.shiro.session.EhcacheSessionDAO" >  
+    	<constructor-arg name="cacheManager" ref="cacheManager"></constructor-arg>  
+    	<constructor-arg name="cacheName" value="shiro-activeSessionCache"></constructor-arg>  
+    	<property name="loginLogManager" ref="loginLogService" />
+    </bean>  
+    
         <!-- sessionManager -->  
     <!-- session管理器 -->  
     <bean id="sessionManager"  
@@ -67,7 +52,7 @@
         <property name="sessionValidationInterval" value="1800000" />  
   
         <!-- session存储的实现 -->  
-        <property name="sessionDAO" ref="redisSessionDAO" />  
+        <property name="sessionDAO" ref="ehcacheSessionDAO" />  
         
         <!-- 定时检查失效的session -->  
         <property name="sessionValidationSchedulerEnabled" value="true" />  

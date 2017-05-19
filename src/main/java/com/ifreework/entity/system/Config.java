@@ -1,17 +1,27 @@
 package com.ifreework.entity.system;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.cache.CacheManager;
 
 import com.ifreework.common.constant.EhCacheConstant;
 import com.ifreework.common.manager.SpringManager;
 import com.ifreework.mapper.system.ConfigMapper;
 
-public class Config{
+public class Config implements Serializable{
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = -4773165368555660431L;
+
 	public static final String SYSTEM_NAME = "system_name"; //系统名称
 	
 	public static final String BUTTON_AUTH_ENABLE = "button_auth_enable"; //是否启用按钮权限
@@ -56,8 +66,8 @@ public class Config{
 	 * @throws
 	 */
 	public static Config init(){
-		EhCacheManager ehCacheManager = SpringManager.getEhCacheManager();
-		Cache<String,Config> cache = ehCacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
+		CacheManager cacheManager = SpringManager.getCacheManager();
+		Cache<String,Config> cache = cacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
 		config = cache.get(EhCacheConstant.CONFIG_CACHE_KEY_NAME.toString());
 		
 		if(config == null){
@@ -87,8 +97,8 @@ public class Config{
 	 * @throws
 	 */
 	public static void reset(){
-		EhCacheManager ehCacheManager = SpringManager.getEhCacheManager();
-		Cache<String,Config> cache = ehCacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
+		CacheManager cacheManager = SpringManager.getCacheManager();
+		Cache<String,Config> cache = cacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
 		cache.clear();
 	}
 }

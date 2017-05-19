@@ -5,20 +5,23 @@
  */
 package com.ifreework.common.aop;
 
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ifreework.common.constant.EhCacheConstant;
-import com.ifreework.common.manager.BaseCacheManager;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.entity.system.UserRole;
-
 
 /**
  * 用户权限的切面
@@ -66,15 +69,25 @@ import com.ifreework.entity.system.UserRole;
  */
 @Component
 @Aspect
-public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
+public class UserAuthCacheAspect {
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Autowired
+	private CacheManager cacheManager;
+	private String cacheName; // 设置缓存地址名称
+	private String userPermissionsPrefix; // 用户拥有角色缓存key前缀
+	private String resourcePermissionsPrefix;
 
 	public UserAuthCacheAspect() {
-		setCacheName("sys-authCache");
+		cacheName = EhCacheConstant.AUTH_CACHE_NAME.toString(); // 设置缓存地址名称
+		userPermissionsPrefix = EhCacheConstant.USER_PERMISSIONS_PREFIX.toString(); // 用户拥有角色缓存key前缀
+		resourcePermissionsPrefix = EhCacheConstant.RESOURCE_PERMISSIONS_PREFIX.toString();
 	}
 
-	private String userPermissionsPrefix = EhCacheConstant.USER_PERMISSIONS_PREFIX.toString();  //用户拥有角色缓存key前缀
-	private String resourcePermissionsPrefix = EhCacheConstant.RESOURCE_PERMISSIONS_PREFIX.toString();
-
+	private Cache<String, Object> getCache() {
+		return cacheManager.getCache(cacheName);
+	}
 
 	public String getUserPermissionsPrefix() {
 		return userPermissionsPrefix;
@@ -92,18 +105,14 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 		this.resourcePermissionsPrefix = resourcePermissionsPrefix;
 	}
 
-
 	private String getUserPermissionsKey(String username) {
 		return userPermissionsPrefix + username;
 	}
-	
+
 	private String getResourcePermissionsKey(String resourceId) {
 		return resourcePermissionsPrefix + resourceId;
 	}
-	
-	
-	
-	
+
 	/**
 	 * 
 	 * 描述：切点，通过resourceId获取权限时
@@ -115,7 +124,7 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.queryAuthorityByResourceId(..))")
 	private void authCacheAuthorityByResourcePointcut() {
 	}
-	
+
 	/**
 	 * 
 	 * 描述：如果缓存中包涵该用户所拥有的权限，则从缓存中获取，
@@ -129,13 +138,13 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 	public Object queryAuthorityByUserName(ProceedingJoinPoint joinPoint) throws Throwable {
 		String username = (String) joinPoint.getArgs()[0];
 		String key = getUserPermissionsKey(username);
-		Object obj = get(key);
+		Object obj = getCache().get(key);
 		if (obj != null) {
-			log.debug("cacheName:" + cacheName + ", method:queryAuthorityByUserName, hit key:" + key + ",value:" + obj);
+			logger.debug("cacheName:{},method:queryAuthorityByUserName, hit key:{},value:{}", cacheName, key, obj);
 			return obj;
 		}
 		obj = joinPoint.proceed();
-		put(key, obj);
+		getCache().put(key, obj);
 		return obj;
 
 	}
@@ -151,7 +160,7 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.queryAuthorityByUserName(..))")
 	private void authCacheAuthorityByUsernamePointcut() {
 	}
-	
+
 	/**
 	 * 
 	 * 描述：如果缓存中包涵该资源所对应的资源，则从缓存中获取，
@@ -165,13 +174,13 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 	public Object queryAuthorityByResourceId(ProceedingJoinPoint joinPoint) throws Throwable {
 		String resourceId = (String) joinPoint.getArgs()[0];
 		String key = getResourcePermissionsKey(resourceId);
-		Object obj = get(key);
+		Object obj = getCache().get(key);
 		if (obj != null) {
-			log.debug("cacheName:" + cacheName + ", method:queryAuthorityByUserName, hit key:" + key + ",value:" + obj);
+			logger.debug("cacheName:{},method:queryAuthorityByUserName, hit key:{},value:{}", cacheName, key, obj);
 			return obj;
 		}
 		obj = joinPoint.proceed();
-		put(key, obj);
+		getCache().put(key, obj);
 		return obj;
 
 	}
@@ -184,11 +193,11 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 	 * @return   
 	 * @throws
 	 */
-	@Pointcut(value = "execution(*  com.ifreework.mapper.system.UserRoleMapper.add(..))" + 
-					  "|| execution(*  com.ifreework.mapper.system.UserRoleMapper.delete(..))")
+	@Pointcut(value = "execution(*  com.ifreework.mapper.system.UserRoleMapper.add(..))"
+			+ "|| execution(*  com.ifreework.mapper.system.UserRoleMapper.delete(..))")
 	private void resetCacheAuthorityByUsernamePointcut() {
 	}
-	
+
 	/**
 	 * 
 	 * 描述：修改用户角色前，先清除该用户对应的缓存
@@ -202,11 +211,10 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 		UserRole ur = (UserRole) joinPoint.getArgs()[0];
 		User user = UserManager.getUser(ur.getUserId());
 		String key = getUserPermissionsKey(user.getUsername());
-		Object obj = remove(key);
-		log.debug("cacheName:" + cacheName + ", method:remove, hit key:" + key + ",value:" + obj);
+		Object obj = getCache().remove(key);
+		logger.debug("cacheName:{},method:remove, hit key:{},value:{}", cacheName, key, obj);
 	}
 
-	
 	/**
 	 * 
 	 * 描述：切点，清除全部缓存
@@ -220,23 +228,22 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 	 * @return   
 	 * @throws
 	 */
-	@Pointcut(value = "execution(*  com.ifreework.service.system.RoleAuthorityServiceImpl.save(..))" + 
-	 
-					    "|| execution(*  com.ifreework.service.system.RoleServiceImpl.add(..))" + 
-						"|| execution(*  com.ifreework.service.system.RoleServiceImpl.update(..))" + 
-						"|| execution(*  com.ifreework.service.system.RoleServiceImpl.delete(..))" + 
-						
-						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.add(..))" + 
-						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.update(..))" + 
-						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.delete(..))" + 
-						
-						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.add(..))" + 
-						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.update(..))" + 
-						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.delete(..))") 
+	@Pointcut(value = "execution(*  com.ifreework.service.system.RoleAuthorityServiceImpl.save(..))" +
+
+	"|| execution(*  com.ifreework.service.system.RoleServiceImpl.add(..))"
+			+ "|| execution(*  com.ifreework.service.system.RoleServiceImpl.update(..))"
+			+ "|| execution(*  com.ifreework.service.system.RoleServiceImpl.delete(..))" +
+
+	"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.add(..))"
+			+ "|| execution(*  com.ifreework.service.system.ResourceServiceImpl.update(..))"
+			+ "|| execution(*  com.ifreework.service.system.ResourceServiceImpl.delete(..))" +
+
+	"|| execution(*  com.ifreework.service.system.OperationServiceImpl.add(..))"
+			+ "|| execution(*  com.ifreework.service.system.OperationServiceImpl.update(..))"
+			+ "|| execution(*  com.ifreework.service.system.OperationServiceImpl.delete(..))")
 	private void resetCachePointcut() {
 	}
-	
-	
+
 	/**
 	 * 
 	 * 描述：清除全部缓存
@@ -247,7 +254,23 @@ public class UserAuthCacheAspect extends BaseCacheManager<String, Object> {
 	 */
 	@Before(value = "resetCachePointcut()")
 	public void resetCache() throws Throwable {
-		 clear();
-		log.debug("cacheName:" + cacheName + " clear");
+		getCache().clear();
+		logger.debug("cacheName:" + cacheName + " clear");
+	}
+
+	public CacheManager getCacheManager() {
+		return cacheManager;
+	}
+
+	public void setCacheManager(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
+	}
+
+	public String getCacheName() {
+		return cacheName;
+	}
+
+	public void setCacheName(String cacheName) {
+		this.cacheName = cacheName;
 	}
 }

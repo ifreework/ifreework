@@ -1,10 +1,17 @@
 package com.ifreework.entity.system;
 
+import java.io.Serializable;
 
-
-
-public class Operation{
+public class Operation implements Serializable{
 	
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = -633306191521779561L;
 	//columns START
 	private java.lang.String operationId;
 	private java.lang.String pk;

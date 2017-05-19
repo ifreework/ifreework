@@ -1,10 +1,17 @@
 package com.ifreework.entity.system;
 
+import java.io.Serializable;
 
-
-
-public class UserRole{
+public class UserRole implements Serializable{
 	
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = 2740348109895212361L;
 	//columns START
 	private java.lang.String userRoleId;
 	private java.lang.String userId;

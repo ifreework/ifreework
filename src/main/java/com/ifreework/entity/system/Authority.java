@@ -1,10 +1,17 @@
 package com.ifreework.entity.system;
 
+import java.io.Serializable;
 
-
-
-public class Authority{
+public class Authority implements Serializable{
 	
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = -8796013310099951509L;
 	//columns START
 	private java.lang.String pk;
 	private java.lang.String resourceId;

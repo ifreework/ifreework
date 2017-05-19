@@ -1,10 +1,17 @@
 package com.ifreework.entity.db;
 
+import java.io.Serializable;
 
-
-
-public class Municipality{
+public class Municipality implements Serializable{
 	
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = 1001701982592538377L;
 	//columns START
 	private String municipalityId;
 	private String municipalityName;

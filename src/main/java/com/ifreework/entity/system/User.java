@@ -1,13 +1,22 @@
 package com.ifreework.entity.system;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.ifreework.entity.db.County;
 import com.ifreework.entity.db.Municipality;
 import com.ifreework.entity.db.Province;
 
-public class User{
+public class User implements Serializable{
 	
+	
+	/**    
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
+	 *    
+	 * @version 1.0    
+	 */    
+	
+	private static final long serialVersionUID = -880792284516769954L;
 	//columns START
 	private String userId;
 	private String username;

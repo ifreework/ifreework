@@ -5,20 +5,23 @@
  */
 package com.ifreework.common.aop;
 
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ifreework.common.constant.EhCacheConstant;
-import com.ifreework.common.manager.BaseCacheManager;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.entity.system.UserRole;
-
 
 /**
  * 用户菜单的切面
@@ -66,27 +69,27 @@ import com.ifreework.entity.system.UserRole;
  */
 @Component
 @Aspect
-public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
+public class UserMenuCacheAspect {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Autowired
+	private CacheManager cacheManager;
+	private String cacheName; // 设置缓存地址名称
+	private String userMenuPrefix; // 用户拥有菜单缓存key前缀
 
 	public UserMenuCacheAspect() {
-		setCacheName(EhCacheConstant.MENU_CACHE_NAME.toString());
+		cacheName = EhCacheConstant.MENU_CACHE_NAME.toString(); // 设置缓存地址名称
+		userMenuPrefix = EhCacheConstant.USER_MENU_PREFIX.toString(); // 用户拥有菜单缓存key前缀
 	}
 
-	private String userMenuPrefix = EhCacheConstant.USER_MENU_PREFIX.toString();  //用户拥有菜单缓存key前缀
-	
-	public String getUserMenuPrefix() {
-		return userMenuPrefix;
+	private Cache<String, Object> getCache() {
+		return cacheManager.getCache(cacheName);
 	}
 
-	public void setUserMenuPrefix(String userMenuPrefix) {
-		this.userMenuPrefix = userMenuPrefix;
-	}
-
-	
-	private String getKey(String userId){
+	private String getKey(String userId) {
 		return userMenuPrefix + userId;
 	}
-	
+
 	/**
 	 * 
 	 * 描述：切点，通过userId获取权限时
@@ -98,7 +101,7 @@ public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
 	@Pointcut(value = "execution(* com.ifreework.service.system.UserServiceImpl.queryMenuByUserId(..))")
 	private void menuCacheByUserIdPointcut() {
 	}
-	
+
 	/**
 	 * 
 	 * 描述：如果缓存中包涵该用户所拥有的权限，则从缓存中获取，
@@ -112,20 +115,17 @@ public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
 	public Object queryAuthorityByUserName(ProceedingJoinPoint joinPoint) throws Throwable {
 		User user = UserManager.getUser();
 		String userId = user.getUserId();
-		
+
 		String key = getKey(userId);
-		
-		Object obj = get(key);
+		Object obj = getCache().get(key);
 		if (obj != null) {
-			log.debug("cacheName:" + cacheName + ", method:queryMenuByUserId, hit key:" + key + ",value:" + obj);
+			logger.debug("cacheName:{},method:queryMenuByUserId, hit key:{},value:{}", cacheName, key, obj);
 			return obj;
 		}
 		obj = joinPoint.proceed();
-		put(key, obj);
+		getCache().put(key, obj);
 		return obj;
-
 	}
-	
 
 	/**
 	 * 
@@ -135,11 +135,11 @@ public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
 	 * @return   
 	 * @throws
 	 */
-	@Pointcut(value = "execution(*  com.ifreework.mapper.system.UserRoleMapper.add(..))" + 
-					  "|| execution(*  com.ifreework.mapper.system.UserRoleMapper.delete(..))")
+	@Pointcut(value = "execution(*  com.ifreework.mapper.system.UserRoleMapper.add(..))"
+			+ "|| execution(*  com.ifreework.mapper.system.UserRoleMapper.delete(..))")
 	private void resetCacheAuthorityByUsernamePointcut() {
 	}
-	
+
 	/**
 	 * 
 	 * 描述：修改用户角色前，先清除该用户对应的缓存
@@ -152,11 +152,10 @@ public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
 	public void resetCacheAuthorityByUsername(JoinPoint joinPoint) throws Throwable {
 		UserRole ur = (UserRole) joinPoint.getArgs()[0];
 		String key = getKey(ur.getUserId());
-		Object obj = remove(key);
-		log.debug("cacheName:" + cacheName + ", method:remove, hit key:" + key + ",value:" + obj);
+		Object obj = getCache().remove(key);
+		logger.debug("cacheName:{},method:remove, hit key:{},value:{}", cacheName, key, obj);
 	}
 
-	
 	/**
 	 * 
 	 * 描述：切点，清除全部缓存
@@ -170,23 +169,22 @@ public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
 	 * @return   
 	 * @throws
 	 */
-	@Pointcut(value = "execution(*  com.ifreework.service.system.RoleAuthorityServiceImpl.save(..))" + 
-	 
-					    "|| execution(*  com.ifreework.service.system.RoleServiceImpl.add(..))" + 
-						"|| execution(*  com.ifreework.service.system.RoleServiceImpl.update(..))" + 
-						"|| execution(*  com.ifreework.service.system.RoleServiceImpl.delete(..))" + 
-						
-						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.add(..))" + 
-						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.update(..))" + 
-						"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.delete(..))" + 
-						
-						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.add(..))" + 
-						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.update(..))" + 
-						"|| execution(*  com.ifreework.service.system.OperationServiceImpl.delete(..))") 
+	@Pointcut(value = "execution(*  com.ifreework.service.system.RoleAuthorityServiceImpl.save(..))" +
+
+	"|| execution(*  com.ifreework.service.system.RoleServiceImpl.add(..))"
+			+ "|| execution(*  com.ifreework.service.system.RoleServiceImpl.update(..))"
+			+ "|| execution(*  com.ifreework.service.system.RoleServiceImpl.delete(..))" +
+
+	"|| execution(*  com.ifreework.service.system.ResourceServiceImpl.add(..))"
+			+ "|| execution(*  com.ifreework.service.system.ResourceServiceImpl.update(..))"
+			+ "|| execution(*  com.ifreework.service.system.ResourceServiceImpl.delete(..))" +
+
+	"|| execution(*  com.ifreework.service.system.OperationServiceImpl.add(..))"
+			+ "|| execution(*  com.ifreework.service.system.OperationServiceImpl.update(..))"
+			+ "|| execution(*  com.ifreework.service.system.OperationServiceImpl.delete(..))")
 	private void resetCachePointcut() {
 	}
-	
-	
+
 	/**
 	 * 
 	 * 描述：清除全部缓存
@@ -197,7 +195,7 @@ public class UserMenuCacheAspect extends BaseCacheManager<String, Object> {
 	 */
 	@Before(value = "resetCachePointcut()")
 	public void resetCache() throws Throwable {
-		 clear();
-		log.debug("cacheName:" + cacheName + " clear");
+		getCache().clear();
+		logger.debug("cacheName:" + cacheName + " clear");
 	}
 }
