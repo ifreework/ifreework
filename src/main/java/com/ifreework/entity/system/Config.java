@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 
-import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.constant.CacheConstant;
 import com.ifreework.common.manager.SpringManager;
 import com.ifreework.mapper.system.ConfigMapper;
 
@@ -67,8 +67,8 @@ public class Config implements Serializable{
 	 */
 	public static Config init(){
 		CacheManager cacheManager = SpringManager.getCacheManager();
-		Cache<String,Config> cache = cacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
-		config = cache.get(EhCacheConstant.CONFIG_CACHE_KEY_NAME.toString());
+		Cache<String,Config> cache = cacheManager.getCache(CacheConstant.CONFIG_CACHE_NAME.toString());
+		config = cache.get(CacheConstant.CONFIG_CACHE_KEY_NAME.toString());
 		
 		if(config == null){
 			ConfigMapper configMapper = (ConfigMapper) SpringManager.getBean("configMapper");
@@ -78,7 +78,7 @@ public class Config implements Serializable{
 				map.put((String) item.get("CONFIG_KEY"), item.get("CONFIG_VALUE"));
 			}
 			config = new Config(map);
-			cache.put(EhCacheConstant.CONFIG_CACHE_KEY_NAME.toString(), config);
+			cache.put(CacheConstant.CONFIG_CACHE_KEY_NAME.toString(), config);
 		}
 		return config;
 	}
@@ -98,7 +98,7 @@ public class Config implements Serializable{
 	 */
 	public static void reset(){
 		CacheManager cacheManager = SpringManager.getCacheManager();
-		Cache<String,Config> cache = cacheManager.getCache(EhCacheConstant.CONFIG_CACHE_NAME.toString());
+		Cache<String,Config> cache = cacheManager.getCache(CacheConstant.CONFIG_CACHE_NAME.toString());
 		cache.clear();
 	}
 }

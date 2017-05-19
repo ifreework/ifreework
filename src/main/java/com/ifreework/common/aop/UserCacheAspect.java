@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.constant.CacheConstant;
 import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.User;
 
@@ -38,8 +38,8 @@ public class UserCacheAspect {
 	private String usernameKeyPrefix; // 用户名key前缀
 
 	public UserCacheAspect() {
-		cacheName = EhCacheConstant.USER_CACHE_NAME.toString(); // 设置缓存地址名称
-		usernameKeyPrefix = EhCacheConstant.USERNAME_KEY_PREFIX.toString(); // 用户名key前缀
+		cacheName = CacheConstant.USER_CACHE_NAME.toString(); // 设置缓存地址名称
+		usernameKeyPrefix = CacheConstant.USERNAME_KEY_PREFIX.toString(); // 用户名key前缀
 	}
 
 	private Cache<String, User> getCache() {

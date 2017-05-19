@@ -12,9 +12,6 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 
-import com.ifreework.common.constant.Constant;
-import com.ifreework.common.shiro.listener.LoginLogManager;
-import com.ifreework.util.StringUtil;
 
 /**
  * 将shiro的session托管给ehcache进行缓存

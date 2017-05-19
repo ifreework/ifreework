@@ -5,7 +5,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 
-import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.constant.CacheConstant;
 import com.ifreework.entity.system.User;
 import com.ifreework.mapper.system.UserMapper;
 import com.ifreework.util.StringUtil;
@@ -39,8 +39,8 @@ public class UserManager {
 		}
 		
 		CacheManager cacheManager = SpringManager.getCacheManager();
-		Cache<String,User> cache = cacheManager.getCache(EhCacheConstant.USER_CACHE_NAME.toString());
-		return cache.get(EhCacheConstant.USERNAME_KEY_PREFIX + username);
+		Cache<String,User> cache = cacheManager.getCache(CacheConstant.USER_CACHE_NAME.toString());
+		return cache.get(CacheConstant.USERNAME_KEY_PREFIX + username);
 	}
 	
 

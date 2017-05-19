@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.constant.CacheConstant;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.entity.system.UserRole;
@@ -78,8 +78,8 @@ public class UserMenuCacheAspect {
 	private String userMenuPrefix; // 用户拥有菜单缓存key前缀
 
 	public UserMenuCacheAspect() {
-		cacheName = EhCacheConstant.MENU_CACHE_NAME.toString(); // 设置缓存地址名称
-		userMenuPrefix = EhCacheConstant.USER_MENU_PREFIX.toString(); // 用户拥有菜单缓存key前缀
+		cacheName = CacheConstant.MENU_CACHE_NAME.toString(); // 设置缓存地址名称
+		userMenuPrefix = CacheConstant.USER_MENU_PREFIX.toString(); // 用户拥有菜单缓存key前缀
 	}
 
 	private Cache<String, Object> getCache() {

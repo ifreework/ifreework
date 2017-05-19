@@ -1,7 +1,7 @@
 package com.ifreework.common.constant;
 
 
-public enum EhCacheConstant {
+public enum CacheConstant {
 	USER_CACHE_NAME("sys-userCache"), //用户信息缓存空间
 	USERNAME_KEY_PREFIX("username-"), //用户缓存key前缀
 	 
@@ -18,7 +18,7 @@ public enum EhCacheConstant {
 	
 	
 	private String value;
-	private EhCacheConstant(String value){
+	private CacheConstant(String value){
 		this.value = value;
 	}
 	

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ifreework.common.constant.EhCacheConstant;
+import com.ifreework.common.constant.CacheConstant;
 import com.ifreework.common.manager.UserManager;
 import com.ifreework.entity.system.User;
 import com.ifreework.entity.system.UserRole;
@@ -80,9 +80,9 @@ public class UserAuthCacheAspect {
 	private String resourcePermissionsPrefix;
 
 	public UserAuthCacheAspect() {
-		cacheName = EhCacheConstant.AUTH_CACHE_NAME.toString(); // 设置缓存地址名称
-		userPermissionsPrefix = EhCacheConstant.USER_PERMISSIONS_PREFIX.toString(); // 用户拥有角色缓存key前缀
-		resourcePermissionsPrefix = EhCacheConstant.RESOURCE_PERMISSIONS_PREFIX.toString();
+		cacheName = CacheConstant.AUTH_CACHE_NAME.toString(); // 设置缓存地址名称
+		userPermissionsPrefix = CacheConstant.USER_PERMISSIONS_PREFIX.toString(); // 用户拥有角色缓存key前缀
+		resourcePermissionsPrefix = CacheConstant.RESOURCE_PERMISSIONS_PREFIX.toString();
 	}
 
 	private Cache<String, Object> getCache() {
