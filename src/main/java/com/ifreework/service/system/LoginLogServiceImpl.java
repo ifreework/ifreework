@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +70,7 @@ public class LoginLogServiceImpl implements LoginLogService, LoginLogManager {
 		try {
 			userAgentInfo = new UASparser(OnlineUpdater.getVendoredInputStream()).parse(agent);
 			LoginLog loginLog = new LoginLog();
+			loginLog.setLoginLogId(SecurityUtils.getSubject().getSession().getId().toString());
 			loginLog.setUsername(username);
 			loginLog.setBrowser(userAgentInfo.getUaFamily());
 			loginLog.setBrowserVersion(userAgentInfo.getBrowserVersionInfo());

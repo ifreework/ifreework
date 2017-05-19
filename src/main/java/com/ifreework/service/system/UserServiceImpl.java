@@ -99,7 +99,6 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 		try {
 			subject.login(token);
 			loginLogService.add(username);
-			SecurityUtils.getSubject().getSession().setAttribute(Constant.CACHE_USER, username);
 			pd.setResult(Constant.SUCCESS);
 		} catch (LockedAccountException e) {
 			pd.setResult(Constant.FAILED);

@@ -51,10 +51,6 @@
 
 
 	<insert id="add" parameterType="com.ifreework.entity.system.LoginLog">
-		<selectKey keyProperty="loginLogId" resultType="String"
-			order="BEFORE">
-			select sys_guid() from dual
-		</selectKey>
 
 		insert into SYS_LOGIN_LOG (
 		<include refid="loginLogColumns" />
@@ -77,6 +73,6 @@
 	<update id="update" parameterType="string">
 		update SYS_LOGIN_LOG
 		set LOGOUT_TIME = sysdate
-		where USERNAME = #{username} and LOGOUT_TIME is null
+		where LOGIN_LOG_ID = #{loginLogId} and LOGOUT_TIME is null
 	</update>
 </mapper>

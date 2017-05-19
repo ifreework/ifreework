@@ -41,7 +41,7 @@
 	    
 	    
 	<!-- 項目自定义的Realm -->
-	<bean id="ShiroRealm" class="com.ifreework.common.shiro.realm.ShiroRealm">
+	<bean id="shiroRealm" class="com.ifreework.common.shiro.realm.ShiroRealm">
 		<property name="shiroAuth" ref="userService" />
 		<property name="authenticationCachingEnabled" value="false" />
 		<property name="authorizationCachingEnabled" value="false" />
@@ -49,12 +49,16 @@
 
 	
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<property name="realm" ref="ShiroRealm" />
+		<property name="realm" ref="shiroRealm" />
 		<property name="sessionManager" ref="sessionManager"></property>  
 	</bean>
 
-
-        <!-- sessionManager -->  
+	<!-- session 监听 -->
+	<bean id="shiroSessionListener" class="com.ifreework.common.shiro.listener.ShiroSessionListener">
+		<property name="loginLogManager" ref="loginLogService" />
+	</bean>  
+	
+	
     <!-- session管理器 -->  
     <bean id="sessionManager"  
         class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">  
@@ -64,7 +68,7 @@
         <property name="deleteInvalidSessions" value="true" />  
   
         <!-- 会话验证器调度时间 -->  
-        <property name="sessionValidationInterval" value="1800000" />  
+        <property name="sessionValidationInterval" value="180000" />  
   
         <!-- session存储的实现 -->  
         <property name="sessionDAO" ref="redisSessionDAO" />  
@@ -73,6 +77,8 @@
         <property name="sessionValidationSchedulerEnabled" value="true" />  
         <property name="sessionIdCookieEnabled" value="true" />  
         <property name="sessionIdCookie.name" value="jsid"/>  
+        
+        <property name="sessionListeners" ref="shiroSessionListener" />  
     </bean>  
     
 	<!-- Shiro Filter -->

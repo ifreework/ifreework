@@ -29,16 +29,7 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 	private Logger logger = Logger.getLogger(getClass());
 	private Cache<String, Session> cache;
 	private String keyPrefix = "shiro_redis_cache:";
-	private LoginLogManager loginLogManager;
 	
-	
-	public LoginLogManager getLoginLogManager() {
-		return loginLogManager;
-	}
-
-	public void setLoginLogManager(LoginLogManager loginLogManager) {
-		this.loginLogManager = loginLogManager;
-	}
 
 	public EhcacheSessionDAO(String cacheName, CacheManager cacheManager) {
 		cache = cacheManager.getCache(cacheName);
@@ -77,11 +68,6 @@ public class EhcacheSessionDAO extends AbstractSessionDAO {
 			logger.error("session or session id is null");
 			return;
 		}
-		String username = (String) session.getAttribute(Constant.CACHE_USER);
-		if(!StringUtil.isEmpty(username)){
-			loginLogManager.logoutLog(username);
-		}
-		
 		logger.debug("delete session : " + session.getId());
 		cache.remove(getKey(session.getId()));
 	}

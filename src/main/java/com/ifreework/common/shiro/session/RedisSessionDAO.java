@@ -22,9 +22,9 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	
 	private String shiroKey = "shiro_redis_cache"; //shiro缓存在数据库中保存的key
 	
-	private String keyPrefix = "shiro_redis_session:";
+	private String keyPrefix = "shiro_redis_session:"; //shiro在redis中默认的缓存key
 	
-	private int expire = 1800000; // 超时时间，0永不超时,单位毫秒
+	private int expire = 1800000; // 超时时间，0永不超时,单位毫秒,默认30分钟
 	
 	@Override
 	public void update(Session session) throws UnknownSessionException {

@@ -29,19 +29,20 @@ public class ShiroSessionListener implements SessionListener  {
 
 	@Override
 	public void onStart(Session session) {
-		logger.debug("session start!");
+		logger.debug("session {} start!",session);
 	}
 
 	@Override
 	public void onStop(Session session) {
-		logger.debug("session stop!");
-//		String username = (String) session.getAttribute(Constant.CACHE_USER);
-//		loginLogManager.logoutLog(username);
+		
+		logger.debug("session {} stop!",session);
+		loginLogManager.logoutLog(session.getId().toString());
 	}
 
 	@Override
 	public void onExpiration(Session session) {
-		logger.debug("session expiration!");
+		logger.debug("session {} expiration!",session);
+		loginLogManager.logoutLog(session.getId().toString());
 	}
 
 }
