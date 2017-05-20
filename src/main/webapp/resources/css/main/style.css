@@ -185,6 +185,87 @@
 	color: #4b8b6b;
 }
 
+
+.page-breadcrumbs .breadcrumbs-buttons{
+	display: inline-block;
+}
+
+@media only screen and (max-width: 500px) {
+	.page-breadcrumbs .breadcrumbs-buttons{
+		display: none;
+	}
+}
+
+.page-breadcrumbs .breadcrumbs-buttons {
+	display: inline-block;
+	position: absolute;
+	right: 0;
+	top: 0
+}
+.page-breadcrumbs .breadcrumbs-buttons a {
+	position: relative;
+	vertical-align: middle;
+	display: inline-block;
+	z-index: 1029;
+	height: 40px;
+	width: 36px;
+	margin-right: 5px;
+	padding: 8px 10px;
+	color: #dfdfdf;
+	-webkit-transition: all .218s ease;
+	-moz-transition: all .218s ease;
+	-o-transition: all .218s ease;
+	transition: all .218s ease;
+	float: right
+}
+.page-breadcrumbs .breadcrumbs-buttons a:before {
+	display: block;
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -3px;
+	right: 0;
+	height: 4px;
+	max-height: 4px;
+	overflow: hidden;
+	background-color: #2dc3e8
+}
+.page-breadcrumbs .breadcrumbs-buttons a:hover {
+	-webkit-box-shadow: 0 0 20px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 0 20px rgba(0,0,0,.2);
+	box-shadow: 0 0 20px rgba(0,0,0,.2);
+	color: #2dc3e8
+}
+.page-breadcrumbs .breadcrumbs-buttons a.active {
+	color: #2dc3e8
+}
+.page-breadcrumbs .breadcrumbs-buttons a i {
+	font-size: 17px;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 27px
+}
+.page-breadcrumbs .breadcrumbs-buttons a.fullscreen:before {
+	background-color: #fb6e52
+}
+.page-breadcrumbs .breadcrumbs-buttons a.fullscreen:hover,.page-breadcrumbs .breadcrumbs-buttons a.fullscreen.active {
+	color: #fb6e52
+}
+.page-breadcrumbs .breadcrumbs-buttons a.refresh:before {
+	background-color: #ffce55
+}
+.page-breadcrumbs .breadcrumbs-buttons a.refresh:hover,.page-breadcrumbs .breadcrumbs-buttons a.refresh.active {
+	color: #ffce55
+}
+.page-breadcrumbs .breadcrumbs-buttons a.backspace:before {
+	background-color: #2dc3e8
+}
+.page-breadcrumbs .breadcrumbs-buttons a.backspace:hover,.page-breadcrumbs .breadcrumbs-buttons a.backspace.active {
+	color: #2dc3e8
+}
+
+
+
 .page-body{
 	padding: 10px 10px 0px 10px;
 	background: #fff;

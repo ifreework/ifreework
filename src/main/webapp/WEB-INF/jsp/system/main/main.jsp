@@ -49,7 +49,7 @@
 	
 	
 <!-- 部分自定义方法 -->
-<script src="${ jsPath }/base.js"></script>
+<script src="${ jsPath }/ifreework.js"></script>
 
 <!-- main界面js -->
 <script src="${ jsPath }/main/main.js"></script>
@@ -144,6 +144,17 @@
                             <a href="javascript:void(0)">首页</a>
                         </li>
                     </ul>
+                    <div class="breadcrumbs-buttons">
+                        <a class="backspace" id="backspace-toggler" href="javascript:void(0);" title="返回上一页">
+                            <i class="fa  fa-reply"></i>
+                        </a>
+                        <a class="refresh" id="refresh-toggler" href="javascript:void(0);" title="刷新">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </a>
+                        <a class="fullscreen" id="fullscreen-toggler" href="javascript:void(0);" title="全屏">
+                            <i class="glyphicon glyphicon-fullscreen"></i>
+                        </a>
+                    </div>
                 </div>
                 <!-- /Page Breadcrumb -->
                 

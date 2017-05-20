@@ -1,5 +1,11 @@
-(function() {
+$.namespace("system.main"); // 创建命名空间，格式层级等于页面请求目录
 
+system.main = function(){
+	var historyArray = [], // 用于记录用户请求路径
+		historyBreadcrumbArray = [], //用于记录用户请求路径对应的标头
+		indexPath = "system/index";// 首页地址
+		
+	
 	/**
 	 * 当页面大小发生改变时，修改PageBody的高度
 	 */
@@ -10,17 +16,14 @@
 			minHeight : bodyHeight - 85
 		});
 	}
-
+	
 	/**
 	 * 初始化用户下拉框点击事件
 	 */
 	function initUserDropDown() {
 		$("#user-manager ul.dropdown-menu").click(function(t) {
-			
 			var _a = $(t.target).closest("a"), // 获取点击的a标签
 			id = _a.data("id");
-			
-			console.log(_a);
 			
 			if (id === "user-img") {
 				openUserImg();
@@ -39,13 +42,13 @@
 	// 打开用户编辑界面
 	function openUserEdit(username){
 		var url = "system/user/edit";
-		W.openPage(url,{username:username});
+		system.main.open(url,"用户编辑",{username:username});
 	}
 	
 	
 	//打开编辑头像界面
 	function openUserImg(){
-		var dialog = bootbox.dialog({
+		return bootbox.dialog({
 			id:"userImgDialog",
 			title: "头像设置",
 			width:700,
@@ -53,10 +56,9 @@
 	    });
 	}
 	
-	
 	//打开修改密码界面
 	function openResetPwd(){
-		var dialog = bootbox.dialog({
+		return bootbox.dialog({
 			id:"userImgDialog",
 			title: "密码重置",
 			width:700,
@@ -103,8 +105,9 @@
 					if(!W.isNull(url)){
 						$(".sidebar-menu").find("li.active").removeClass("active");
 						_a.closest("li").addClass("active");
-						changeBreadcrumb(_a);
-						W.openPage(url);
+						openPage(url,{},function(){
+							resetBreadcrumb(_a);
+						});
 					}
 				} else {// 如果点击的a标签含有下拉菜单，则显示下拉菜单
 					if (r = _a.next().get(0), !$(r).is(":visible")) {
@@ -119,45 +122,240 @@
 		});
 	}
 	
-	function changeBreadcrumb(_a) { // 重置页面标头导航
-		var parentsLi, // 父级li节点
-		a, // 父级a节点
-		text, _li, _a;
-		$("#ul-breadcrumb").html("");
+	
+	// 重置页面标头导航
+	function resetBreadcrumb(e) { 
+		var parentsLi, // 所有的父级节点
+		parentA, // 父级a节点
+		aText, //每个a标签中的文字
+		_li,  //新建<li></li>
+		_a;  //新建<a></a>
+		
+		
+		$("#ul-breadcrumb").html(""); //初始化标头
 
-		parentsLi = _a.parents("li");
-		console.log(parentsLi);
+		parentsLi = e.parents("li");  //获取所有父级节点
 
-		$.each(parentsLi, function(index, element) {
-			a = $(element).find("> a ");
-			text = a.find(" > .menu-text");
+		$.each(parentsLi, function(index, element) { //倒叙
+			parentA = $(element).find("> a");
+			aText = parentA.find(" > .menu-text");
 
 			_li = $("<li></li>");
-			if(index == 0){
+			
+			if(index == 0){ //如果是最后一个标签，添加激活标志
 				_li.addClass("active");
 			}
-			if (parentsLi.length - 1 == index) {
+			
+			if (parentsLi.length - 1 == index) { // 如果是第一个标签，添加icon
 				_li.append('<i class="fa fa-home"></i>');
 			}
 
-			_a = $('<a href="javascript:void(0)" >' + text.text() + '</a>');
+			_a = $('<a href="javascript:void(0)" >' + aText.text() + '</a>');
 
-			if (a.data("url") != null && a.data("url") != "") {
-				_a.data("url", a.data("url"));
+			if (!W.isNull(parentA.data("url"))) { //如果请求路径不为空，则添加请求地址
+				_a.data("url", parentA.data("url"));
 			}
+			
 			_li.append(_a);
+			
 			$("#ul-breadcrumb").prepend(_li);
+			
 		});
 		
-		$("#ul-breadcrumb li a").unbind("click").on("click",W.breadcrumbLiClick);
+		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+		
+		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
 	}
 	
-	$().ready(function(){
-		initiateSideMenuCompact();
-		initiateSideMenu();
-		changePageBodyHeight();
-		initUserDropDown();
-		$(window).resize(changePageBodyHeight);
-	});
+	
+	//添加页面表头
+	function addBreadcrumbLi(url,text,data) { 
+		var _li,
+			_a;
+		$("#ul-breadcrumb li.active").removeClass("active");
+		_li = $("<li class='active'></li>");
 
-}());
+		_a = $('<a href="javascript:void(0)" >' + text + '</a>');
+		_a.data("url", url);
+		_a.data("data", data);
+		_li.append(_a);
+		
+		$("#ul-breadcrumb").append(_li);
+		
+		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+		
+		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
+	}
+	
+	
+	//首页标头
+	function indexBreadcrumbLi() { 
+		var _li,
+			_a;
+		
+		$("#ul-breadcrumb").html(""); //初始化标头
+		
+		_li = $("<li></li>");
+		_li.addClass("active");
+		_li.append('<i class="fa fa-home"></i>');
+
+		_a = $('<a href="javascript:void(0)" >首页</a>');
+		_a.data("url",indexPath);
+		_li.append(_a);
+		
+		$("#ul-breadcrumb").prepend(_li);
+	
+		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
+	}
+	
+	
+	
+	function breadcrumbLiClick(t){//表头点击事件
+		var url = $(this).data("url");
+		if(url != null && url != ""){
+			$("#ul-breadcrumb li.active").removeClass("active");
+			$(t.target).closest("li").addClass("active");
+			
+			var data = $(this).data("data");
+			
+			$(this).parents("li").nextAll().remove();
+			
+			historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+			openPage(url,data);
+		}
+	}
+	
+	
+	/**
+	 * 在page-body中打开新的页面
+	 * url:String 请求地址
+	 * data:jsonObject 请求参数 
+	 * callBack:function(response,status,xhr) 页面加载成功后回调函数，response 返回结果,status 状态 xhr
+	 * 
+	 */
+	function openPage(url, data, callBack) {
+		var time = $.now();
+
+		if (data == null) {
+			data = {};
+		}
+
+		data._type = "windowOpen";
+		data._time = time;
+		
+		bootbox.load();
+		
+		$("#page-body").load(url, data, function(response,status,xhr) {
+			bootbox.unload();
+			
+			historyArray.push({ //保存请求历史纪录
+				url : url,
+				data : data
+			});
+			
+			if("error" == status){
+				$("#page-body").html(response);
+			}
+			if("timeout" == status){
+				bootbox.alert("请求超时，请检查网络后重新进行连接。");
+			}
+			if ($.isFunction(callBack)) {
+				return callBack.call(this,response,status,xhr);
+			}
+		});
+	}
+	
+	
+	/**
+	 * 初始化页面右上角三个按钮操作
+	 */
+	function initBreadcrumbsButtons(){
+		$("#fullscreen-toggler").on("click",function() {//全屏
+			var n = document.documentElement;
+			$("body").hasClass("full-screen") ? ($("body").removeClass("full-screen"), $("#fullscreen-toggler").removeClass("active"), document.exitFullscreen ? document.exitFullscreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitExitFullscreen && document.webkitExitFullscreen()) : ($("body").addClass("full-screen"), $("#fullscreen-toggler").addClass("active"), n.requestFullscreen ? n.requestFullscreen() : n.mozRequestFullScreen ? n.mozRequestFullScreen() : n.webkitRequestFullscreen ? n.webkitRequestFullscreen() : n.msRequestFullscreen && n.msRequestFullscreen())
+		});
+		$("#refresh-toggler").on("click",function() {//刷新
+			if (historyArray.length == 0) { 
+				window.location.reload(true);
+				return;
+			}
+			var urlObj = historyArray[historyArray.length - 1];
+			urlObj.data = urlObj.data== null ? {} : urlObj.data;
+			openPage(urlObj.url, urlObj.data);
+			return;
+		});
+		
+		$("#backspace-toggler").on("click",function() {//返回
+			history();
+		});
+		
+	}
+	
+	/**
+	 * 返回操作
+	 */
+	function history() { 
+		if (historyArray.length == 0) { // 如果没有历史记录，则不进行任何操作
+			return;
+		}
+		if (historyArray.length == 1) { // 如果只打开了一个界面，则返回首页
+			historyArray = [];
+			historyBreadcrumbArray = [];
+			indexBreadcrumbLi();
+			openPage(indexPath);
+			return ;
+		}
+		historyArray.pop();
+		historyBreadcrumbArray.pop();
+		var urlObj = historyArray[historyArray.length - 1];
+		
+		urlObj.data = urlObj.data== null ? {} : urlObj.data;
+		openPage(urlObj.url, urlObj.data,function(response,status,xhr){
+			$("#ul-breadcrumb").html(historyBreadcrumbArray[historyBreadcrumbArray.length - 1]);
+			
+			$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
+			
+		});
+		return;
+	}
+	
+	return {
+		init:function(){
+			initiateSideMenuCompact();
+			initiateSideMenu();
+			changePageBodyHeight();
+			initUserDropDown();
+			initBreadcrumbsButtons();
+			$(window).resize(changePageBodyHeight);
+		},
+		
+		/**
+		 * 返回上一页
+		 */
+		history : function() { 
+			history();
+		},
+		
+		/**
+		 * 在pagebody中加载页面内容
+		 * @param url 页面路径
+		 * @param title 标题
+		 * @param data 请求数据 json格式
+		 * @param callback 回掉函数
+		 */
+		open:function(url,title,data,callback){
+			openPage(url,data,function(response,status,xhr){
+				addBreadcrumbLi(url,title,data);
+				if ($.isFunction(callback)) {
+					callback.call(this,response,status,xhr)
+				}
+			});
+		} 
+		
+	}
+}();
+
+$().ready(function(){
+	system.main.init();
+});
