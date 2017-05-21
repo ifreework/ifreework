@@ -2,88 +2,91 @@
 <link href="${cssPath }/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
 <script src="${ jsPath }/bootstrap/ztree/jquery.ztree.all.js"></script>
 <script type="text/javascript">
-	(function(){
-		var $userRole;
-		$().ready(function(){
-			$userRole = $("#userRole");
-			
-			var setting = {
-				check: {
-					enable: true,
-					chkboxType: { "Y": "p", "N": "p" },
-					autoCheckTrigger: true
-				},
-				async: {
-					enable: true,
-					url:"${ contextPath }/system/userrole/queryRoleList",
-					autoParam:["id"],
-					otherParam:{userId:"${userId}"},
-					dataFilter: filter
-				}
+$.namespace("system.userrole");
+system.userrole = function(){
+	var systemUserrole ,
+		ztree ;
+	function initZtree(){
+		var setting = {
+			check: {
+				enable: true,
+				chkboxType: { "Y": "p", "N": "p" },
+				autoCheckTrigger: true
+			},
+			async: {
+				enable: true,
+				url:"${ contextPath }/system/userrole/queryRoleList",
+				autoParam:["id"],
+				otherParam:{userId:"${userId}"},
+				dataFilter: filter
+			}
+		};
+		
+		ztree = $.fn.zTree.init(systemUserrole.find("#userRoleTree"), setting);
+	}
+	
+	function filter(treeId, parentNode, childNodes) {
+		if (!childNodes) return null;
+		for (var i=0, l=childNodes.length; i<l; i++) {
+			childNodes[i].id = childNodes[i].roleId;
+			childNodes[i].name = childNodes[i].role.roleName;
+			childNodes[i].isParent = childNodes[i].role.isLeaf == 1 ? false : true;
+			childNodes[i].checked = childNodes[i].userRoleId == null || childNodes[i].userRoleId == "" ? false : true;
+		}
+		return childNodes;
+	}
+	
+	function save(){
+		var nodes = ztree.getChangeCheckedNodes(),
+			addNodes = [],
+			deleteNodes = [],
+			addStr,
+			deleteStr;
+		for(var i = 0 ; i < nodes.length;i++){
+			var obj = {
+				userId : "${userId}",
+				roleId: nodes[i].roleId
 			};
-			
-			function filter(treeId, parentNode, childNodes) {
-				if (!childNodes) return null;
-				for (var i=0, l=childNodes.length; i<l; i++) {
-					childNodes[i].id = childNodes[i].roleId;
-					childNodes[i].name = childNodes[i].role.roleName;
-					childNodes[i].isParent = childNodes[i].role.isLeaf == 1 ? false : true;
-					childNodes[i].checked = childNodes[i].userRoleId == null || childNodes[i].userRoleId == "" ? false : true;
+			if(nodes[i].checked){
+				addNodes.push(obj);
+			}else{
+				deleteNodes.push(obj);
+			}
+		}
+		addStr = W.jsonArrayToString(addNodes);
+		deleteStr =  W.jsonArrayToString(deleteNodes);
+		var opt = {
+			url : "${ contextPath }/system/userrole/save",
+			data : {addStr:addStr,deleteStr:deleteStr},
+			success:function(data){
+				if(data.result == SUCCESS){
+					bootbox.alert("数据保存成功","",function(){
+						var treeObj = $.fn.zTree.getZTreeObj("userRoleTree");
+						treeObj.reAsyncChildNodes(null, "refresh");
+					});
+				}else{
+					bootbox.alert("系统异常，保存失败");
 				}
-				return childNodes;
 			}
 			
-			
-			$.fn.zTree.init($userRole.find("#userRoleTree"), setting);
-			
-			$userRole.find("#btn-save").on("click",function(){
-				editUserRole();
-			})
-			
-			//保存修改后的权限树
-			function editUserRole(){
-				var treeObj = $.fn.zTree.getZTreeObj("userRoleTree");
-				var nodes = treeObj.getChangeCheckedNodes(),
-					addNodes = [],
-					deleteNodes = [],
-					addStr,
-					deleteStr;
-				for(var i = 0 ; i < nodes.length;i++){
-					var obj = {
-						userId : "${userId}",
-						roleId: nodes[i].roleId
-					};
-					if(nodes[i].checked){
-						addNodes.push(obj);
-					}else{
-						deleteNodes.push(obj);
-					}
-				}
-				addStr = W.jsonArrayToString(addNodes);
-				deleteStr =  W.jsonArrayToString(deleteNodes);
-				var opt = {
-					url : "${ contextPath }/system/userrole/save",
-					data : {addStr:addStr,deleteStr:deleteStr},
-					success:function(data){
-						if(data.result == SUCCESS){
-							bootbox.alert("数据保存成功","",function(){
-								var treeObj = $.fn.zTree.getZTreeObj("userRoleTree");
-								treeObj.reAsyncChildNodes(null, "refresh");
-							});
-						}else{
-							bootbox.alert("系统异常，保存失败");
-						}
-					}
-					
-				}
-				W.ajax(opt);
-			}
-		});
-		
-		
-	}());
+		}
+		W.ajax(opt);
+	}
+	
+	return {
+		init:function(){
+			systemUserrole = $("#system-userrole");
+			initZtree();
+			systemUserrole.find("#btn-save").on("click",save);
+		}
+	}
+	
+}();
+$().ready(function(){
+	system.userrole.init();
+});
 </script>
-<div class="container-content" id="userRole">
+<div class="container-content" id="system-userrole">
 	<div class="container-body">
 		<div class="row">
 			<div class="col-xs-12 col-md-12">
