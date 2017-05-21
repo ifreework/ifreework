@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 	}
 
 	public User getUserById(String userId) {
-		return userMapper.getUserByUserName(userId);
+		return userMapper.getUserById(userId);
 	}
 
 	/**

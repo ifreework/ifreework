@@ -1,186 +1,218 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
+$.namespace("system.user.add");
+system.user.edit = function(){
+	var systemUserEdit ,
+		bootstrapValidator;
+	function initBootstrapValidator(){
+		bootstrapValidator = systemUserEdit.find("#saveForm").bootstrapValidator({
+	     	fields: {
+	            username: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请填写您的用户名'
+	                    },
+						remote : {
+							message: '该用户名已经存在！',
+							url: '${ contextPath }/system/user/validate'
+						}
+	                }
+	            },
+	            personName: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请填写您的姓名'
+	                    }
+	                }
+	            },
+	            email: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请填写您的电子邮箱地址'
+	                    },
+	                    emailAddress:{
+	                    }
+	                }
+	            },
+	            phone: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请填写您的电话号码'
+	                    },
+	                    phone:{
+	                    	country: 'CN'
+	                    }
+	                }
+	            },
+	            provinceId: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请选择您的省份'
+	                    }
+	                }
+	            },
+	            municipalityId: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请选择您的市区'
+	                    }
+	                }
+	            },
+	            countyId: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请选择您的区县'
+	                    }
+	                }
+	            },
+	            birthday: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '请选择您的出生日期'
+	                    },
+	                    date: {
+	                    }
+	                }
+	            }
+	     	}
+		}).data('bootstrapValidator');
+	}
+	
+	function initSelect(){
+		$("#provinceId").select2({
+			placeholder: "省",
+	        allowClear: true,
+			ajax: {
+			    url: "${ contextPath }/db/province",
+			    delay: 250,
+			    dataType: 'json',
+				data: function (params) {
+				    return {
+				    	provinceName: params.term, 
+				        page: params.page
+				    };
+				},
+			    processResults: function (data, params) {
+		               params.page = params.page || 1;
+		               return {
+		                   results: data
+		               };
+		        },
+			    cache: true
+			}
+		}).on("change",function(e){
+			$("#municipalityId").val(null).trigger("change");
+			$("#municipalityId").prop("disabled", $("#provinceId").val() == null || $("#provinceId").val() =="" );//启动市区选择
+		});
+		
+		$("#municipalityId").select2({
+			placeholder: "市",
+	        allowClear: true,
+	        disabled : ${user.userId == null || user.userId == ""},
+			ajax: {
+			    url: "${ contextPath }/db/municipality",
+			    delay: 250,
+			    dataType: 'json',
+				data: function (params) {
+					var provinceId = $("#provinceId").val();
+				    return {
+				    	provinceId: provinceId,
+				    	municipalityName: params.term, // search term
+				        page: params.page
+				    };
+				},
+			    processResults: function (data, params) {
+		               params.page = params.page || 1;
+		               return {
+		                   results: data
+		               };
+		        },
+			    cache: true
+			}
+		}).on("change",function(e){
+			$("#countyId").val(null).trigger("change");
+			$("#countyId").prop("disabled", $("#municipalityId").val() == null || $("#municipalityId").val() =="" );//启动市区选择
+		});
+		
+		$("#countyId").select2({
+			placeholder: "区县",
+	        allowClear: true,
+	        disabled : ${user.userId == null || user.userId == ""},
+			ajax: {
+			    url: "${ contextPath }/db/county",
+			    delay: 250,
+			    dataType: 'json',
+				data: function (params) {
+					var municipalityId = $("#municipalityId").val();
+				    return {
+				    	municipalityId: municipalityId,
+				    	countyName: params.term, // search term
+				        page: params.page
+				    };
+				},
+			    processResults: function (data, params) {
+		               params.page = params.page || 1;
+		               return {
+		                   results: data
+		               };
+		        },
+			    cache: true
+			}
+		});
+	}
+	
+	function initDate(){
+		$('#birthday').datepicker({
+			autoclose:true
+		}).on("changeDate",function(){
+			bootstrapValidator.updateStatus("birthday", 'NOT_VALIDATED').validateField("birthday");
+		});
+	}
+	
+	function initAutosize(){
+		$('#remarks').autosize({ append: "\n" });
+	}
+	
+	function initSave(){
+	    $("#btn-save").click(function(){
+	    	bootstrapValidator.validate();
+	    	if(bootstrapValidator.isValid()){
+	    		var data = $("#saveForm").serializeJson();
+	    		var opt = {
+	    				url : "${ contextPath }/system/user/save",
+	    				data:data,
+	    				success:function(param){
+	    					if(param.result === SUCCESS){
+	    						bootbox.alert("数据保存成功","",function(){
+	    							system.main.history();
+	    						});
+	    					}else{
+	    						bootbox.alert("数据异常，保存失败");
+	    					}
+	    				}
+	    		};
+	    		W.ajax(opt);
+	    	}
+	    });
+	}
+	return {
+		init:function(){
+			systemUserEdit = $("#system-user-edit");
+			initBootstrapValidator();
+			initSelect();
+			initDate();
+			initAutosize();
+			initSave();
+		}
+	}
+	
+}();
+
 $().ready(function(){
-	 var bootstrapValidator = $("#saveForm").bootstrapValidator({
-     	message: '数值未通过验证',
-     	fields: {
-            personName: {
-                validators: {
-                    notEmpty: {
-                        message: '请填写您的姓名'
-                    }
-                }
-            },
-            email: {
-                validators: {
-                    notEmpty: {
-                        message: '请填写您的电子邮箱地址'
-                    },
-                    emailAddress:{
-                    	message: '邮箱地址格式不正确，请重新输入'
-                    }
-                }
-            },
-            phone: {
-                validators: {
-                    notEmpty: {
-                        message: '请填写您的电话号码'
-                    },
-                    phone:{
-                    	country: 'CN',
-                    	message: '电话号码格式不正确，请重新输入'
-                    }
-                }
-            },
-            provinceId: {
-                validators: {
-                    notEmpty: {
-                        message: '请选择您的省份'
-                    }
-                }
-            },
-            municipalityId: {
-                validators: {
-                    notEmpty: {
-                        message: '请选择您的市区'
-                    }
-                }
-            },
-            countyId: {
-                validators: {
-                    notEmpty: {
-                        message: '请选择您的区县'
-                    }
-                }
-            },
-            birthday: {
-                validators: {
-                    notEmpty: {
-                        message: '请选择您的出生日期'
-                    },
-                    date: {
-                    	
-                    }
-                }
-            }
-     	}
-	}).data('bootstrapValidator');
-	 
-	$("#provinceId").select2({
-		placeholder: "省",
-        allowClear: true,
-		ajax: {
-		    url: "${ contextPath }/db/province",
-		    delay: 250,
-		    dataType: 'json',
-			data: function (params) {
-			    return {
-			    	provinceName: params.term, // search term
-			        page: params.page
-			    };
-			},
-		    processResults: function (data, params) {
-	               params.page = params.page || 1;
-	               return {
-	                   results: data
-	               };
-	        },
-		    cache: true
-		}
-	}).on("change",function(e){
-		$("#municipalityId").val(null).trigger("change");
-		$("#municipalityId").prop("disabled", $("#provinceId").val() == null || $("#provinceId").val() =="" );//启动市区选择
-	});
-	
-	
-	$("#municipalityId").select2({
-		placeholder: "市",
-        allowClear: true,
-        disabled : ${user.municipalityId == null || user.municipalityId == ""},
-		ajax: {
-		    url: "${ contextPath }/db/municipality",
-		    delay: 250,
-		    dataType: 'json',
-			data: function (params) {
-				var provinceId = $("#provinceId").val();
-			    return {
-			    	provinceId: provinceId,
-			    	municipalityName: params.term, // search term
-			        page: params.page
-			    };
-			},
-		    processResults: function (data, params) {
-	               params.page = params.page || 1;
-	               return {
-	                   results: data
-	               };
-	        },
-		    cache: true
-		}
-	}).on("change",function(e){
-		$("#countyId").val(null).trigger("change");
-		$("#countyId").prop("disabled", $("#municipalityId").val() == null || $("#municipalityId").val() =="" );//启动市区选择
-	});
-	
-	$("#countyId").select2({
-		placeholder: "区县",
-        allowClear: true,
-        disabled : ${user.countyId == null || user.countyId == ""},
-		ajax: {
-		    url: "${ contextPath }/db/county",
-		    delay: 250,
-		    dataType: 'json',
-			data: function (params) {
-				var municipalityId = $("#municipalityId").val();
-			    return {
-			    	municipalityId: municipalityId,
-			    	countyName: params.term, // search term
-			        page: params.page
-			    };
-			},
-		    processResults: function (data, params) {
-	               params.page = params.page || 1;
-	               return {
-	                   results: data
-	               };
-	        },
-		    cache: true
-		}
-	});
-	
-	$('#birthday').datepicker({
-		autoclose:true
-	}).on("changeDate",function(a,b,c,d,e,f,g){
-		bootstrapValidator.updateStatus("birthday", 'NOT_VALIDATED').validateField("birthday");
-	});
-	
-    $('#remarks').autosize({ append: "\n" });
-    
-    $("#btn-save").click(function(){
-    	bootstrapValidator.validate();
-    	if(bootstrapValidator.isValid()){
-    		var data = $("#saveForm").serializeJson();
-    		var opt = {
-    				url : "${ contextPath }/system/user/save",
-    				data:data,
-    				success:function(param){
-    					if(param.result === SUCCESS){
-    						bootbox.alert("数据保存成功","",function(){
-    							history.go(-1);
-    						});
-    					}else{
-    						bootbox.alert("数据异常，保存失败");
-    					}
-    				}
-    		};
-    		W.ajax(opt);
-    	}
-    });
+	system.user.edit.init();
 });
-}());
 </script>
-<div class="container-content">
+<div class="container-content" id="system-user-edit">
 	<div class="container-body">
 		<div id="registration-form">
 			<form id="saveForm" method="post" class="form-horizontal">

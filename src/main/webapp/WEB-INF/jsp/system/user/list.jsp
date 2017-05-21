@@ -91,6 +91,12 @@ system.user = function(){
 	    	 systemUser.find(".status-enable").change(function(){
 	    		 changeStatus(this);
 	    	 });
+	    	 
+	    	 systemUser.find(".btn-edit").click(function(){
+	    		 var userId = $(this).data("userid");
+	    		 system.main.open("${contextPath}/system/user/edit","编辑用户",{userId:userId});
+	    	 });
+	    	 
 	    	 systemUser.find(".btn-reset").click(function(){
 	    		 resetPwd(this);
 	    	 });
