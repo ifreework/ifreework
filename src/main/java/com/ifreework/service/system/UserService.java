@@ -93,4 +93,18 @@ public interface UserService {
 	 */
 	public PageData changePwdSave(PageData pd) ;
 	
+	/**
+	 * 
+	 * 描述：通过用户ID查询用户
+	 * @param userId
+	 */
+	public User getUserById(String userId);
+	
+	/**
+	 * 描述：验证用户名是否已经存在
+	 * @param userName
+	 * @return 
+	 * @return
+	 */
+	public PageData validateUserName(PageData pd);
 }

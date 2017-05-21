@@ -77,6 +77,21 @@ public class UserServiceImpl implements UserService, ShiroAuthInterface {
 
 	/**
 	 * 
+	 * 描述：验证PK值是否已经存在
+	 * @Title: validatePK
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@Override
+	public PageData validateUserName(PageData pd) {
+		User user = getUserByUserName(pd.getString("username"));
+		pd.put("valid", user == null || user.getUserId().equals(pd.getString("userId")));
+		return pd;
+	}
+	
+	/**
+	 * 
 	 * 描述：通过用户名密码验证用户登录是否成功
 	 * @Title: validateUserByNameAndPwd
 	 * @param 

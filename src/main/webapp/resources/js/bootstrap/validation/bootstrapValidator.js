@@ -5939,6 +5939,7 @@ if (typeof jQuery === 'undefined') {
             type: 'type',
             url: 'url',
             data: 'data',
+            async: 'async',
             delay: 'delay'
         },
 
@@ -5982,6 +5983,7 @@ if (typeof jQuery === 'undefined') {
                 data    = options.data || {},
                 url     = options.url,
                 type    = options.type || 'GET',
+                async	= options.async == null && true; 
                 headers = options.headers || {};
 
             // Support dynamic data
@@ -6003,6 +6005,7 @@ if (typeof jQuery === 'undefined') {
             function runCallback() {
                 var xhr = $.ajax({
                     type: type,
+                    async : async,
                     headers: headers,
                     url: url,
                     dataType: 'json',

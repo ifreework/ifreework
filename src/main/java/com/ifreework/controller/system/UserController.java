@@ -56,6 +56,59 @@ public class UserController extends BaseControllerSupport {
 		return mv;
 	}
 	
+
+	
+	/**
+	 * 
+	 * 描述：跳转到关联角色界面
+	 * @Title: gotoView
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@RequestMapping("/add")
+	public ModelAndView add() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/system/user/add");
+		return mv;
+	}
+	
+	/**
+	 * 
+	 * @Title: gotoView
+	 * @Description: TODO(根据用户名查询用户信息，并跳转到修改界面)
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@RequestMapping(value = "/edit")
+	public ModelAndView edit() {
+		ModelAndView mv = this.getModelAndView();
+		User user ;
+		String userId = this.getPageData().getString("userId");
+		if(StringUtil.isEmpty(userId)){
+			user = UserManager.getUser();
+		}else{
+			user = userService.getUserById(userId);
+		}
+		
+		mv.addObject("user",user);
+		mv.setViewName("/system/user/edit");
+		return mv;
+	}
+	
+	/**
+	 * 
+	 * 描述：验证用户是否已经存在
+	 * @param userName
+	 * @return
+	 */
+	@RequestMapping(value = "/validate")
+	@ResponseBody
+	public PageData validate(String userName){
+		return userService.validateUserName(this.getPageData());
+	}
+	
 	
 	@RequestMapping(value = "/query")
 	@ResponseBody
@@ -81,23 +134,6 @@ public class UserController extends BaseControllerSupport {
 		PageData pd = this.getPageData();
 		return userService.resetPwd(pd);
 	}
-	/**
-	 * 
-	 * @Title: gotoView
-	 * @Description: TODO(根据用户名查询用户信息，并跳转到修改界面)
-	 * @param 
-	 * @return   
-	 * @throws
-	 */
-	@RequestMapping(value = "/edit")
-	public ModelAndView edit() {
-		ModelAndView mv = this.getModelAndView();
-		User user = UserManager.getUser();
-		mv.addObject("user",user);
-		mv.setViewName("/system/user/edit");
-		return mv;
-	}
-	
 	
 	/**
 	 * 

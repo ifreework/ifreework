@@ -101,6 +101,13 @@ system.user = function(){
 	    } );
 	}
 	
+	
+	function initAdd(){
+		systemUser.find("#add").on("click",function(){
+			system.main.open("${contextPath}/system/user/add","新建用户");
+		});
+	}
+	
 	//用户启用或者停用
 	function changeStatus(e){
 		var userId = $(e).data("userid"),
@@ -148,6 +155,7 @@ system.user = function(){
 			systemUser.find("#query").click(function(){
 				dataTable.ajax.reload();
 			});
+			initAdd();
 		}
 	}
 }();
@@ -167,7 +175,7 @@ $().ready(function(){
 				</div>
 				<div class="col-sm-8">
 					<a id="query" class="btn btn-default" href="javascript:void(0);"><i class="fa fa-search"></i> 查询</a>
-					<a id="add" class="btn btn btn-sky" href="javascript:void(0);"><i class="fa fa-plus"></i> 添加</a>
+					<a id="add" class="btn btn-sky" href="javascript:void(0);"><i class="fa fa-plus"></i> 添加</a>
 				</div>
 			   </div>
 			</form>
