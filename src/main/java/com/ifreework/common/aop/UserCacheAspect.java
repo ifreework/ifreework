@@ -5,6 +5,7 @@ import org.apache.shiro.cache.CacheManager;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.ifreework.common.constant.CacheConstant;
@@ -30,6 +31,8 @@ import com.ifreework.entity.system.User;
 @Aspect
 public class UserCacheAspect {
 
+	@Autowired
+	@Qualifier("userService")
 	private ShiroAuthInterface shiroAuthInterface;// 与数据库同步接口
 	
 	@Autowired

@@ -67,8 +67,8 @@ public class BaseControllerSupport {
 	 * @return   
 	 * @throws
 	 */
-	public void printHttpServletResponse(Object obj) {
-		ServletRequestManager.printHttpServletResponse(obj);
+	public void printHttpServletResponse(String html) {
+		ServletRequestManager.printHttpServletResponse(html);
 	}
 	
 	

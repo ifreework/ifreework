@@ -42,7 +42,6 @@ public class ExceptionResolver implements HandlerExceptionResolver {
 		if("ajax".equals(type)){
 			PageData pd = new PageData();
 			pd.setResult(Constant.ERROR);
-			pd.put("errorType", "userIsNull");
 			String json = JSON.toJSONString(pd);
 			ServletRequestManager.printHttpServletResponse(json);
 			return null;

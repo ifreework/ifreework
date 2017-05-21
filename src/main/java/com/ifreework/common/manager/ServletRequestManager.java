@@ -1,13 +1,15 @@
 package com.ifreework.common.manager;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.alibaba.fastjson.JSON;
 import com.ifreework.util.StringUtil;
 
 
@@ -171,18 +174,25 @@ public class ServletRequestManager {
 	 * @author 王宜华
 	 * @param obj
 	 */
-	public static void printHttpServletResponse(Object obj) {
-		PrintWriter prw = null;
+	public static void printHttpServletResponse(String html) {
+		ServletOutputStream prw = null;
 		try {
 			HttpServletResponse res = getHttpServletResponse();
 			res.setContentType("text/html;charset=utf-8");
-			prw = res.getWriter();
-			prw.print(obj);
+			prw = res.getOutputStream();
+			prw.print(JSON.toJSONString(html));
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 		} finally {
-			prw.flush();
-			prw.close();
+			try {
+				prw.flush();
+				prw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 	}
 

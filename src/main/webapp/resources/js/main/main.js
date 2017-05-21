@@ -121,7 +121,7 @@ system.main = function(){
 			}
 		});
 	}
-	
+
 	
 	// 重置页面标头导航
 	function resetBreadcrumb(e) { 
@@ -132,7 +132,7 @@ system.main = function(){
 		_a;  //新建<a></a>
 		
 		
-		$("#ul-breadcrumb").html(""); //初始化标头
+		$("#ul-breadcrumb").empty(); //初始化标头
 
 		parentsLi = e.parents("li");  //获取所有父级节点
 
@@ -162,7 +162,7 @@ system.main = function(){
 			
 		});
 		
-		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+		historyBreadcrumbArrayPush();
 		
 		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
 	}
@@ -182,7 +182,7 @@ system.main = function(){
 		
 		$("#ul-breadcrumb").append(_li);
 		
-		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+		historyBreadcrumbArrayPush();
 		
 		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
 	}
@@ -193,7 +193,7 @@ system.main = function(){
 		var _li,
 			_a;
 		
-		$("#ul-breadcrumb").html(""); //初始化标头
+		$("#ul-breadcrumb").empty(); //初始化标头
 		
 		_li = $("<li></li>");
 		_li.addClass("active");
@@ -205,11 +205,19 @@ system.main = function(){
 		
 		$("#ul-breadcrumb").prepend(_li);
 	
-		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+		historyBreadcrumbArrayPush();
 		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
 	}
 	
-	
+	function historyBreadcrumbArrayPush(){
+		var array = [];
+		$("#ul-breadcrumb").find("li").each(function(index,element){
+			var cloneElement = $(element).clone();
+			cloneElement.find("a").data($(element).find("a").data());
+			array.push(cloneElement);
+		});
+		historyBreadcrumbArray.push(array);
+	}
 	
 	function breadcrumbLiClick(t){//表头点击事件
 		var url = $(this).data("url");
@@ -221,7 +229,7 @@ system.main = function(){
 			
 			$(this).parents("li").nextAll().remove();
 			
-			historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+			historyBreadcrumbArrayPush();
 			openPage(url,data);
 		}
 	}
@@ -312,10 +320,13 @@ system.main = function(){
 		
 		urlObj.data = urlObj.data== null ? {} : urlObj.data;
 		openPage(urlObj.url, urlObj.data,function(response,status,xhr){
-			$("#ul-breadcrumb").html(historyBreadcrumbArray[historyBreadcrumbArray.length - 1]);
-			
+			$("#ul-breadcrumb").empty();
+			var array = historyBreadcrumbArray[historyBreadcrumbArray.length - 1];
+			for(var i = 0 ; i < array.length ; i++){
+				$("#ul-breadcrumb").append(array[i]);
+			}
 			$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
-			
+
 		});
 		return;
 	}

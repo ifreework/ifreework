@@ -1,11 +1,15 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
-	$().ready(function(){
-		var dataTable = $('#userTab').DataTable({
+$.namespace("system.user")
+system.user = function(){
+	var systemUser = $("#system-user"),//页面对象
+		dataTable ;
+	
+	function initDatable(){
+		dataTable = systemUser.find('#userTab').DataTable({
 			searching:false,//
 			serverSide:true, //是否启用服务器模式
-			order:[[1,'asc']],
+			order:[[0,'asc']],
 			pageLength: 100 ,
 			autoWidth: false,
 			ajax:{
@@ -14,12 +18,8 @@
 		      		return $.extend( {}, d, $("#queryForm").serializeJson());
 			    }
 			},
+			
 			columns : [{  
-	            data : "userId",  
-	            defaultContent : "", //此列默认值为""，以防数据中没有此值，DataTables加载数据的时候报错  
-	            visible : false, //此列不显示
-	            orderable:false  //是否进行排序
-	        }, {  
 	            data : "userNo",  
 	            name : "user_no", //列别名，对应数据库中字段名，如果该列不进行排序，可不进行设置 
 	            title : "编号",  
@@ -88,22 +88,19 @@
 	    }).on('xhr.dt', function ( e, settings, json, xhr ) {//页面发送请求后，关闭加载遮罩
 	    	 bootbox.unload();
 	    } ).on( 'draw.dt', function () {
-	    	 $("#userTab .status-enable").change(function(){
+	    	 systemUser.find(".status-enable").change(function(){
 	    		 changeStatus(this);
 	    	 });
-	    	 $("#userTab .btn-reset").click(function(){
+	    	 systemUser.find(".btn-reset").click(function(){
 	    		 resetPwd(this);
 	    	 });
-	    	 $("#userTab .btn-role").click(function(){
-	    		 W.open("${contextPath}/system/userrole",{userId:$(this).data("userid")},"添加角色");
+	    	 systemUser.find(".btn-role").click(function(){
+	    		 var userId = $(this).data("userid");
+	    		 system.main.open("${contextPath}/system/userrole","添加角色",{userId:userId});
 	    	 });
-	    } );;
-		
-		$("#query").click(function(){
-			dataTable.ajax.reload();
-		});
-	});
-
+	    } );
+	}
+	
 	//用户启用或者停用
 	function changeStatus(e){
 		var userId = $(e).data("userid"),
@@ -145,9 +142,21 @@
 		});
 		
 	}
-}());
+	return {
+		init:function(){
+			initDatable();
+			systemUser.find("#query").click(function(){
+				dataTable.ajax.reload();
+			});
+		}
+	}
+}();
+
+$().ready(function(){
+	system.user.init();
+});
 </script>
-<div class="container-content">
+<div class="container-content" id="system-user">
 	<div class="container-body">
 		<div class="table-toolbar">
 			<form class="form-horizontal" id="queryForm">
