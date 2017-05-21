@@ -121,7 +121,20 @@ system.main = function(){
 			}
 		});
 	}
+
 	
+<<<<<<< HEAD
+	// 重置页面标头导航
+	function resetBreadcrumb(e) { 
+		var parentsLi, // 所有的父级节点
+		parentA, // 父级a节点
+		aText, //每个a标签中的文字
+		_li,  //新建<li></li>
+		_a;  //新建<a></a>
+		
+		
+		$("#ul-breadcrumb").empty(); //初始化标头
+=======
 	
 	// 重置页面标头导航
 	function resetBreadcrumb(e) { 
@@ -133,6 +146,7 @@ system.main = function(){
 		
 		
 		$("#ul-breadcrumb").html(""); //初始化标头
+>>>>>>> refs/remotes/origin/master
 
 		parentsLi = e.parents("li");  //获取所有父级节点
 
@@ -162,7 +176,11 @@ system.main = function(){
 			
 		});
 		
+<<<<<<< HEAD
+		historyBreadcrumbArrayPush();
+=======
 		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
+>>>>>>> refs/remotes/origin/master
 		
 		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
 	}
@@ -182,6 +200,152 @@ system.main = function(){
 		
 		$("#ul-breadcrumb").append(_li);
 		
+<<<<<<< HEAD
+		historyBreadcrumbArrayPush();
+		
+		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
+	}
+	
+	
+	//首页标头
+	function indexBreadcrumbLi() { 
+		var _li,
+			_a;
+		
+		$("#ul-breadcrumb").empty(); //初始化标头
+		
+		_li = $("<li></li>");
+		_li.addClass("active");
+		_li.append('<i class="fa fa-home"></i>');
+
+		_a = $('<a href="javascript:void(0)" >首页</a>');
+		_a.data("url",indexPath);
+		_li.append(_a);
+		
+		$("#ul-breadcrumb").prepend(_li);
+	
+		historyBreadcrumbArrayPush();
+		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
+	}
+	
+	function historyBreadcrumbArrayPush(){
+		var array = [];
+		$("#ul-breadcrumb").find("li").each(function(index,element){
+			var cloneElement = $(element).clone();
+			cloneElement.find("a").data($(element).find("a").data());
+			array.push(cloneElement);
+		});
+		historyBreadcrumbArray.push(array);
+	}
+	
+	function breadcrumbLiClick(t){//表头点击事件
+		var url = $(this).data("url");
+		if(url != null && url != ""){
+			$("#ul-breadcrumb li.active").removeClass("active");
+			$(t.target).closest("li").addClass("active");
+			
+			var data = $(this).data("data");
+			
+			$(this).parents("li").nextAll().remove();
+			
+			historyBreadcrumbArrayPush();
+			openPage(url,data);
+		}
+	}
+	
+	
+	/**
+	 * 在page-body中打开新的页面
+	 * url:String 请求地址
+	 * data:jsonObject 请求参数 
+	 * callBack:function(response,status,xhr) 页面加载成功后回调函数，response 返回结果,status 状态 xhr
+	 * 
+	 */
+	function openPage(url, data, callBack) {
+		var time = $.now();
+
+		if (data == null) {
+			data = {};
+		}
+
+		data._type = "windowOpen";
+		data._time = time;
+		
+		bootbox.load();
+		
+		$("#page-body").load(url, data, function(response,status,xhr) {
+			bootbox.unload();
+			
+			historyArray.push({ //保存请求历史纪录
+				url : url,
+				data : data
+			});
+			
+			if("error" == status){
+				$("#page-body").html(response);
+			}
+			if("timeout" == status){
+				bootbox.alert("请求超时，请检查网络后重新进行连接。");
+			}
+			if ($.isFunction(callBack)) {
+				return callBack.call(this,response,status,xhr);
+			}
+		});
+	}
+	
+	
+	/**
+	 * 初始化页面右上角三个按钮操作
+	 */
+	function initBreadcrumbsButtons(){
+		$("#fullscreen-toggler").on("click",function() {//全屏
+			var n = document.documentElement;
+			$("body").hasClass("full-screen") ? ($("body").removeClass("full-screen"), $("#fullscreen-toggler").removeClass("active"), document.exitFullscreen ? document.exitFullscreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitExitFullscreen && document.webkitExitFullscreen()) : ($("body").addClass("full-screen"), $("#fullscreen-toggler").addClass("active"), n.requestFullscreen ? n.requestFullscreen() : n.mozRequestFullScreen ? n.mozRequestFullScreen() : n.webkitRequestFullscreen ? n.webkitRequestFullscreen() : n.msRequestFullscreen && n.msRequestFullscreen())
+		});
+		$("#refresh-toggler").on("click",function() {//刷新
+			if (historyArray.length == 0) { 
+				window.location.reload(true);
+				return;
+			}
+			var urlObj = historyArray[historyArray.length - 1];
+			urlObj.data = urlObj.data== null ? {} : urlObj.data;
+			openPage(urlObj.url, urlObj.data);
+			return;
+		});
+		
+		$("#backspace-toggler").on("click",function() {//返回
+			history();
+		});
+		
+	}
+	
+	/**
+	 * 返回操作
+	 */
+	function history() { 
+		if (historyArray.length == 0) { // 如果没有历史记录，则不进行任何操作
+			return;
+		}
+		if (historyArray.length == 1) { // 如果只打开了一个界面，则返回首页
+			historyArray = [];
+			historyBreadcrumbArray = [];
+			indexBreadcrumbLi();
+			openPage(indexPath);
+			return ;
+		}
+		historyArray.pop();
+		historyBreadcrumbArray.pop();
+		var urlObj = historyArray[historyArray.length - 1];
+		
+		urlObj.data = urlObj.data== null ? {} : urlObj.data;
+		openPage(urlObj.url, urlObj.data,function(response,status,xhr){
+			$("#ul-breadcrumb").empty();
+			var array = historyBreadcrumbArray[historyBreadcrumbArray.length - 1];
+			for(var i = 0 ; i < array.length ; i++){
+				$("#ul-breadcrumb").append(array[i]);
+			}
+			$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
+=======
 		historyBreadcrumbArray.push($("#ul-breadcrumb").html());
 		
 		$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
@@ -316,6 +480,7 @@ system.main = function(){
 			
 			$("#ul-breadcrumb li a").unbind("click").on("click",breadcrumbLiClick);
 			
+>>>>>>> refs/remotes/origin/master
 		});
 		return;
 	}
