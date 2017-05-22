@@ -9,14 +9,13 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.Resource;
 
 public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
-	private Logger logger = LoggerFactory.getLogger(HandlerInterceptorAdapter.class);
+	private Logger logger = LoggerFactory.getLogger(AuthHandlerInterceptor.class);
 
 	private String unAuthorizedUrl; // 请求没有权限跳转地址
 	private ShiroAuthInterface shiroAuth; // 获取请求所需权限接口
@@ -39,7 +38,7 @@ public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
 
 	/**
 	 * 
-	 * 描述：验证当前请求是否已经登录
+	 * 描述：验证当前用户是否有当前请求权限
 	 * @Title: preHandle
 	 * @param 
 	 * @return   
@@ -58,7 +57,7 @@ public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
 			if (resource == null) { //如果查询出所需权限为空，则表明不需要权限
 				return true;
 			}
-			
+			request.setAttribute("_resource_log", resource);
 			List<String> auths = shiroAuth.queryAuthorityByResourceId(resource.getResourceId());
 
 			logger.debug("The request path " + path + " need auth of " + auths);
@@ -76,37 +75,5 @@ public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
 			request.getRequestDispatcher(unAuthorizedUrl).forward(request,response);
 			return false;
 		}
-	}
-	
-	/**
-	 * This implementation is empty.
-	 */
-	@Override
-	public void postHandle(
-			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
-			throws Exception {
-		logger.debug("postHandle");
-		
-	}
-
-	/**
-	 * This implementation is empty.
-	 */
-	@Override
-	public void afterCompletion(
-			HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-			throws Exception {
-		logger.debug("afterCompletion");
-	}
-
-	/**
-	 * This implementation is empty.
-	 */
-	@Override
-	public void afterConcurrentHandlingStarted(
-			HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
-		
-		logger.debug("afterConcurrentHandlingStarted");
 	}
 }

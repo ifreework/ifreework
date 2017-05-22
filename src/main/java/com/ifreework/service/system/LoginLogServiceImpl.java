@@ -9,7 +9,6 @@
  */
 package com.ifreework.service.system;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +23,7 @@ import com.ifreework.common.shiro.listener.LoginLogManager;
 import com.ifreework.entity.system.LoginLog;
 import com.ifreework.mapper.system.LoginLogMapper;
 
-import cz.mallat.uasparser.OnlineUpdater;
-import cz.mallat.uasparser.UASparser;
-import cz.mallat.uasparser.UserAgentInfo;
-
+import eu.bitwalker.useragentutils.UserAgent;
 
 /**
  * 
@@ -40,7 +36,6 @@ import cz.mallat.uasparser.UserAgentInfo;
  */
 @Service("loginLogService")
 public class LoginLogServiceImpl implements LoginLogService, LoginLogManager {
-	
 	@Autowired
 	private LoginLogMapper loginLogMapper;
 
@@ -64,24 +59,20 @@ public class LoginLogServiceImpl implements LoginLogService, LoginLogManager {
 	public void add(String username) {
 		HttpServletRequest request = ServletRequestManager.getHttpServletRequest();
 		String ip = request.getRemoteAddr();// 访问者IP
-		String agent = request.getHeader("User-Agent");
-		UserAgentInfo userAgentInfo = null;
+		String agentStr = request.getHeader("User-Agent");
+		UserAgent agent = UserAgent.parseUserAgentString(agentStr);
 		
-		try {
-			userAgentInfo = new UASparser(OnlineUpdater.getVendoredInputStream()).parse(agent);
-			LoginLog loginLog = new LoginLog();
-			loginLog.setLoginLogId(SecurityUtils.getSubject().getSession().getId().toString());
-			loginLog.setUsername(username);
-			loginLog.setBrowser(userAgentInfo.getUaFamily());
-			loginLog.setBrowserVersion(userAgentInfo.getBrowserVersionInfo());
-			loginLog.setIp(ip);
-			loginLog.setOs(userAgentInfo.getOsFamily());
-			loginLogMapper.add(loginLog);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		LoginLog loginLog = new LoginLog();
+		loginLog.setLoginLogId(SecurityUtils.getSubject().getSession().getId().toString());
+		loginLog.setUsername(username);
+		loginLog.setBrowser(agent.getBrowser().getName());
+		loginLog.setBrowserVersion(agent.getBrowserVersion().getVersion());
+		loginLog.setIp(ip);
+		loginLog.setOs(agent.getOperatingSystem().getGroup().getName());
+		loginLog.setOsInfo(agent.getOperatingSystem().getName());
+		loginLog.setDeviceType(agent.getOperatingSystem().getDeviceType().getName());
+		loginLogMapper.add(loginLog);
 	}
 
 	@Override

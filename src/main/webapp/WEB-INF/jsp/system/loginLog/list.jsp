@@ -13,7 +13,7 @@ system.loginLog = function(){
 			serverSide:true, //是否启用服务器模式
 			pageLength: 100 ,
 			autoWidth: false,
-			order:[[5,'desc']],
+			order:[[6,'desc']],
 			ajax:{
 				url:"${contextPath}/system/loginLog/query",
 				data: function ( d ) {
@@ -34,14 +34,17 @@ system.loginLog = function(){
 	        	data : "browser",  
 	            title : "浏览器",  
 	            defaultContent : "",
-	            orderable:false
+	            orderable:false,
+	            render:function( data, type, row, meta ){
+	            	return data + " (" + row.browserVersion + ")"
+	            }
 	        },{  
-	        	data : "browserVersion",  
-	            title : "浏览器版本",  
+	        	data : "deviceType",  
+	            title : "设备类型",  
 	            defaultContent : "",
 	            orderable:false
 	        },{  
-	        	data : "os",  
+	        	data : "osInfo",  
 	            title : "操作系统",  
 	            defaultContent : "",
 	            orderable:false

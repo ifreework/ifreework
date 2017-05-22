@@ -20,75 +20,79 @@ public class LoginLog implements Serializable{
 	private java.lang.String ip;
 	private java.lang.String browser;
 	private java.lang.String browserVersion;
-	private java.lang.String mac;
+	private java.lang.String deviceName;
 	private java.lang.String os;
+	private java.lang.String deviceType;
+	private java.lang.String osInfo;
 	//columns END
-
-	public void setLoginLogId(java.lang.String value) {
-		this.loginLogId = value;
-	}
-	
 	public java.lang.String getLoginLogId() {
-		return this.loginLogId;
+		return loginLogId;
 	}
-	
-	
-	
-	public void setUsername(java.lang.String value) {
-		this.username = value;
+	public void setLoginLogId(java.lang.String loginLogId) {
+		this.loginLogId = loginLogId;
 	}
 	public java.lang.String getUsername() {
-		return this.username;
-	}	
-	
-	public void setLoginTime(java.util.Date value) {
-		this.loginTime = value;
+		return username;
+	}
+	public void setUsername(java.lang.String username) {
+		this.username = username;
 	}
 	public java.util.Date getLoginTime() {
-		return this.loginTime;
-	}	
-	
-	public void setLogoutTime(java.util.Date value) {
-		this.logoutTime = value;
+		return loginTime;
+	}
+	public void setLoginTime(java.util.Date loginTime) {
+		this.loginTime = loginTime;
 	}
 	public java.util.Date getLogoutTime() {
-		return this.logoutTime;
-	}	
-	
-	public void setIp(java.lang.String value) {
-		this.ip = value;
+		return logoutTime;
+	}
+	public void setLogoutTime(java.util.Date logoutTime) {
+		this.logoutTime = logoutTime;
 	}
 	public java.lang.String getIp() {
-		return this.ip;
-	}	
-	
-	public void setBrowser(java.lang.String value) {
-		this.browser = value;
+		return ip;
+	}
+	public void setIp(java.lang.String ip) {
+		this.ip = ip;
 	}
 	public java.lang.String getBrowser() {
-		return this.browser;
-	}	
-	
-	public void setBrowserVersion(java.lang.String value) {
-		this.browserVersion = value;
+		return browser;
+	}
+	public void setBrowser(java.lang.String browser) {
+		this.browser = browser;
 	}
 	public java.lang.String getBrowserVersion() {
-		return this.browserVersion;
-	}	
-	
-	public void setMac(java.lang.String value) {
-		this.mac = value;
+		return browserVersion;
 	}
-	public java.lang.String getMac() {
-		return this.mac;
-	}	
-	
-	public void setOs(java.lang.String value) {
-		this.os = value;
+	public void setBrowserVersion(java.lang.String browserVersion) {
+		this.browserVersion = browserVersion;
+	}
+	public java.lang.String getDeviceName() {
+		return deviceName;
+	}
+	public void setDeviceName(java.lang.String deviceName) {
+		this.deviceName = deviceName;
 	}
 	public java.lang.String getOs() {
-		return this.os;
-	}	
+		return os;
+	}
+	public void setOs(java.lang.String os) {
+		this.os = os;
+	}
+	public java.lang.String getDeviceType() {
+		return deviceType;
+	}
+	public void setDeviceType(java.lang.String deviceType) {
+		this.deviceType = deviceType;
+	}
+	public java.lang.String getOsInfo() {
+		return osInfo;
+	}
+	public void setOsInfo(java.lang.String osInfo) {
+		this.osInfo = osInfo;
+	}
+
+	
 }
 
 
