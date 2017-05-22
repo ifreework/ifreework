@@ -80,6 +80,7 @@ $().ready(function(){
 	system.loginLog.init();
 });
 
+
 </script>
 <div class="container-content" id="system-loginLog">
 	<div class="container-body">

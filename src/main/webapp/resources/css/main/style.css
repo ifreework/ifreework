@@ -104,6 +104,10 @@
 	border-right: 0;
 }
 
+.page-sidebar .sidebar-menu .submenu{
+	background-color: #f6fcff;
+}
+
 .page-sidebar .sidebar-menu li.active:AFTER {
     border-style: solid;
     border-top: 5px solid transparent;
@@ -120,7 +124,9 @@
     z-index: 1;
 }
 
-
+.page-sidebar .sidebar-menu .submenu>li.open>a {
+    background-color: #f6fcff;
+}
 
 .page-sidebar .sidebar-menu li:not(.open):hover:before{
 	background-color: #2dc3e8;

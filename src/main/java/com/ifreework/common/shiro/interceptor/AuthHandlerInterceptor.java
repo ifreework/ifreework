@@ -5,16 +5,18 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.Resource;
 
 public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
-	Logger logger = Logger.getLogger(HandlerInterceptorAdapter.class);
+	private Logger logger = LoggerFactory.getLogger(HandlerInterceptorAdapter.class);
 
 	private String unAuthorizedUrl; // 请求没有权限跳转地址
 	private ShiroAuthInterface shiroAuth; // 获取请求所需权限接口
@@ -74,5 +76,37 @@ public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
 			request.getRequestDispatcher(unAuthorizedUrl).forward(request,response);
 			return false;
 		}
+	}
+	
+	/**
+	 * This implementation is empty.
+	 */
+	@Override
+	public void postHandle(
+			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+			throws Exception {
+		logger.debug("postHandle");
+		
+	}
+
+	/**
+	 * This implementation is empty.
+	 */
+	@Override
+	public void afterCompletion(
+			HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		logger.debug("afterCompletion");
+	}
+
+	/**
+	 * This implementation is empty.
+	 */
+	@Override
+	public void afterConcurrentHandlingStarted(
+			HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+		
+		logger.debug("afterConcurrentHandlingStarted");
 	}
 }

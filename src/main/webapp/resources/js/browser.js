@@ -101,7 +101,8 @@ var BrowserDetect = {
 };
 BrowserDetect.init();
 
-console.log(BrowserDetect.browser);
+console.log(BrowserDetect);
+console.log(navigator);
 if("Chrome" != BrowserDetect.browser){
 //	alert("您当前使用浏览器暂不支持该系统，请下载最新版Chrome浏览器使用。");
 //	window.location.href = "system/attachment/download?attachmentId=C6D625A8F4454F08941B22A7C60E07D9&_time=" + new Date().getTime; 

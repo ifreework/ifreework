@@ -177,15 +177,21 @@ system.resource = function(){
 	
 	function deleteNode(e){
 		var resourceId = $(e).data("resourceid");
-		W.ajax({
-			url : "${contextPath}/system/resource/delete",
-			data: {resourceId:resourceId},
-			success:function(result){
-				if(SUCCESS == result.result){
-					dataTable.ajax.reload();
-				}else{
-					bootbox.alert("数据异常，删除失败");
-				}
+		bootbox.confirm("确定要删除该资源吗？","",function(r){
+			if(r){
+				W.ajax({
+					url : "${contextPath}/system/resource/delete",
+					data: {resourceId:resourceId},
+					success:function(result){
+						if(SUCCESS == result.result){
+							bootbox.alert("删除成功","提示",function(){
+								dataTable.ajax.reload();
+							});
+						}else{
+							bootbox.alert("数据异常，删除失败");
+						}
+					}
+				});
 			}
 		});
 	}
