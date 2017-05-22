@@ -79,7 +79,7 @@ system.user.add = function(){
 	}
 	
 	function initSelect(){
-		$("#provinceId").select2({
+		systemUserAdd.find("#provinceId").select2({
 			placeholder: "省",
 	        allowClear: true,
 			ajax: {
@@ -101,11 +101,11 @@ system.user.add = function(){
 			    cache: true
 			}
 		}).on("change",function(e){
-			$("#municipalityId").val(null).trigger("change");
-			$("#municipalityId").prop("disabled", $("#provinceId").val() == null || $("#provinceId").val() =="" );//启动市区选择
+			systemUserAdd.find("#municipalityId").val(null).trigger("change");
+			systemUserAdd.find("#municipalityId").prop("disabled", systemUserAdd.find("#provinceId").val() == null || systemUserAdd.find("#provinceId").val() =="" );//启动市区选择
 		});
 		
-		$("#municipalityId").select2({
+		systemUserAdd.find("#municipalityId").select2({
 			placeholder: "市",
 	        allowClear: true,
 	        disabled : true,
@@ -114,7 +114,7 @@ system.user.add = function(){
 			    delay: 250,
 			    dataType: 'json',
 				data: function (params) {
-					var provinceId = $("#provinceId").val();
+					var provinceId = systemUserAdd.find("#provinceId").val();
 				    return {
 				    	provinceId: provinceId,
 				    	municipalityName: params.term, // search term
@@ -130,11 +130,11 @@ system.user.add = function(){
 			    cache: true
 			}
 		}).on("change",function(e){
-			$("#countyId").val(null).trigger("change");
-			$("#countyId").prop("disabled", $("#municipalityId").val() == null || $("#municipalityId").val() =="" );//启动市区选择
+			systemUserAdd.find("#countyId").val(null).trigger("change");
+			systemUserAdd.find("#countyId").prop("disabled", systemUserAdd.find("#municipalityId").val() == null || systemUserAdd.find("#municipalityId").val() =="" );//启动市区选择
 		});
 		
-		$("#countyId").select2({
+		systemUserAdd.find("#countyId").select2({
 			placeholder: "区县",
 	        allowClear: true,
 	        disabled : true,
@@ -143,7 +143,7 @@ system.user.add = function(){
 			    delay: 250,
 			    dataType: 'json',
 				data: function (params) {
-					var municipalityId = $("#municipalityId").val();
+					var municipalityId = systemUserAdd.find("#municipalityId").val();
 				    return {
 				    	municipalityId: municipalityId,
 				    	countyName: params.term, // search term
@@ -162,7 +162,7 @@ system.user.add = function(){
 	}
 	
 	function initDate(){
-		$('#birthday').datepicker({
+		systemUserAdd.find('#birthday').datepicker({
 			autoclose:true
 		}).on("changeDate",function(){
 			bootstrapValidator.updateStatus("birthday", 'NOT_VALIDATED').validateField("birthday");
@@ -170,14 +170,14 @@ system.user.add = function(){
 	}
 	
 	function initAutosize(){
-		$('#remarks').autosize({ append: "\n" });
+		systemUserAdd.find('#remarks').autosize({ append: "\n" });
 	}
 	
 	function initSave(){
-	    $("#btn-save").click(function(){
+	    systemUserAdd.find("#btn-save").click(function(){
 	    	bootstrapValidator.validate();
 	    	if(bootstrapValidator.isValid()){
-	    		var data = $("#saveForm").serializeJson();
+	    		var data = systemUserAdd.find("#saveForm").serializeJson();
 	    		var opt = {
 	    				url : "${ contextPath }/system/user/save",
 	    				data:data,

@@ -1,10 +1,12 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
-	var bootstrapValidator;
-	$().ready(function(){
-		 bootstrapValidator = $("#saveForm").bootstrapValidator({
-	     	message: '数值未通过验证',
+$.namespace("system.department.edit");
+system.department.edit = function(){
+	var systemDepartmentEdit ,
+		bootstrapValidator ;
+	
+	function initValidator(){
+		 bootstrapValidator = systemDepartmentEdit.find("#saveForm").bootstrapValidator({
 	     	fields: {
 	     		departmentNo: {
 	                validators: {
@@ -23,48 +25,62 @@
 	            tel: {
 	                validators: {
 	                    phone:{
-	                    	message: '电话号码格式不正确，请重新输入'
 	                    }
 	                }
 	            }
 	     	}
 		}).data('bootstrapValidator');
-	    $('#remarks').autosize({ append: "\n" });
-	    
-	    $("#btn-save").click(function(){
-	    	bootstrapValidator.validate();
-	    	if(bootstrapValidator.isValid()){
-	    		var data = $("#saveForm").serializeJson();
-	    		var opt = {
-	    				url : "${ contextPath }/system/department/save",
-	    				data:data,
-	    				success:function(param){
-	    					if(param.result === SUCCESS){
-    							$("#departmentDialog").modal("hide");
-    							console.log(departmentTreeNode);
-    							
-    							var treeObj = $.fn.zTree.getZTreeObj("departmentTree");
-    							if($("#departmentId").val()){
-    								departmentTreeNode.name = $("#departmentName").val();
-    								treeObj.updateNode(departmentTreeNode);
-    							}else{
-	    							if(departmentTreeNode != null){
-	    								departmentTreeNode.isParent = true ;
-	    							}
-		    						treeObj.reAsyncChildNodes(departmentTreeNode, "refresh");
+		 
+		 systemDepartmentEdit.find('#remarks').autosize({ append: "\n" });
+	}
+	
+	function save(){
+    	bootstrapValidator.validate();
+    	if(bootstrapValidator.isValid()){
+    		var data = systemDepartmentEdit.find("#saveForm").serializeJson();
+    		var opt = {
+    				url : "${ contextPath }/system/department/save",
+    				data:data,
+    				success:function(param){
+    					if(param.result === SUCCESS){
+							bootbox.hideAll();
+							
+							console.log(system.department);
+							var treeNode = system.department.treeNode();
+							var treeObj = system.department.tree();
+							
+							if(systemDepartmentEdit.find("#departmentId").val()){
+								treeNode.name = systemDepartmentEdit.find("#departmentName").val();
+								treeObj.updateNode(treeNode);
+							}else{
+    							if(treeNode != null){
+    								treeNode.isParent = true ;
     							}
-	    					}else{
-	    						bootbox.alert("数据异常，保存失败");
-	    					}
-	    				}
-	    		};
-	    		W.ajax(opt);
-	    	}
-	    });
-	});
-}());
+	    						treeObj.reAsyncChildNodes(treeNode, "refresh");
+							}
+    					}else{
+    						bootbox.alert("数据异常，保存失败");
+    					}
+    				}
+    		};
+    		W.ajax(opt);
+    	}
+	}
+	
+	return {
+		init: function(){
+			systemDepartmentEdit = $("#system-department-edit");
+			initValidator();
+			systemDepartmentEdit.find("#btn-save").on("click",save);
+		}
+	}
+}();
+
+$().ready(function(){
+	system.department.edit.init();
+});
 </script>
-<div class="container-content">
+<div class="container-content" id="system-department-edit">
 	<div class="container-body">
    	<div class="row">
            <div class="col-lg-12 col-sm-12 col-xs-12">

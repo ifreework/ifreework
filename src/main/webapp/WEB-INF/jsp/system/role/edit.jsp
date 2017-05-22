@@ -1,11 +1,14 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
-	var bootstrapValidator,
-		$roleEdit = $("#roleEdit");
-	$().ready(function(){
-		 bootstrapValidator = $roleEdit.find("#saveForm").bootstrapValidator({
-	     	message: '数值未通过验证',
+
+$.namespace("system.role.edit");
+
+system.role.edit = function(){
+	var bootstrapValidator ,
+		systemRoleEdit ;
+	
+	function initValidator(){
+		bootstrapValidator = systemRoleEdit.find("#saveForm").bootstrapValidator({
 	     	fields: {
 	            roleName: {
 	                validators: {
@@ -16,43 +19,57 @@
 	            }
 	     	}
 		}).data('bootstrapValidator');
-	    $roleEdit.find('#remarks').autosize({ append: "\n" });
-	    
-	    $roleEdit.find("#btn-save").click(function(){
-	    	bootstrapValidator.validate();
-	    	if(bootstrapValidator.isValid()){
-	    		var data = $roleEdit.find("#saveForm").serializeJson();
-	    		var opt = {
-	    				url : "${ contextPath }/system/role/save",
-	    				data:data,
-	    				success:function(param){
-	    					if(param.result === SUCCESS){
-    							bootbox.hideAll();
-    							
-    							var treeObj = $.fn.zTree.getZTreeObj("roleTree");
-    							var roleTreeNode = $("#role").data("treeNode");
-    							
-    							if($roleEdit.find("#roleId").val()){
-    								roleTreeNode.name = $roleEdit.find("#roleName").val();
-    								treeObj.updateNode(roleTreeNode);
-    							}else{
-	    							if(roleTreeNode != null){
-	    								roleTreeNode.isParent = true ;
-	    							}
-		    						treeObj.reAsyncChildNodes(roleTreeNode, "refresh");
+		
+		systemRoleEdit.find('#remarks').autosize({ append: "\n" });
+		
+	}
+	
+	function save(){
+    	bootstrapValidator.validate();
+    	if(bootstrapValidator.isValid()){
+    		var data = systemRoleEdit.find("#saveForm").serializeJson();
+    		var opt = {
+    				url : "${ contextPath }/system/role/save",
+    				data:data,
+    				success:function(param){
+    					if(param.result === SUCCESS){
+							bootbox.hideAll();
+							
+							var treeObj = system.role.tree();;
+							var roleTreeNode = system.role.treeNode();
+							
+							if(systemRoleEdit.find("#roleId").val()){
+								roleTreeNode.name = systemRoleEdit.find("#roleName").val();
+								treeObj.updateNode(roleTreeNode);
+							}else{
+    							if(roleTreeNode != null){
+    								roleTreeNode.isParent = true ;
     							}
-	    					}else{
-	    						bootbox.alert("数据异常，保存失败");
-	    					}
-	    				}
-	    		};
-	    		W.ajax(opt);
-	    	}
-	    });
-	});
-}());
+	    						treeObj.reAsyncChildNodes(roleTreeNode, "refresh");
+							}
+    					}else{
+    						bootbox.alert("数据异常，保存失败");
+    					}
+    				}
+    		};
+    		W.ajax(opt);
+    	}
+	}
+	
+	return {
+		init:function(){
+			systemRoleEdit = $("#system-role-edit");
+			initValidator();
+			systemRoleEdit.find("#btn-save").on("click",save);
+		}
+	}
+}();
+
+$().ready(function(){
+	system.role.edit.init();
+});
 </script>
-<div class="container-content" id="roleEdit">
+<div class="container-content" id="system-role-edit">
 	<div class="container-body">
 	   	<div class="row">
 	           <div class="col-lg-12 col-sm-12 col-xs-12">

@@ -5760,7 +5760,7 @@ if (typeof jQuery === 'undefined') {
                 return true;
             }
 
-            var country = options.country;
+            var country = options.country || 'CN';
             if (typeof country !== 'string' || $.inArray(country, this.COUNTRY_CODES) === -1) {
                 // Try to determine the country
                 country = validator.getDynamicOption($field, country);

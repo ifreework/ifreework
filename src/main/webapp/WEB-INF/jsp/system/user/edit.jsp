@@ -79,7 +79,7 @@ system.user.edit = function(){
 	}
 	
 	function initSelect(){
-		$("#provinceId").select2({
+		systemUserEdit.find("#provinceId").select2({
 			placeholder: "省",
 	        allowClear: true,
 			ajax: {
@@ -101,11 +101,11 @@ system.user.edit = function(){
 			    cache: true
 			}
 		}).on("change",function(e){
-			$("#municipalityId").val(null).trigger("change");
-			$("#municipalityId").prop("disabled", $("#provinceId").val() == null || $("#provinceId").val() =="" );//启动市区选择
+			systemUserEdit.find("#municipalityId").val(null).trigger("change");
+			systemUserEdit.find("#municipalityId").prop("disabled", systemUserEdit.find("#provinceId").val() == null || systemUserEdit.find("#provinceId").val() =="" );//启动市区选择
 		});
 		
-		$("#municipalityId").select2({
+		systemUserEdit.find("#municipalityId").select2({
 			placeholder: "市",
 	        allowClear: true,
 	        disabled : ${user.userId == null || user.userId == ""},
@@ -114,7 +114,7 @@ system.user.edit = function(){
 			    delay: 250,
 			    dataType: 'json',
 				data: function (params) {
-					var provinceId = $("#provinceId").val();
+					var provinceId = systemUserEdit.find("#provinceId").val();
 				    return {
 				    	provinceId: provinceId,
 				    	municipalityName: params.term, // search term
@@ -130,11 +130,11 @@ system.user.edit = function(){
 			    cache: true
 			}
 		}).on("change",function(e){
-			$("#countyId").val(null).trigger("change");
-			$("#countyId").prop("disabled", $("#municipalityId").val() == null || $("#municipalityId").val() =="" );//启动市区选择
+			systemUserEdit.find("#countyId").val(null).trigger("change");
+			systemUserEdit.find("#countyId").prop("disabled", systemUserEdit.find("#municipalityId").val() == null || systemUserEdit.find("#municipalityId").val() =="" );//启动市区选择
 		});
 		
-		$("#countyId").select2({
+		systemUserEdit.find("#countyId").select2({
 			placeholder: "区县",
 	        allowClear: true,
 	        disabled : ${user.userId == null || user.userId == ""},
@@ -143,7 +143,7 @@ system.user.edit = function(){
 			    delay: 250,
 			    dataType: 'json',
 				data: function (params) {
-					var municipalityId = $("#municipalityId").val();
+					var municipalityId = systemUserEdit.find("#municipalityId").val();
 				    return {
 				    	municipalityId: municipalityId,
 				    	countyName: params.term, // search term
@@ -162,7 +162,7 @@ system.user.edit = function(){
 	}
 	
 	function initDate(){
-		$('#birthday').datepicker({
+		systemUserEdit.find('#birthday').datepicker({
 			autoclose:true
 		}).on("changeDate",function(){
 			bootstrapValidator.updateStatus("birthday", 'NOT_VALIDATED').validateField("birthday");
@@ -170,14 +170,14 @@ system.user.edit = function(){
 	}
 	
 	function initAutosize(){
-		$('#remarks').autosize({ append: "\n" });
+		systemUserEdit.find('#remarks').autosize({ append: "\n" });
 	}
 	
 	function initSave(){
-	    $("#btn-save").click(function(){
+	    systemUserEdit.find("#btn-save").click(function(){
 	    	bootstrapValidator.validate();
 	    	if(bootstrapValidator.isValid()){
-	    		var data = $("#saveForm").serializeJson();
+	    		var data = systemUserEdit.find("#saveForm").serializeJson();
 	    		var opt = {
 	    				url : "${ contextPath }/system/user/save",
 	    				data:data,

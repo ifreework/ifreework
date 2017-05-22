@@ -624,6 +624,7 @@
     		 options.loadData = {};
     	 }
     	 options.loadData._time = new Date().getTime();
+    	 options.loadData._type = "windowOpen";
     	
     	 body.find(".bootbox-body").load(options.loadUrl,options.loadData,function(response,status,xhr){
     		 if(typeof options.load === "function"){

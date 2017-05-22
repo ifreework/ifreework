@@ -2,12 +2,17 @@
 <link href="${cssPath }/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
 <script src="${ jsPath }/bootstrap/ztree/jquery.ztree.all.js"></script>
 <script type="text/javascript">
-(function(){
-	var $role = $("#role");
-	$().ready(function(){
-		//创建右键menu对象
-		var menu = new W.menu({
-			id : "menu", //menu id
+$.namespace("system.role");
+system.role = function(){
+	var sysRole,
+		tree,
+		treeNode,
+		nodeId ,
+		menu;
+	
+	function initMenu(){
+		menu = new W.menu({
+			id : "sysRoleMenu", //menu id
 			items :[{
 				id:"authorization",
 				icon:"fa fa-pagelines sky",
@@ -15,44 +20,44 @@
 			},{
 				id:"add",
 				icon:"fa fa-plus green",
-				text:"新增节点"
+				text:"新增角色"
 			},{
 				id:"update",
 				icon:"fa fa-edit blue",
-				text:"修改节点"
+				text:"修改角色"
 			},{
 				id:"delete",
 				icon:"fa fa-trash-o red",
-				text:"删除节点"
+				text:"删除角色"
 			}], 
 			onclick:function(id){
 				if(id == "authorization"){
-					W.open("${ contextPath }/system/role/authorization?treeId=" + $role.data("treeId"),{},"角色授权");
+					system.main.open("${ contextPath }/system/role/authorization?treeId=" + nodeId,"角色授权",{});
 				}else if(id == "add"){
-					openDialog("${ contextPath }/system/role/add?treeId=" + $role.data("treeId"));
+					openDialog("${ contextPath }/system/role/add?treeId=" + nodeId);
 				}else if(id == "update"){
-					var treeId = $role.data("treeId");
-					if(treeId == null || treeId == "0"){
+					if(nodeId == null || nodeId == "0"){
 						bootbox.alert("请选择您要修改的角色");
 						return;
 					}
-					openDialog("${ contextPath }/system/role/update?treeId=" + treeId);
+					openDialog("${ contextPath }/system/role/update?treeId=" + nodeId);
 				}else if(id == "delete"){
-					var treeId = $role.data("treeId");
-					if(treeId == null || treeId == "0"){
+					if(nodeId == null || nodeId == "0"){
 						bootbox.alert("请选择您要删除的角色");
 						return;
 					}
-					var message = $role.data("treeNode").isParent ? "该角色删除后，其相关的子角色都会被删除，确定要删除该角色吗？" : "确定要删除该角色吗？"
+					var message = treeNode.isParent ? "该角色删除后，其相关的子角色都会被删除，确定要删除该角色吗？" : "确定要删除该角色吗？"
 					bootbox.confirm(message,"",function(e){
 						if(e){
-							deleteNode(treeId);
+							deleteNode(nodeId);
 						}
 					});
 				}
 			}
 		});
-		
+	}
+	
+	function initTree(){
 		var setting = {
 			async: {
 				enable: true,
@@ -61,9 +66,9 @@
 				dataFilter: filter
 			},
 			callback: {
-				onRightClick: function(event, id, treeNode) {
-					$role.data("treeNode",treeNode);
-					$role.data("treeId",treeNode == null ? "0" : treeNode.id);
+				onRightClick: function(event, id, node) {
+					treeNode = node;
+					nodeId = node == null ? "0" : node.id
 					menu.show(event.clientX,event.clientY);
 				}
 			},
@@ -74,39 +79,37 @@
 				}
 			};
 			
-			function filter(treeId, parentNode, childNodes) {
-				if (!childNodes) return null;
-				for (var i=0, l=childNodes.length; i<l; i++) {
-					childNodes[i].id = childNodes[i].roleId;
-					childNodes[i].name = childNodes[i].roleName;
-					childNodes[i].isParent = childNodes[i].isLeaf == 1 ? false : true;
-				}
-				return childNodes;
-			}
-			
-			$.fn.zTree.init($role.find("#roleTree"), setting);
-		});
+			tree = $.fn.zTree.init(sysRole.find("#roleTree"), setting);
+	}
 	
+	function filter(treeId, parentNode, childNodes) {
+		if (!childNodes) return null;
+		for (var i=0, l=childNodes.length; i<l; i++) {
+			childNodes[i].id = childNodes[i].roleId;
+			childNodes[i].name = childNodes[i].roleName;
+			childNodes[i].isParent = childNodes[i].isLeaf == 1 ? false : true;
+		}
+		return childNodes;
+	}
 	
 	function openDialog(url){
 		var dialog = bootbox.dialog({
-			id:"roleDialog",
-			title: "头像设置",
+			id:"systemRoleDialog",
+			title: "角色编辑",
 			width:700,
 			loadUrl: url
 		});
 	}
 	
 	//删除节点
-	function deleteNode(treeId){
+	function deleteNode(roleId){
 		var opt = {
 			url : "${ contextPath }/system/role/delete",
-			data:{roleId:treeId},
+			data:{roleId:roleId},
 			success:function(param){
 				if(param.result === SUCCESS){
 					bootbox.alert("数据删除成功","",function(){
-						var treeObj = $.fn.zTree.getZTreeObj("roleTree");
-						treeObj.removeNode($role.data("treeNode"));
+						tree.removeNode(treeNode);
 					});
 				}else{
 					bootbox.alert("数据异常，删除失败");
@@ -116,7 +119,6 @@
 		W.ajax(opt);
 	}
 	
-	
 	//节点拖拽后，修改父节点
 	function updateNode(departmentId,parentId){
 		var opt = {
@@ -124,8 +126,7 @@
 			data:{departmentId:departmentId,parentId:parentId},
 			success:function(param){
 				if(param.result === SUCCESS){
-					var treeObj = $.fn.zTree.getZTreeObj("departmentTree");
-					treeObj.removeNode(departmentTreeNode);
+					tree.removeNode(treeNode);
 				}else{
 					bootbox.alert("数据异常，删除失败");
 				}
@@ -133,9 +134,27 @@
 		};
 		W.ajax(opt);
 	}
-}());
+	
+	return {
+		init : function(){
+			sysRole = $("#system-role");
+			initMenu();
+			initTree();
+		},
+		tree : function(){
+			return tree;
+		},
+		treeNode : function(){
+			return treeNode;
+		}
+	}
+}();
+
+$().ready(function(){
+	system.role.init();
+});
 </script>
-<div class="container-content" id="role">
+<div class="container-content" id="system-role">
 	<div class="container-body">
 		<div class="row">
 			<div class="col-xs-12 col-md-12">

@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $.namespace("system.user")
 system.user = function(){
-	var systemUser = $("#system-user"),//页面对象
+	var systemUser,//页面对象
 		dataTable ;
 	
 	function initDatable(){
@@ -15,7 +15,7 @@ system.user = function(){
 			ajax:{
 				url:"${contextPath}/system/user/query",
 				data: function ( d ) {
-		      		return $.extend( {}, d, $("#queryForm").serializeJson());
+		      		return $.extend( {}, d, systemUser.find("#queryForm").serializeJson());
 			    }
 			},
 			
@@ -157,6 +157,7 @@ system.user = function(){
 	}
 	return {
 		init:function(){
+			systemUser = $("#system-user");
 			initDatable();
 			systemUser.find("#query").click(function(){
 				dataTable.ajax.reload();
