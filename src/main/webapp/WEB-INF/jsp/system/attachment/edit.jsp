@@ -2,10 +2,13 @@
 <link rel="stylesheet" href="${ cssPath }/dropzone/dropzone.css"></link>
 <script src="${ jsPath }/bootstrap/dropzone/dropzone.js"></script>
 <script type="text/javascript">
-(function(){
+
+$.namespace("system.attachment");
+
+system.attachment = function(){
 	var dropzone;
-	$().ready(function() {
-		dropzone = new Dropzone("#attachmentEdit #dropzone", {
+	function initDropzone(){
+		dropzone = new Dropzone("#system-attachment #dropzone", {
 			url : "${ contextPath }/system/attachment/fileUpload",
 			autoProcessQueue : true,
 			addRemoveLinks:true,
@@ -31,11 +34,21 @@
 				W.ajax(opt);
 			}
 		});
-	});
-}());
+	}
+	
+	return {
+		init : function(){
+			initDropzone();
+		}
+	}
+}();
+
+$().ready(function(){
+	system.attachment.init();
+});
 </script>
 
-<div class="container-content" id="attachmentEdit">
+<div class="container-content" id="system-attachment">
 	<div class="container-body">
 			<div class="col12">
 				<div id="dropzone" class="dropzone ">

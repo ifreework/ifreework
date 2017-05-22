@@ -1,17 +1,23 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
-	var $loginLog = $("#loginLog");
-	$().ready(function(){
-		var dataTable = $loginLog.find('#loginLogTab').DataTable({
+
+$.namespace("system.loginLog");
+
+system.loginLog = function(){
+	var systemLoginLog,
+		dataTable;
+	
+	function initTable(){
+		dataTable = systemLoginLog.find('#loginLogTab').DataTable({
 			searching:false,//
 			serverSide:true, //是否启用服务器模式
 			pageLength: 100 ,
 			autoWidth: false,
+			order:[[5,'desc']],
 			ajax:{
 				url:"${contextPath}/system/loginLog/query",
 				data: function ( d ) {
-		      		return $.extend( {}, d, $loginLog.find("#queryForm").serializeJson());
+		      		return $.extend( {}, d, systemLoginLog.find("#queryForm").serializeJson());
 			    }
 			},
 			columns : [ {  
@@ -55,14 +61,27 @@
 	    }).on('xhr.dt', function ( e, settings, json, xhr ) {//页面发送请求后，关闭加载遮罩
 	    	 bootbox.unload();
 	    } );
-		
-		$loginLog.find("#query").click(function(){
-			dataTable.ajax.reload();
-		});
-	});
-}());
+	}
+	
+	function query(){
+		dataTable.ajax.reload();
+	}
+	
+	return {
+		init : function(){
+			systemLoginLog = $("#system-loginLog");
+			initTable();
+			systemLoginLog.find("#query").on("click",query);
+		} 
+	}
+}();
+
+$().ready(function(){
+	system.loginLog.init();
+});
+
 </script>
-<div class="container-content" id="loginLog">
+<div class="container-content" id="system-loginLog">
 	<div class="container-body">
 		<div class="table-toolbar">
 			<form class="form-horizontal" id="queryForm">
