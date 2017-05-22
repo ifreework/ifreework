@@ -1,9 +1,13 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
-	var $authority = $("#authority");
-	$().ready(function(){
-		var dataTable = $authority.find('#authorityTab').DataTable({
+$.namespace("system.authority");
+
+system.authority = function(){
+	var systemAuthority,
+		dataTable;
+	
+	function initTable(){
+		dataTable = systemAuthority.find('#authorityTab').DataTable({
 			searching:false,//
 			serverSide:true, //是否启用服务器模式
 			pageLength: 100 ,
@@ -11,7 +15,7 @@
 			ajax:{
 				url:"${contextPath}/system/authority/query",
 				data: function ( d ) {
-		      		return $.extend( {}, d, $authority.find("#queryForm").serializeJson());
+		      		return $.extend( {}, d, systemAuthority.find("#queryForm").serializeJson());
 			    }
 			},
 			columns : [ {  
@@ -36,14 +40,27 @@
 	    }).on('xhr.dt', function ( e, settings, json, xhr ) {//页面发送请求后，关闭加载遮罩
 	    	 bootbox.unload();
 	    } );
-		
-		$authority.find("#query").click(function(){
-			dataTable.ajax.reload();
-		});
-	});
-}());
+	}
+	
+	function query(){
+		dataTable.ajax.reload();
+	}
+	
+	return {
+		init : function(){
+			systemAuthority = $("#system-authority");
+			initTable();
+			systemAuthority.find("#query").on("click",query);
+		} 
+	}
+}();
+
+$().ready(function(){
+	system.authority.init();
+});
+
 </script>
-<div class="container-content" id="authority">
+<div class="container-content" id="system-authority">
 	<div class="container-body">
 		<div class="table-toolbar">
 			<form class="form-horizontal" id="queryForm">

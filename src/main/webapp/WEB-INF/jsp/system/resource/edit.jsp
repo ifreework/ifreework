@@ -1,169 +1,187 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script src="${jsPath}/bootstrap/fuelux/wizard/wizard-custom.js"></script>
 <script type="text/javascript">
-	(function(){
-		var bootstrapValidator;
-		$().ready(function(){
-			 bootstrapValidator = $("#saveForm").bootstrapValidator({
-				message: '数值未通过验证',
-				fields: {
-					resourceName: {
-						validators: {
-							notEmpty: {
-								message: '请填写资源名称'
-							}
+$.namespace("system.resource.edit");
+
+system.resource.edit = function(){
+	var systemResourceEdit,
+		bootstrapValidator;
+	
+	function initValidator(){
+		 bootstrapValidator = systemResourceEdit.find("#saveForm").bootstrapValidator({
+			fields: {
+				resourceName: {
+					validators: {
+						notEmpty: {
+							message: '请填写资源名称'
 						}
-					},
-					pk: {
-						validators: {
-							notEmpty: {
-								message: '请选择资源类型'
-							},
-							remote : {
-								message: '该PK值已存在！',
-								async: false,
-								url: '${ contextPath }/system/resource/validate?resourceId=${resource.resourceId}'
-							}
+					}
+				},
+				pk: {
+					validators: {
+						notEmpty: {
+							message: '请选择资源类型'
+						},
+						remote : {
+							message: '该资源编码已存在！',
+							async: false,
+							url: '${ contextPath }/system/resource/validate?resourceId=${resource.resourceId}'
 						}
-					},
-					resourceType: {
-						validators: {
-							notEmpty: {
-								message: '请选择资源类型'
-							}
+					}
+				},
+				resourceType: {
+					validators: {
+						notEmpty: {
+							message: '请选择资源类型'
 						}
 					}
 				}
-			}).data('bootstrapValidator');
-			
-			$('#resourceWizard').wizard().on('changed', function (e) {
-				resizeDrag();
-			}).on('change', function (e) {
-				bootstrapValidator.validate();
-				return bootstrapValidator.isValid();
-			}).on('finished', function (e) {
-				saveData();
-			});
-			
-			//点击选中或者取消事件
-			$("#resourceEdit .nav a").on("click",function(e){
-				var _li = $(this).closest("li");
-				console.log(_li);
-				if(_li.hasClass("selected")){
-					_li.removeClass("selected");
-				}else{
-					_li.addClass("selected");
-				}
-			});
-			
-			$("#fromButton").on("click",function(){
-				var lis = $("#dragFrom").find("li.selected");
-				changeLi(lis);
-				$("#dragTo").append(lis);
-				resizeDrag();
-			});
-			
-			$("#toButton").on("click",function(){
-				var lis = $("#dragTo").find("li.selected");
-				changeLi(lis);
-				$("#dragFrom").append(lis);
-				resizeDrag();
-			});
-			
+			}
+		}).data('bootstrapValidator');
+	}
+	
+	function initWizard(){
+		systemResourceEdit.find('#resourceWizard').wizard().on('changed', function (e) {
+			resizeDrag();
+		}).on('change', function (e) {
+			bootstrapValidator.validate();
+			return bootstrapValidator.isValid();
+		}).on('finished', function (e) {
+			saveData();
+		});
+	}
+	
+	function initButton(){
+		//点击选中或者取消事件
+		systemResourceEdit.find(".nav a").on("click",function(e){
+			var _li = $(this).closest("li");
+			console.log(_li);
+			if(_li.hasClass("selected")){
+				_li.removeClass("selected");
+			}else{
+				_li.addClass("selected");
+			}
 		});
 		
-		//在拖拽的时候，对选中的li标签进行处理
-		function changeLi(lis){
-			lis.removeClass("selected");
-			lis.each(function(index,e){
-				var li = $(e);
-				if(li.attr("changed")){
-					li.removeAttr("changed");
-				}else{
-					li.attr("changed","changed");
-				}
-			});
-		}
+		systemResourceEdit.find("#fromButton").on("click",function(){
+			var lis = systemResourceEdit.find("#dragFrom").find("li.selected");
+			changeLi(lis);
+			systemResourceEdit.find("#dragTo").append(lis);
+			resizeDrag();
+		});
 		
-		
-		//重置左右div的高度,并使按钮剧中
-		function resizeDrag(){
-			var fromHeight = $(".drag-from .widget-body").css("height","").height();
-			var toHeight = $(".drag-to .widget-body").css("height","").height();
-			
-			console.log("fromHeight:" + fromHeight );
-			console.log("toHeight:" + toHeight );
-			if(fromHeight >= toHeight ){
-				$(".drag-to .widget-body").height(fromHeight);
+		systemResourceEdit.find("#toButton").on("click",function(){
+			var lis = systemResourceEdit.find("#dragTo").find("li.selected");
+			changeLi(lis);
+			systemResourceEdit.find("#dragFrom").append(lis);
+			resizeDrag();
+		});
+	}
+	
+	//在拖拽的时候，对选中的li标签进行处理
+	function changeLi(lis){
+		lis.removeClass("selected");
+		lis.each(function(index,e){
+			var li = $(e);
+			if(li.attr("changed")){
+				li.removeAttr("changed");
 			}else{
-				$(".drag-from .widget-body").height(toHeight);
+				li.attr("changed","changed");
 			}
-			
-			$("#drag-button").css({
-				marginTop:((fromHeight >= toHeight ? fromHeight : toHeight) - 35)/2
-			});
+		});
+	}
+	
+	
+	//重置左右div的高度,并使按钮剧中
+	function resizeDrag(){
+		var fromHeight = systemResourceEdit.find(".drag-from .widget-body").css("height","").height();
+		var toHeight = systemResourceEdit.find(".drag-to .widget-body").css("height","").height();
+		
+		console.log("fromHeight:" + fromHeight );
+		console.log("toHeight:" + toHeight );
+		if(fromHeight >= toHeight ){
+			systemResourceEdit.find(".drag-to .widget-body").height(fromHeight);
+		}else{
+			systemResourceEdit.find(".drag-from .widget-body").height(toHeight);
 		}
 		
-		
-		//获取有过拖拽的li
-		function getAddArray(){
-			var changeArray = [];
-			var addLis = $("#resourceEdit #dragTo li[changed='changed']");
-			addLis.each(function(index,e){
-				var li = $(e);
-				var addObj = {
-					operationId:li.data("operationid")
-				};
-				changeArray.push(JSON.stringify(addObj));
-			});
-			console.log(changeArray);
-			return "[" +  changeArray.toString() + "]";
+		systemResourceEdit.find("#drag-button").css({
+			marginTop:((fromHeight >= toHeight ? fromHeight : toHeight) - 35)/2
+		});
+	}
+	
+	
+	//获取有过拖拽的li
+	function getAddArray(){
+		var changeArray = [];
+		var addLis = systemResourceEdit.find("#dragTo li[changed='changed']");
+		addLis.each(function(index,e){
+			var li = $(e);
+			var addObj = {
+				operationId:li.data("operationid")
+			};
+			changeArray.push(JSON.stringify(addObj));
+		});
+		console.log(changeArray);
+		return "[" +  changeArray.toString() + "]";
+	}
+	
+	
+	//获取有过拖拽的li
+	function getDeleteArray(){
+		var changeArray = [];
+		var deleteLis = systemResourceEdit.find("#dragFrom li[changed='changed']");
+		deleteLis.each(function(index,e){
+			var li = $(e);
+			var deleteObj = {
+				operationId:li.data("operationid")
+			};
+			changeArray.push(JSON.stringify(deleteObj));
+		});
+		console.log(changeArray);
+		return "[" +  changeArray.toString() + "]";
+	}
+	
+	//保存页面中的数据
+	function saveData(){
+    	bootstrapValidator.validate();
+    	if(bootstrapValidator.isValid()){
+    		var data = systemResourceEdit.find("#saveForm").serializeJson();
+    		data.addArray = getAddArray();
+    		data.deleteArray = getDeleteArray();
+    		var opt = {
+    				url : "${ contextPath }/system/resource/save",
+    				data:data,
+    				success:function(param){
+    					if(param.result === SUCCESS){
+    						bootbox.alert("数据保存成功","",function(){
+    							system.main.history();
+    						});
+    					}else{
+    						bootbox.alert("数据异常，保存失败");
+    					}
+    				}
+    		};
+    		W.ajax(opt);
+    	}
+	}
+	
+	return {
+		init : function(){
+			systemResourceEdit = $("#system-resource-edit");
+			initValidator();
+			initWizard();
+			initButton();
 		}
-		
-		
-		//获取有过拖拽的li
-		function getDeleteArray(){
-			var changeArray = [];
-			var deleteLis = $("#resourceEdit #dragFrom li[changed='changed']");
-			deleteLis.each(function(index,e){
-				var li = $(e);
-				var deleteObj = {
-					operationId:li.data("operationid")
-				};
-				changeArray.push(JSON.stringify(deleteObj));
-			});
-			console.log(changeArray);
-			return "[" +  changeArray.toString() + "]";
-		}
-		
-		//保存页面中的数据
-		function saveData(){
-	    	bootstrapValidator.validate();
-	    	if(bootstrapValidator.isValid()){
-	    		var data = $("#saveForm").serializeJson();
-	    		data.addArray = getAddArray();
-	    		data.deleteArray = getDeleteArray();
-	    		var opt = {
-	    				url : "${ contextPath }/system/resource/save",
-	    				data:data,
-	    				success:function(param){
-	    					if(param.result === SUCCESS){
-	    						bootbox.alert("数据保存成功","",function(){
-	    							W.history();
-	    						});
-	    					}else{
-	    						bootbox.alert("数据异常，保存失败");
-	    					}
-	    				}
-	    		};
-	    		W.ajax(opt);
-	    	}
-		}
-		
-	}());
+	}
+}();
+
+$().ready(function(){
+	system.resource.edit.init();
+});
 </script>
 
-<div class="container-content" id="resourceEdit">
+<div class="container-content" id="system-resource-edit">
 	<div class="container-body">
 		<div class="row">
 			<div class="col-lg-12 col-sm-12 col-xs-12">

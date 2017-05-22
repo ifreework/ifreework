@@ -1,8 +1,13 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
-	$().ready(function(){
-		 var bootstrapValidator = $("#saveForm").bootstrapValidator({
+$.namespace("system.config");
+
+system.config = function(){
+	var systemConfig,
+		bootstrapValidator ;
+	
+	function initValidator(){
+		bootstrapValidator = systemConfig.find("#saveForm").bootstrapValidator({
 	     	message: '数值未通过验证',
 	     	fields: {
 	     		system_name: {
@@ -14,50 +19,66 @@
 	            }
 	     	}
 		}).data('bootstrapValidator');
-		 
-		//是否启用ftp,如果启用ftp，则需要填写ftp相关配置 
-		$("#ftp_enable_checkbox").change(function(){
-			var checked = this.checked;
-			if(checked){
-				$("#ftp_enable").val(1);
-				$(".ftp").show();
-			}else{
-				$("#ftp_enable").val(0);
-				$(".ftp").hide();
-			}
-		});
-		$("#button_auth_enable_checkbox").change(function(){
-			var checked = this.checked;
-			if(checked){
-				$("#button_auth_enable").val(1);
-			}else{
-				$("#button_auth_enable").val(0);
-			}
-		});
-	    
-	    $("#btn-save").click(function(){
-	    	bootstrapValidator.validate();
-	    	if(bootstrapValidator.isValid()){
-	    		var data = $("#saveForm").serializeJson();
-	    		var opt = {
-	    				url : "${contextPath}/system/config/save",
-	    				data:data,
-	    				success:function(param){
-	    					if(param.result === SUCCESS){
-	    						bootbox.alert("数据保存成功");
-	    					}else{
-	    						bootbox.alert("数据异常，保存失败");
-	    					}
-	    				}
-	    		};
-	    		W.ajax(opt);
-	    	}
-	    });
-	});
-}());
+	}
+	
+	function ftpEnable(e){
+		var checked = this.checked;
+		if(checked){
+			systemConfig.find("#ftp_enable").val(1);
+			systemConfig.find(".ftp").show();
+		}else{
+			systemConfig.find("#ftp_enable").val(0);
+			systemConfig.find(".ftp").hide();
+		}
+	}
+	
+	function authEnable(e){
+		var checked = this.checked;
+		if(checked){
+			systemConfig.find("#button_auth_enable").val(1);
+		}else{
+			systemConfig.find("#button_auth_enable").val(0);
+		}
+	}
+	
+	function save(){
+    	bootstrapValidator.validate();
+    	if(bootstrapValidator.isValid()){
+    		var data = systemConfig.find("#saveForm").serializeJson();
+    		var opt = {
+    				url : "${contextPath}/system/config/save",
+    				data:data,
+    				success:function(param){
+    					if(param.result === SUCCESS){
+    						bootbox.alert("数据保存成功");
+    					}else{
+    						bootbox.alert("数据异常，保存失败");
+    					}
+    				}
+    		};
+    		W.ajax(opt);
+    	}
+	}
+	
+	return {
+		init : function(){
+			systemConfig = $("#system-config");
+			initValidator();
+			systemConfig.find("#ftp_enable_checkbox").change(ftpEnable);
+			systemConfig.find("#button_auth_enable_checkbox").change(authEnable);
+			systemConfig.find("#btn-save").click(save);
+		}
+	}
+	
+}();
+
+$().ready(function(){
+	system.config.init();
+});
+
 </script>
 </head>
-<div class="container-content">
+<div class="container-content" id="system-config">
 	<div class="container-body">
 	                    <div id="registration-form">
 	                         <form id="saveForm" method="post" class="form-horizontal">

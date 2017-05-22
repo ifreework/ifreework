@@ -39,8 +39,7 @@ public class UserController extends BaseControllerSupport {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @Title: gotoView
@@ -55,9 +54,7 @@ public class UserController extends BaseControllerSupport {
 		mv.setViewName("/system/user/list");
 		return mv;
 	}
-	
 
-	
 	/**
 	 * 
 	 * 描述：跳转到关联角色界面
@@ -72,7 +69,7 @@ public class UserController extends BaseControllerSupport {
 		mv.setViewName("/system/user/add");
 		return mv;
 	}
-	
+
 	/**
 	 * 
 	 * @Title: gotoView
@@ -84,19 +81,34 @@ public class UserController extends BaseControllerSupport {
 	@RequestMapping(value = "/edit")
 	public ModelAndView edit() {
 		ModelAndView mv = this.getModelAndView();
-		User user ;
-		String userId = this.getPageData().getString("userId");
-		if(StringUtil.isEmpty(userId)){
-			user = UserManager.getUser();
-		}else{
-			user = userService.getUserById(userId);
-		}
-		
-		mv.addObject("user",user);
+		User user;
+		user = UserManager.getUser();
+
+		mv.addObject("user", user);
 		mv.setViewName("/system/user/edit");
 		return mv;
 	}
-	
+
+	/**
+	 * 
+	 * @Title: gotoView
+	 * @Description: TODO(根据用户名查询用户信息，并跳转到修改界面)
+	 * @param 
+	 * @return   
+	 * @throws
+	 */
+	@RequestMapping(value = "/update")
+	public ModelAndView update() {
+		ModelAndView mv = this.getModelAndView();
+		User user;
+		String userId = this.getPageData().getString("userId");
+		user = userService.getUserById(userId);
+
+		mv.addObject("user", user);
+		mv.setViewName("/system/user/edit");
+		return mv;
+	}
+
 	/**
 	 * 
 	 * 描述：验证用户是否已经存在
@@ -105,22 +117,20 @@ public class UserController extends BaseControllerSupport {
 	 */
 	@RequestMapping(value = "/validate")
 	@ResponseBody
-	public PageData validate(String userName){
+	public PageData validate(String userName) {
 		return userService.validateUserName(this.getPageData());
 	}
-	
-	
+
 	@RequestMapping(value = "/query")
 	@ResponseBody
-	public PageData query(){
+	public PageData query() {
 		PageData pd = this.getPageData();
 		List<User> list = userService.queryUserList(pd);
 		pd = new PageData();
 		pd.setPagination(list);
 		return pd;
 	}
-	
-	
+
 	/**
 	 * 描述：根据用户id，重置用户密码
 	 * @Title: resetPwd
@@ -130,11 +140,11 @@ public class UserController extends BaseControllerSupport {
 	 */
 	@RequestMapping(value = "/resetPwd")
 	@ResponseBody
-	public PageData resetPwd(){
+	public PageData resetPwd() {
 		PageData pd = this.getPageData();
 		return userService.resetPwd(pd);
 	}
-	
+
 	/**
 	 * 
 	 * @Title: reset
@@ -147,32 +157,29 @@ public class UserController extends BaseControllerSupport {
 	public ModelAndView reset() {
 		ModelAndView mv = this.getModelAndView();
 		User user = UserManager.getUser();
-		mv.addObject("user",user);
+		mv.addObject("user", user);
 		mv.setViewName("/system/user/changePwd");
 		return mv;
 	}
-	
+
 	@RequestMapping(value = "/save")
 	@ResponseBody
-	public PageData save(@ModelAttribute( "user" ) User user){
+	public PageData save(@ModelAttribute("user") User user) {
 		PageData pd;
-		if(StringUtil.isEmpty(user.getUserId())){
+		if (StringUtil.isEmpty(user.getUserId())) {
 			pd = userService.add(user);
-		}else{
+		} else {
 			pd = userService.update(user);
 		}
-		
+
 		return pd;
 	}
-	
+
 	@RequestMapping(value = "/changePwdSave")
 	@ResponseBody
-	public PageData changePwdSave(){
+	public PageData changePwdSave() {
 		PageData pd = this.getPageData();
 		return userService.changePwdSave(pd);
 	}
-	
-	
-	
-	
+
 }

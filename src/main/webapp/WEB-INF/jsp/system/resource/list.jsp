@@ -1,9 +1,13 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
-(function(){
-	var dataTable;
-	$().ready(function(){
-		dataTable = $('#resourceTab').DataTable({
+$.namespace("system.resource");
+
+system.resource = function(){
+	var systemResource,
+		dataTable;
+	
+	function initTable(){
+		dataTable = systemResource.find('#resourceTab').DataTable({
 			searching : false,//
 			ordering : false,
 			serverSide:true, //是否启用服务器模式
@@ -30,7 +34,7 @@
 		            defaultContent : ""
 		        }, {  
 		        	data : "pk",  
-		            title : "pk",  
+		            title : "资源编码",  
 		            defaultContent : ""
 		        }, {  
 		        	data : "resourceType",  
@@ -64,33 +68,28 @@
 	    }).on('xhr.dt', function ( e, settings, json, xhr ) {//页面发送请求后，关闭加载遮罩
 	    	 bootbox.unload();
 	    } ).on( 'draw.dt', function () {
-	    	 $("#resourceTab .row-details").click(function(){ //显示隐藏切换按钮
+	    	 systemResource.find("#resourceTab .row-details").click(function(){ //显示隐藏切换按钮
 	    		 toggleTr(this);
 	    	 });
 	    	 
-	 		 $(".btn-add").on("click",function(e){
-	 			 gotoAdd(this);
+	 		 systemResource.find(".btn-add").on("click",function(e){
+	 			 addChild(this);
 			 });
-	 		 $(".btn-edit").on("click",function(e){
-	 			 gotoEdit(this);
+	 		 systemResource.find(".btn-edit").on("click",function(e){
+	 			 editNode(this);
 			 });
-	 		 $(".btn-delete").on("click",function(e){
-	 			 gotoDelete(this);
+	 		 systemResource.find(".btn-delete").on("click",function(e){
+	 			 deleteNode(this);
 			 });
 	    } );
-		
-		$("#addRoot").on("click",function(){
-			W.open("${contextPath}/system/resource/add",{},"添加根节点");
-		})
-
-	});
-
+	}
+	
 	//展开与隐藏子节点
 	function toggleTr(e){
 		var id = $(e).data("id"),//操作的ID
 			depth = $(e).data("depth") + 1, //节点的深度
 			tr = $(e).closest("tr"),
-			children = $("#resourceTab .row-details[parent='" + id + "']").closest("tr");
+			children = systemResource.find("#resourceTab .row-details[parent='" + id + "']").closest("tr");
 		
 		console.log(children);
 		
@@ -133,17 +132,17 @@
 				}
 				tr.after(html);
 				
-				$("#resourceTab .row-details").unbind().on("click",function(){
+				systemResource.find("#resourceTab .row-details").unbind().on("click",function(){
 		    		toggleTr(this);
 		    	});
-		 		 $(".btn-add").unbind().on("click",function(e){
-		 			 gotoAdd(this);
+		 		 systemResource.find(".btn-add").unbind().on("click",function(e){
+		 			 addChild(this);
 				 });
-		 		 $(".btn-edit").unbind().on("click",function(e){
-		 			 gotoEdit(this);
+		 		 systemResource.find(".btn-edit").unbind().on("click",function(e){
+		 			 editNode(this);
 				 });
-		 		 $(".btn-delete").unbind().on("click",function(e){
-		 			 gotoDelete(this);
+		 		 systemResource.find(".btn-delete").unbind().on("click",function(e){
+		 			 deleteNode(this);
 				 });
 			}
 		};
@@ -165,18 +164,18 @@
 	}
 	
 	
-	function gotoAdd(e){
+	function addChild(e){
 		var resourceId = $(e).data("resourceid");
-		W.open("${contextPath}/system/resource/add","新增资源",{resourceId:resourceId});
+		system.main.open("${contextPath}/system/resource/add","新增资源",{resourceId:resourceId});
 	}
 	
-	function gotoEdit(e){
+	function editNode(e){
 		var resourceId = $(e).data("resourceid");
 		console.log(resourceId);
-		W.open("${contextPath}/system/resource/update","修改资源",{resourceId:resourceId});
+		system.main.open("${contextPath}/system/resource/update","修改资源",{resourceId:resourceId});
 	}
 	
-	function gotoDelete(e){
+	function deleteNode(e){
 		var resourceId = $(e).data("resourceid");
 		W.ajax({
 			url : "${contextPath}/system/resource/delete",
@@ -190,9 +189,28 @@
 			}
 		});
 	}
-}());
+	
+	function addRoot(){
+		system.main.open("${contextPath}/system/resource/add",{},"添加根节点");
+	}
+	
+	return {
+		init : function(){
+			systemResource = $("#system-resource");
+			initTable();
+			systemResource.find("#addRoot").on("click",addRoot);
+		}
+	}
+}();
+
+
+
+$().ready(function(){
+	system.resource.init();
+});
+
 </script>
-<div class="container-content">
+<div class="container-content" id="system-resource">
 	<div class="container-body">
 		<div class="table-toolbar">
 	    	<form class="form-horizontal" id="queryForm">
