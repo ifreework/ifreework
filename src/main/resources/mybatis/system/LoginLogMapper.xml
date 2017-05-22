@@ -11,8 +11,10 @@
 		IP,
 		BROWSER,
 		BROWSER_VERSION,
-		MAC,
-		OS
+		DEVICE_NAME,
+		OS,
+		DEVICE_TYPE,
+		OS_INFO
 	</sql>
 
 	<resultMap type="com.ifreework.entity.system.LoginLog" id="loginLog">
@@ -23,8 +25,10 @@
 		<result column="IP" property="ip" />
 		<result column="BROWSER" property="browser" />
 		<result column="BROWSER_VERSION" property="browserVersion" />
-		<result column="MAC" property="mac" />
+		<result column="DEVICE_NAME" property="deviceName" />
 		<result column="OS" property="os" />
+		<result column="DEVICE_TYPE" property="deviceType" />
+		<result column="OS_INFO" property="osInfo" />
 	</resultMap>
 
 
@@ -64,8 +68,10 @@
 		#{ ip,jdbcType=VARCHAR },
 		#{ browser,jdbcType=VARCHAR },
 		#{ browserVersion,jdbcType=VARCHAR },
-		#{ mac,jdbcType=VARCHAR },
-		#{ os,jdbcType=VARCHAR }
+		#{ deviceName,jdbcType=VARCHAR },
+		#{ os,jdbcType=VARCHAR },
+		#{ deviceType,jdbcType=VARCHAR },
+		#{ osInfo,jdbcType=VARCHAR }
 		)
 	</insert>
 

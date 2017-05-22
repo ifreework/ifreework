@@ -1,26 +1,36 @@
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <script type="text/javascript">
 
-$.namespace("system.loginLog");
+$.namespace("system.requestLog");
 
-system.loginLog = function(){
-	var systemLoginLog,
+system.requestLog = function(){
+	var systemRequestLog,
 		dataTable;
 	
 	function initTable(){
-		dataTable = systemLoginLog.find('#loginLogTab').DataTable({
+		dataTable = systemRequestLog.find('#requestLogTab').DataTable({
 			searching:false,//
 			serverSide:true, //是否启用服务器模式
 			pageLength: 100 ,
 			autoWidth: false,
-			order:[[6,'desc']],
+			order:[[7,'desc']],
 			ajax:{
-				url:"${contextPath}/system/loginLog/query",
+				url:"${contextPath}/system/requestLog/query",
 				data: function ( d ) {
-		      		return $.extend( {}, d, systemLoginLog.find("#queryForm").serializeJson());
+		      		return $.extend( {}, d, systemRequestLog.find("#queryForm").serializeJson());
 			    }
 			},
 			columns : [ {  
+	            data : "resource.resourceName",  
+	            title : "访问名称",  
+	            defaultContent : "" ,
+	            orderable:false
+	        }, {  
+	            data : "resource.resourceUrl",  
+	            title : "访问地址",  
+	            defaultContent : "" ,
+	            orderable:false
+	        }, {  
 	            data : "username",  
 	            name : "username",  
 	            title : "用户名",  
@@ -49,14 +59,15 @@ system.loginLog = function(){
 	            defaultContent : "",
 	            orderable:false
 	        },{  
-	        	data : "loginTime",  
-	        	name : "LOGIN_TIME",
-	            title : "登录时间",  
+	        	data : "requestTime",  
+	        	name : "REQUEST_TIME",
+	            title : "访问时间",  
 	            defaultContent : ""
 	        },{  
-	        	data : "logoutTime",  
-	        	name : "LOGOUT_TIME",
-	            title : "退出时间",  
+	        	data : "timeLength",  
+	        	name : "TIME_LENGTH",
+	            title : "访问持续时间", 
+	            className : "text-right",
 	            defaultContent : ""
 	        }]
 	    }).on('preXhr.dt', function ( e, settings, data ) {//页面发送请求前，显示加载框
@@ -72,20 +83,20 @@ system.loginLog = function(){
 	
 	return {
 		init : function(){
-			systemLoginLog = $("#system-loginLog");
+			systemRequestLog = $("#system-requestLog");
 			initTable();
-			systemLoginLog.find("#query").on("click",query);
+			systemRequestLog.find("#query").on("click",query);
 		} 
 	}
 }();
 
 $().ready(function(){
-	system.loginLog.init();
+	system.requestLog.init();
 });
 
 
 </script>
-<div class="container-content" id="system-loginLog">
+<div class="container-content" id="system-requestLog">
 	<div class="container-body">
 		<div class="table-toolbar">
 			<form class="form-horizontal" id="queryForm">
@@ -100,7 +111,7 @@ $().ready(function(){
 			   </div>
 			</form>
 		 </div>
-		<table class="table table-striped table-bordered table-hover" id="loginLogTab">
+		<table class="table table-striped table-bordered table-hover" id="requestLogTab">
 		</table>
 	</div>
 </div>

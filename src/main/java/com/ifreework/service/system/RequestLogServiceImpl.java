@@ -9,6 +9,7 @@
  */
 package com.ifreework.service.system;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,25 +20,25 @@ import org.springframework.stereotype.Service;
 
 import com.ifreework.common.entity.PageData;
 import com.ifreework.common.manager.ServletRequestManager;
-import com.ifreework.common.shiro.listener.LoginLogManager;
-import com.ifreework.entity.system.LoginLog;
-import com.ifreework.mapper.system.LoginLogMapper;
+import com.ifreework.common.shiro.interceptor.RequestLogManager;
+import com.ifreework.entity.system.RequestLog;
+import com.ifreework.mapper.system.RequestLogMapper;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
 /**
  * 
- * 描述：    附件上传
+ * 描述：    请求日志记录
  * @author：wangyh
  * @createDate：2017年5月8日
  * @modify：wangyh    
  * @modifyDate：2017年5月8日 
  * @version 1.0
  */
-@Service("loginLogService")
-public class LoginLogServiceImpl implements LoginLogService, LoginLogManager {
+@Service("requestLogService")
+public class RequestLogServiceImpl implements RequestLogService, RequestLogManager {
 	@Autowired
-	private LoginLogMapper loginLogMapper;
+	private RequestLogMapper requestLogMapper;
 
 	/**
 	 * 
@@ -49,35 +50,39 @@ public class LoginLogServiceImpl implements LoginLogService, LoginLogManager {
 	 */
 	@Override
 	public PageData queryPageList(PageData pd) {
-		List<LoginLog> list = loginLogMapper.queryPageList(pd);
+		List<RequestLog> list = requestLogMapper.queryPageList(pd);
 		pd = new PageData();
 		pd.setPagination(list);
 		return pd;
 	}
 
 	@Override
-	public void add(String username) {
+	public RequestLog getRequestLog(String resourceId) {
 		HttpServletRequest request = ServletRequestManager.getHttpServletRequest();
 		String ip = request.getRemoteAddr();// 访问者IP
 		String agentStr = request.getHeader("User-Agent");
 		UserAgent agent = UserAgent.parseUserAgentString(agentStr);
 		
 		
-		LoginLog loginLog = new LoginLog();
-		loginLog.setLoginLogId(SecurityUtils.getSubject().getSession().getId().toString());
-		loginLog.setUsername(username);
-		loginLog.setBrowser(agent.getBrowser().getName());
-		loginLog.setBrowserVersion(agent.getBrowserVersion().getVersion());
-		loginLog.setIp(ip);
-		loginLog.setOs(agent.getOperatingSystem().getGroup().getName());
-		loginLog.setOsInfo(agent.getOperatingSystem().getName());
-		loginLog.setDeviceType(agent.getOperatingSystem().getDeviceType().getName());
-		loginLogMapper.add(loginLog);
+		RequestLog requestLog = new RequestLog();
+		requestLog.setSessionId(SecurityUtils.getSubject().getSession().getId().toString());
+		requestLog.setUsername((String)SecurityUtils.getSubject().getPrincipal());
+		requestLog.setResourceId(resourceId);
+		requestLog.setRequestTime(new Date());
+		
+		requestLog.setIp(ip);
+		requestLog.setBrowser(agent.getBrowser().getName());
+		requestLog.setBrowserVersion(agent.getBrowserVersion().getVersion());
+		
+		requestLog.setOs(agent.getOperatingSystem().getGroup().getName());
+		requestLog.setOsInfo(agent.getOperatingSystem().getName());
+		requestLog.setDeviceType(agent.getOperatingSystem().getDeviceType().getName());
+		return requestLog;
 	}
 
 	@Override
-	public void logoutLog(String username) {
-		loginLogMapper.update(username);
+	public void saveRequestLog(RequestLog requestLog) {
+		requestLogMapper.add(requestLog);
 	}
 
 }

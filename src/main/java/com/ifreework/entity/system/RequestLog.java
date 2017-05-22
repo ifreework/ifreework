@@ -1,8 +1,9 @@
 package com.ifreework.entity.system;
 
+
 import java.io.Serializable;
 
-public class LoginLog implements Serializable{
+public class RequestLog implements Serializable{
 	
 	
 	/**    
@@ -11,25 +12,42 @@ public class LoginLog implements Serializable{
 	 * @version 1.0    
 	 */    
 	
-	private static final long serialVersionUID = -7815272296449329695L;
+	private static final long serialVersionUID = -7211684431445523719L;
 	//columns START
-	private java.lang.String loginLogId;
+	private java.lang.String requestLogId;
+	private java.lang.String sessionId;
 	private java.lang.String username;
-	private java.util.Date loginTime;
-	private java.util.Date logoutTime;
+	private java.lang.String resourceId;
+	private java.util.Date requestTime;
+	private Long timeLength;
 	private java.lang.String ip;
 	private java.lang.String browser;
 	private java.lang.String browserVersion;
-	private java.lang.String deviceName;
 	private java.lang.String os;
 	private java.lang.String deviceType;
 	private java.lang.String osInfo;
+	
+	private Resource resource;
 	//columns END
-	public java.lang.String getLoginLogId() {
-		return loginLogId;
+	
+	
+	public java.lang.String getRequestLogId() {
+		return requestLogId;
 	}
-	public void setLoginLogId(java.lang.String loginLogId) {
-		this.loginLogId = loginLogId;
+	public Resource getResource() {
+		return resource;
+	}
+	public void setResource(Resource resource) {
+		this.resource = resource;
+	}
+	public void setRequestLogId(java.lang.String requestLogId) {
+		this.requestLogId = requestLogId;
+	}
+	public java.lang.String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(java.lang.String sessionId) {
+		this.sessionId = sessionId;
 	}
 	public java.lang.String getUsername() {
 		return username;
@@ -37,17 +55,23 @@ public class LoginLog implements Serializable{
 	public void setUsername(java.lang.String username) {
 		this.username = username;
 	}
-	public java.util.Date getLoginTime() {
-		return loginTime;
+	public java.lang.String getResourceId() {
+		return resourceId;
 	}
-	public void setLoginTime(java.util.Date loginTime) {
-		this.loginTime = loginTime;
+	public void setResourceId(java.lang.String resourceId) {
+		this.resourceId = resourceId;
 	}
-	public java.util.Date getLogoutTime() {
-		return logoutTime;
+	public java.util.Date getRequestTime() {
+		return requestTime;
 	}
-	public void setLogoutTime(java.util.Date logoutTime) {
-		this.logoutTime = logoutTime;
+	public void setRequestTime(java.util.Date requestTime) {
+		this.requestTime = requestTime;
+	}
+	public Long getTimeLength() {
+		return timeLength;
+	}
+	public void setTimeLength(Long timeLength) {
+		this.timeLength = timeLength;
 	}
 	public java.lang.String getIp() {
 		return ip;
@@ -66,12 +90,6 @@ public class LoginLog implements Serializable{
 	}
 	public void setBrowserVersion(java.lang.String browserVersion) {
 		this.browserVersion = browserVersion;
-	}
-	public java.lang.String getDeviceName() {
-		return deviceName;
-	}
-	public void setDeviceName(java.lang.String deviceName) {
-		this.deviceName = deviceName;
 	}
 	public java.lang.String getOs() {
 		return os;
@@ -92,7 +110,6 @@ public class LoginLog implements Serializable{
 		this.osInfo = osInfo;
 	}
 
-	
 }
 
 
