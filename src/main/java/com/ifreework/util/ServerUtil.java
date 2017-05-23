@@ -188,7 +188,6 @@ public class ServerUtil {
 		return sd._rexIP.booleanValue();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public static boolean isSun() {
 		if (isSun7() || isSun8()) {
 			return true;
