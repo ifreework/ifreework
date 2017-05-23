@@ -57,7 +57,7 @@ public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
 			if (resource == null) { //如果查询出所需权限为空，则表明不需要权限
 				return true;
 			}
-			request.setAttribute("_resource_log", resource);
+			
 			List<String> auths = shiroAuth.queryAuthorityByResourceId(resource.getResourceId());
 
 			logger.debug("The request path " + path + " need auth of " + auths);

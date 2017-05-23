@@ -13,20 +13,15 @@ system.requestLog = function(){
 			serverSide:true, //是否启用服务器模式
 			pageLength: 100 ,
 			autoWidth: false,
-			order:[[7,'desc']],
+			order:[[6,'desc']],
 			ajax:{
 				url:"${contextPath}/system/requestLog/query",
 				data: function ( d ) {
 		      		return $.extend( {}, d, systemRequestLog.find("#queryForm").serializeJson());
 			    }
 			},
-			columns : [ {  
-	            data : "resource.resourceName",  
-	            title : "访问名称",  
-	            defaultContent : "" ,
-	            orderable:false
-	        }, {  
-	            data : "resource.resourceUrl",  
+			columns : [{  
+	            data : "url",  
 	            title : "访问地址",  
 	            defaultContent : "" ,
 	            orderable:false
@@ -36,7 +31,7 @@ system.requestLog = function(){
 	            title : "用户名",  
 	            defaultContent : "" 
 	        }, {  
-	            data : "ip",  
+	            data : "requestIp",  
 	            title : "IP",  
 	            defaultContent : "" ,
 	            orderable:false
@@ -64,9 +59,9 @@ system.requestLog = function(){
 	            title : "访问时间",  
 	            defaultContent : ""
 	        },{  
-	        	data : "timeLength",  
-	        	name : "TIME_LENGTH",
-	            title : "访问持续时间", 
+	        	data : "responseTime",  
+	        	name : "RESPONSE_TIME",
+	            title : "响应时长", 
 	            className : "text-right",
 	            defaultContent : ""
 	        }]

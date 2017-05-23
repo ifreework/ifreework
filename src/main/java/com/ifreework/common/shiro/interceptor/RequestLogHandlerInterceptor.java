@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.ifreework.entity.system.RequestLog;
-import com.ifreework.entity.system.Resource;
 
 public class RequestLogHandlerInterceptor extends HandlerInterceptorAdapter {
 
@@ -36,9 +35,9 @@ public class RequestLogHandlerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		Resource resource = (Resource) request.getAttribute("_resource_log");
-		if(resource != null && "M".equals(resource.getResourceType())){
-			RequestLog requestLog = requestLogManager.getRequestLog(resource.getResourceId());
+		String path = request.getServletPath();
+		if (!path.equals("/")) {
+			RequestLog requestLog = requestLogManager.getRequestLog(path);
 			request.setAttribute("_request_log", requestLog);
 		}
 		return true;
@@ -51,7 +50,7 @@ public class RequestLogHandlerInterceptor extends HandlerInterceptorAdapter {
 		RequestLog requestLog = (RequestLog) request.getAttribute("_request_log");
 		if(requestLog != null){
 			Long time = new Date().getTime() - requestLog.getRequestTime().getTime();
-			requestLog.setTimeLength(time);
+			requestLog.setResponseTime(time);
 			requestLogManager.saveRequestLog(requestLog);
 		}
 	}

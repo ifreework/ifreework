@@ -4,38 +4,45 @@
 <mapper namespace="com.ifreework.mapper.system.RequestLogMapper">
 
 	<sql id="requestLogColumns">
-		REQUEST_LOG_ID,
-		SESSION_ID,
-		USERNAME,
-		RESOURCE_ID,
-		REQUEST_TIME,
-		TIME_LENGTH,
-		IP,
-		BROWSER,
-		BROWSER_VERSION,
-		OS,
-		DEVICE_TYPE,
-		OS_INFO
+			REQUEST_LOG_ID,
+			SESSION_ID,
+			USERNAME,
+			URL,
+			REQUEST_TIME,
+			RESPONSE_TIME,
+			REQUEST_IP,
+			BROWSER,
+			BROWSER_VERSION,
+			DEVICE_TYPE,
+			OS_INFO,
+			OS,
+			RESPONSE_DEVICE,
+			RESPONSE_IP,
+			RESPONSE_NODE
 	</sql>
 
 	<resultMap type="com.ifreework.entity.system.RequestLog" id="requestLog">
-		<id column="REQUEST_LOG_ID" property="requestLogId" />
-		<result column="SESSION_ID" property="sessionId" />
-		<result column="USERNAME" property="username" />
-		<result column="RESOURCE_ID" property="resourceId" />
-		<result column="REQUEST_TIME" property="requestTime" />
-		<result column="TIME_LENGTH" property="timeLength" />
-		<result column="IP" property="ip" />
-		<result column="BROWSER" property="browser" />
-		<result column="BROWSER_VERSION" property="browserVersion" />
-		<result column="OS" property="os" />
-		<result column="DEVICE_TYPE" property="deviceType" />
-		<result column="OS_INFO" property="osInfo" />
+		<id column="REQUEST_LOG_ID" property="requestLogId"/>
+		<result column="SESSION_ID" property="sessionId"/>
+		<result column="USERNAME" property="username"/>
+		<result column="URL" property="url"/>
+		<result column="REQUEST_TIME" property="requestTime"/>
+		<result column="RESPONSE_TIME" property="responseTime"/>
+		<result column="REQUEST_IP" property="requestIp"/>
+		<result column="BROWSER" property="browser"/>
+		<result column="BROWSER_VERSION" property="browserVersion"/>
+		<result column="DEVICE_TYPE" property="deviceType"/>
+		<result column="OS_INFO" property="osInfo"/>
+		<result column="OS" property="os"/>
+		<result column="RESPONSE_DEVICE" property="responseDevice"/>
+		<result column="RESPONSE_IP" property="responseIp"/>
+		<result column="RESPONSE_NODE" property="responseNode"/>
 		
 		<association property="resource" javaType="com.ifreework.entity.system.Resource">
 			<result column="RESOURCE_NAME" property="resourceName" />
-			<result column="RESOURCE_URL" property="resourceUrl" />
+			<result column="RESOURCE_ID" property="resourceId" />
 		</association>
+		
 	</resultMap>
 
 
@@ -43,29 +50,34 @@
 	<select id="queryPageList" parameterType="pd"
 		resultMap="requestLog">
 		select
-			L.REQUEST_LOG_ID,
-			L.SESSION_ID,
-			L.USERNAME,
-			L.RESOURCE_ID,
-			L.REQUEST_TIME,
-			L.TIME_LENGTH,
-			L.IP,
-			L.BROWSER,
-			L.BROWSER_VERSION,
-			L.OS,
-			L.DEVICE_TYPE,
-			L.OS_INFO,
+			REQUEST_LOG_ID,
+			SESSION_ID,
+			USERNAME,
+			URL,
+			REQUEST_TIME,
+			RESPONSE_TIME,
+			REQUEST_IP,
+			BROWSER,
+			BROWSER_VERSION,
+			DEVICE_TYPE,
+			OS_INFO,
+			OS,
+			RESPONSE_DEVICE,
+			RESPONSE_IP,
+			RESPONSE_NODE,
+			
 			R.RESOURCE_NAME,
-			R.RESOURCE_URL
+			R.RESOURCE_ID
 		from SYS_REQUEST_LOG L
-		join SYS_RESOURCE R ON L.RESOURCE_ID = R.RESOURCE_ID 
+		left join SYS_RESOURCE R ON L.URL = R.RESOURCE_URL 
 		<where>
 			<trim  suffixOverrides="and">
-				<if test=" username != null and  username != ''">
-					and USERNAME like '%' || #{username} || '%'
+				<if test=" url != null and  url != ''">
+					and L.URL like '%' || #{url} || '%'
 				</if>
 			</trim>
 		</where>
+		
 		<foreach collection="columns" item="column" index="index"
             open="order by" close="" separator=",">
             <if test="column.orderable">
@@ -79,23 +91,24 @@
 		<selectKey keyProperty="requestLogId" resultType="String" order="BEFORE">
 			select sys_guid() from dual
 		</selectKey>
-		insert into SYS_REQUEST_LOG (
-		<include refid="requestLogColumns" />
-		)
-		values
+		insert into SYS_REQUEST_LOG (<include refid="requestLogColumns"/>) 
+		values 
 		(
-		#{ requestLogId,jdbcType=VARCHAR },
-		#{ sessionId,jdbcType=VARCHAR },
-		#{ username,jdbcType=VARCHAR },
-		#{ resourceId,jdbcType=VARCHAR },
-		#{ requestTime,jdbcType=DATE },
-		#{ timeLength,jdbcType=INTEGER },
-		#{ ip,jdbcType=VARCHAR },
-		#{ browser,jdbcType=VARCHAR },
-		#{ browserVersion,jdbcType=VARCHAR },
-		#{ os,jdbcType=VARCHAR },
-		#{ deviceType,jdbcType=VARCHAR },
-		#{ osInfo,jdbcType=VARCHAR }
+			#{ requestLogId,jdbcType=VARCHAR },
+			#{ sessionId,jdbcType=VARCHAR },
+			#{ username,jdbcType=VARCHAR },
+			#{ url,jdbcType=VARCHAR },
+			sysdate,
+			#{ responseTime,jdbcType=INTEGER },
+			#{ requestIp,jdbcType=VARCHAR },
+			#{ browser,jdbcType=VARCHAR },
+			#{ browserVersion,jdbcType=VARCHAR },
+			#{ deviceType,jdbcType=VARCHAR },
+			#{ osInfo,jdbcType=VARCHAR },
+			#{ os,jdbcType=VARCHAR },
+			#{ responseDevice,jdbcType=VARCHAR },
+			#{ responseIp,jdbcType=VARCHAR },
+			#{ responseNode,jdbcType=VARCHAR }
 		)
 	</insert>
 </mapper>
