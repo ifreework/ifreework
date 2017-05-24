@@ -97,9 +97,9 @@ $().ready(function(){
 		<div class="table-toolbar">
 			<form class="form-horizontal" id="queryForm">
 				 <div class="has-feedback row">
-				<label class="col-sm-1 control-label">用户名</label>
+				<label class="col-sm-1 control-label">访问路径</label>
 				<div class="col-sm-2">
-					<input type="text" class="form-control" name="username" placeholder="用户名">
+					<input type="text" class="form-control" name="url" placeholder="访问路径">
 				</div>
 				<div class="col-sm-1">
 					<a id="query" class="btn btn-default" href="javascript:void(0);"><i class="fa fa-search"></i> 查询</a>

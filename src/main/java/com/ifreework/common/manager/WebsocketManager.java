@@ -29,6 +29,7 @@ public class WebsocketManager {
 	 * @throws
 	 */
 	public static void send(String url, Object msg) {
+		getSimpMessagingTemplate().convertAndSend(url, msg);
 //		Set<String> set = Constant.WEBSOCKET_USER_MAP.keySet();
 //		for(String name : set){
 //			send(name,url,msg);

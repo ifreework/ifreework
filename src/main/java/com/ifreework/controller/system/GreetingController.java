@@ -5,14 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+
+import com.ifreework.common.manager.WebsocketManager;
 import com.ifreework.entity.system.Msg;
 
 @Controller
 public class GreetingController {
 
 	@SuppressWarnings("unused")
+	
 	@Autowired
 	private SimpMessagingTemplate template;
 
@@ -65,9 +67,14 @@ public class GreetingController {
 	}
 
 	@MessageMapping("/httpSendMsg")
-	@SendToUser("/topic/greetings")
 	public String httpSendMsg(String msg) {
 		//this.template.convertAndSendToUser("admin", "/topic/greetings", "zxZXzzxczx");
+		for (int i = 0; i < 10; i++) {
+			WebsocketManager.send("/topic/greetings", msg);
+		}
+		
+		
 		return "asdasdas";
 	}
+	
 }

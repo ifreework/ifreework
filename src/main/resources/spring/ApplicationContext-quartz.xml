@@ -23,8 +23,14 @@
 				<map>
 					<entry key="jobName" value="WindowsGetMemeryJob" />
 					<entry key="jobClass" value="com.ifreework.job.WindowGetMemeryJob" />
-					<entry key="runTime" value="0/20 * * * * ?" />
+					<entry key="runTime" value="0/60 * * * * ?" />
 				</map>
+				<map>
+					<entry key="jobName" value="WindowsSendMemeryJob" />
+					<entry key="jobClass" value="com.ifreework.job.WindowSendMemeryJob" />
+					<entry key="runTime" value="0/60 * * * * ?" />
+				</map>
+				
 			</list>
 		</constructor-arg>
 	</bean>

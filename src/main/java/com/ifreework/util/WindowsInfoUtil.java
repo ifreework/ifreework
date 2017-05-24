@@ -23,7 +23,7 @@ public class WindowsInfoUtil {
 		long freePhysicalMemorySize = osmxb.getFreePhysicalMemorySize();
 
 		Double compare = (Double) (1 - freePhysicalMemorySize * 1.0 / totalvirtualMemory) * 100;
-		return compare;
+		return compare.intValue();
 	}
 
 	// 获取MAC地址的方法

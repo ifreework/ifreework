@@ -39,7 +39,6 @@ public class WebSocketeBrokerConfig extends AbstractWebSocketMessageBrokerConfig
     
     @Bean
     public SessionConnectedListener sessionConnectedListener(){
-
         return new SessionConnectedListener();
     }
     
