@@ -3,43 +3,113 @@
 <script src="${jsPath }/websocket/stomp.js"></script>
 
 <script type="text/javascript">
-	function connect() {
-		var websocket;
+	$.namespace("system.memery");
 
-		websocket = new SockJS("/ifreework/websocket");
-		var stompClient = Stomp.over(websocket);
+	system.memery = function() {
+		var systemMemery, websocket, stompClient, memeryChart, labels;
 
-		stompClient.connect({}, function(frame) {
-			stompClient.subscribe('/topic/memeryScale', function(data) { //订阅消息
-				console.log(data);
-				$("#response").html($("#response").html() + "<br>" + data);
+		function connect() {
+			websocket = new SockJS("${contextPath}/websocket");
+			stompClient = Stomp.over(websocket);
+			stompClient.connect({}, function(frame) {
+				stompClient.subscribe('/topic/memeryScale', function(data) { //订阅消息
+					console.log(data);
+					labels.shift();
+					labels.push(formatDate(new Date()));
+					memeryChart.data.datasets[0].data = eval(data.body);
+					memeryChart.data.labels = labels;
+					memeryChart.update();
+				});
+
 			});
-
-		});
-
-		document.getElementById("ws").onclick = function() {
-			stompClient.send("/app/httpSendMsg", {}, JSON.stringify({
-				name : "nane",
-				taskName : "taskName",
-				taskDetail : "taskDetail"
-			}));
 		}
-	}
 
-	function sendName() {
-		websocket.send(JSON.stringify({
-			name : "nane",
-			taskName : "taskName",
-			taskDetail : "taskDetail"
-		}));
-	}
+		function setLabels() {
+			var now;
+			labels = [];
+			now = new Date();
+			for (var i = 30; i > 0; i--) {
+				now.setMinutes(now.getMinutes() - 1);
+				labels.unshift(formatDate(now));
+			}
+		}
 
-	/*   
-	 1. new WebSocket('ws://localhost:8080//websocket')尝试与服务器建立连接;  
-	 2. 握手成功并建立连接后，socket.onopen被调用  
-	 3. 当接收来自服务器的消息，socket.onmessage被调用  
-	 4. socket.send()用来发送消息至服务端  
-	 */
+		function initChart() {
+			var ctx = systemMemery.find("#memeryChart");
+			memeryChart = new Chart(ctx, {
+				type : 'line',
+				data : {
+					labels : labels,
+					datasets : [ {
+						label : "内存使用（%）",
+						fill : false,
+						lineTension : 0.1,
+						backgroundColor : "rgba(75,192,192,0.4)",
+						borderColor : "#fb6e52",
+						borderCapStyle : 'butt',
+						borderDash : [],
+						borderDashOffset : 0.0,
+						pointBorderColor : "#ffce55",
+						pointBackgroundColor : "#ffce55",
+						pointBorderWidth : 3,
+						pointHoverRadius : 5,
+						pointHoverBackgroundColor : "#ffce55",
+						pointHoverBorderColor : "rgba(220,220,220,1)",
+						pointHoverBorderWidth : 3,
+						pointRadius : 1,
+						pointHitRadius : 10,
+						data : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+						spanGaps : false
+					} ]
+				},
+			    options: {
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                	max: 100,
+			                    min: 0,
+			                    stepSize: 10
+			                }
+			            }]
+			        }
+			    }
+			});
+		}
+
+		function formatDate(date) {
+			var hour = date.getHours();
+			var minutes = date.getMinutes();
+			hout = hour < 10 ? "0" + hour : hour;
+			minutes = minutes < 10 ? "0" : minutes;
+			return hour + ":" + minutes;
+		}
+		
+		
+		return {
+			init : function(){
+				systemMemery = $("#system-memery");
+				connect();
+				setLabels();
+				initChart();
+			}
+		};
+	}();
+	
+	$().ready(function(){
+		system.memery.init();
+	});
 </script>
-
+<div class="container-content" id="system-memery">
+	<div class="container-body">
+		<div class="row">
+			<div class="col-xs-12 col-md-12">
+				<div class="widget">
+					<div class="widget-body" style="height: 500px;">
+						<canvas id="memeryChart" width="0" height="0"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
