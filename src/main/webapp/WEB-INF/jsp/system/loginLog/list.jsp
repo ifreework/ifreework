@@ -10,6 +10,7 @@ system.loginLog = function(){
 	function initTable(){
 		dataTable = systemLoginLog.find('#loginLogTab').DataTable({
 			searching:false,//
+			lengthChange: false,
 			serverSide:true, //是否启用服务器模式
 			pageLength: 100 ,
 			autoWidth: false,

@@ -1,4 +1,4 @@
-package com.ifreework.service.system;
+package com.ifreework.job;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,27 +9,21 @@ import org.apache.shiro.cache.CacheManager;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.ifreework.common.entity.PageData;
-import com.ifreework.common.manager.QuartzManager;
 import com.ifreework.common.manager.SpringManager;
 import com.ifreework.util.WindowsInfoUtil;
 
-@Service("windowsMemeryService")
-public class WindowsMemeryServiceImpl implements WindowsMemeryService, Job {
-
+public class WindowGetMemeryJob implements Job{
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	private static final String REDIS_MEMERY_SCALE_CACHE = "REDIS_MEMERY_SCALE_CACHE1";
-	public WindowsMemeryServiceImpl(){
-		QuartzManager.addJob("AddWindowsMemeryJob1", WindowsMemeryServiceImpl.class, "0/20 * * * * ?");
-	}
 	
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		System.out.println("=======================================================");
-		System.out.println(new Date());
+		logger.debug("WindowGetMemeryJob start ! {}",new Date());
 		CacheManager cacheManager = SpringManager.getCacheManager();
 		
 		String macAddress = WindowsInfoUtil.getMACAddress();
@@ -45,16 +39,10 @@ public class WindowsMemeryServiceImpl implements WindowsMemeryService, Job {
 		}
 		list.add(memeryScale);
 		cache.put(getKey(macAddress), list);
-	}
-
-	
-	@Override
-	public PageData getMemeryScale() {
-		return null;
+		logger.debug("WindowGetMemeryJob stop ! {}",new Date());
 	}
 	
 	private String getKey(String macAddress){
 		return "memery-" + macAddress;
 	}
-
 }

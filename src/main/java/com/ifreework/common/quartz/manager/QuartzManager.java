@@ -1,4 +1,4 @@
-package com.ifreework.common.manager;
+package com.ifreework.common.quartz.manager;
 
 import java.util.Map;
 

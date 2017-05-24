@@ -8,6 +8,7 @@ system.user = function(){
 	function initDatable(){
 		dataTable = systemUser.find('#userTab').DataTable({
 			searching:false,//
+			lengthChange: false,
 			serverSide:true, //是否启用服务器模式
 			order:[[0,'asc']],
 			pageLength: 100 ,

@@ -9,10 +9,11 @@ system.resource = function(){
 	function initTable(){
 		dataTable = systemResource.find('#resourceTab').DataTable({
 			searching : false,//
+			lengthChange: false,
+			info:false,
 			ordering : false,
 			serverSide:true, //是否启用服务器模式
 			paging : false,
-			pageLength: 0 ,
 			autoWidth: false,
 			ajax:{
 				url:"${contextPath}/system/resource/query",
