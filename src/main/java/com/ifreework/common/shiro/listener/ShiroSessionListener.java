@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ShiroSessionListener implements SessionListener  {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger(ShiroSessionListener.class);
 	private LoginLogManager loginLogManager;
 	
 	public LoginLogManager getLoginLogManager() {

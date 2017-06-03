@@ -35,7 +35,7 @@ import com.ifreework.service.system.AttachmentService;
 @Controller
 @RequestMapping("/system/attachment")
 public class AttachmentController extends BaseControllerSupport {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger(AttachmentController.class);
 
 	@Autowired
 	private AttachmentService attachmentService ;

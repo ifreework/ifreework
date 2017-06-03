@@ -29,7 +29,7 @@ public class ExceptionResolver implements HandlerExceptionResolver {
 
 	private String errorPath;
 	
-	private Logger logger = LoggerFactory.getLogger(ExceptionResolver.class);
+	private static Logger logger = LoggerFactory.getLogger(ExceptionResolver.class);
 	
 	
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,

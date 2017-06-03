@@ -70,7 +70,7 @@ import com.ifreework.entity.system.UserRole;
 @Component
 @Aspect
 public class UserMenuCacheAspect {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger(UserMenuCacheAspect.class);
 	
 	@Autowired
 	private CacheManager cacheManager;

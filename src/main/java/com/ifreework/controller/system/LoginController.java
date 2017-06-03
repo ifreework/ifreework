@@ -72,7 +72,7 @@ public class LoginController extends BaseControllerSupport {
 	 * @TODO(用户登录界面跳转，如果已经登录，则跳转到Main页面) 
 	 * @param @return @throws
 	 */
-	@RequestMapping()
+	@RequestMapping("/index.htm")
 	public ModelAndView gotoIndexView() {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();

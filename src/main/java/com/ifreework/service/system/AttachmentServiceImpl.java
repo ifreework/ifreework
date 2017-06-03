@@ -43,7 +43,7 @@ import com.ifreework.util.StringUtil;
  */
 @Service("fileUploadService")
 public class AttachmentServiceImpl implements AttachmentService {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger(AttachmentServiceImpl.class);
 	private static final String REMOTEPATH = "/attachment"; // 文件保存支线
 
 	@Autowired

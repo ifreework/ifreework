@@ -19,7 +19,7 @@ import com.ifreework.util.StringUtil;
  * @version 1.0
  */
 public class QuartzJobFactory {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger(QuartzJobFactory.class);
 	
 	/**
 	 * 

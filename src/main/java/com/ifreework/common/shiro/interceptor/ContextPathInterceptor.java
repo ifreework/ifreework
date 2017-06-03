@@ -34,9 +34,9 @@ public class ContextPathInterceptor extends HandlerInterceptorAdapter{
 		request.setAttribute("response", response);
 		
 		String contextPath = request.getContextPath();     //设置项目路径
-		String cssPath = contextPath + "/resources/css";   //CSS路径
-		String jsPath = contextPath + "/resources/js";     //JS路径
-		String imagePath = contextPath + "/resources/img"; //图片路径
+		String cssPath = contextPath + "/assets/css";   //CSS路径
+		String jsPath = contextPath + "/assets/js";     //JS路径
+		String imagePath = contextPath + "/assets/img"; //图片路径
 		
 		request.setAttribute("contextPath", contextPath);
 		request.setAttribute("cssPath", cssPath);

@@ -28,7 +28,7 @@ import org.apache.shiro.subject.PrincipalCollection;
  */
 public class ShiroRealm extends AuthorizingRealm {
 
-	private Logger log = Logger.getLogger(ShiroRealm.class);
+	private static Logger log = Logger.getLogger(ShiroRealm.class);
 	
 	private ShiroAuthInterface shiroAuth;
 

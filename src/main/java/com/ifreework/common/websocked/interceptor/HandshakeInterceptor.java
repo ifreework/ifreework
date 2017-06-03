@@ -21,7 +21,7 @@ import com.ifreework.entity.system.User;
  */
 public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
 
-	private Logger logger = Logger.getLogger(getClass());
+	private static Logger logger = Logger.getLogger(HandshakeInterceptor.class);
 
 	/**
 	 * @Title: beforeHandshake 

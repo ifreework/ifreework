@@ -71,7 +71,7 @@ import com.ifreework.entity.system.UserRole;
 @Aspect
 public class UserAuthCacheAspect {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger(UserAuthCacheAspect.class);
 	
 	@Autowired
 	private CacheManager cacheManager;

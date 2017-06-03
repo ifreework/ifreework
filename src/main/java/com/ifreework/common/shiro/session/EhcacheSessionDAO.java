@@ -23,7 +23,7 @@ import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
  * @version 1.0
  */
 public class EhcacheSessionDAO extends AbstractSessionDAO {
-	private Logger logger = Logger.getLogger(getClass());
+	private static Logger logger = Logger.getLogger(EhcacheSessionDAO.class);
 	private Cache<String, Session> cache;
 	private String keyPrefix = "shiro_redis_cache:";
 	

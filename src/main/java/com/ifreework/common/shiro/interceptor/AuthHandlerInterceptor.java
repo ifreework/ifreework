@@ -15,7 +15,7 @@ import com.ifreework.common.shiro.realm.ShiroAuthInterface;
 import com.ifreework.entity.system.Resource;
 
 public class AuthHandlerInterceptor extends HandlerInterceptorAdapter {
-	private Logger logger = LoggerFactory.getLogger(AuthHandlerInterceptor.class);
+	private static Logger logger = LoggerFactory.getLogger(AuthHandlerInterceptor.class);
 
 	private String unAuthorizedUrl; // 请求没有权限跳转地址
 	private ShiroAuthInterface shiroAuth; // 获取请求所需权限接口

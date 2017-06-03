@@ -16,7 +16,7 @@ import com.ifreework.util.SerializeUtils;
 
 class RedisCache<K, V> implements Cache<K, V>, Serializable {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static Logger logger = LoggerFactory.getLogger(RedisCache.class);
 
 	private static final long serialVersionUID = -3239675522496957694L;
 
