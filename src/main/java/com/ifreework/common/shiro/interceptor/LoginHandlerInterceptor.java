@@ -65,7 +65,7 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter{
 		String path = request.getServletPath();
 		logger.debug("The request path is :" + path);
 		
-		if("/".equals(path)){
+		if("/".equals(path) || "/index.htm".equals(path)){
 			return true;
 		}
 		

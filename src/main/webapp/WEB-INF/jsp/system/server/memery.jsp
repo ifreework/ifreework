@@ -1,4 +1,7 @@
+<%@ page language="java" pageEncoding="UTF-8"
+	contentType="text/html; charset=UTF-8"%>
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
+
 <script src="${jsPath }/websocket/sockjs.js"></script>
 <script src="${jsPath }/websocket/stomp.js"></script>
 

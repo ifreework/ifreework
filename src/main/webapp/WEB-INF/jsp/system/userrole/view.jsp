@@ -1,3 +1,5 @@
+<%@ page language="java" pageEncoding="UTF-8"
+	contentType="text/html; charset=UTF-8"%>
 <%@ include file="/WEB-INF/jsp/include/head.jsp"%>
 <link href="${cssPath }/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
 <script src="${ jsPath }/bootstrap/ztree/jquery.ztree.all.js"></script>

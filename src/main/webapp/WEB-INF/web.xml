@@ -94,8 +94,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springMvc</servlet-name>
-		<url-pattern>*.htm</url-pattern>
-		<url-pattern>*.json</url-pattern>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 	<error-page>
