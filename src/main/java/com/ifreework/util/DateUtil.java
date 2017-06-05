@@ -81,6 +81,18 @@ public class DateUtil {
 		return fmt.format(new Date());
 	}
 	
+	/**
+	 * 
+	 * 描述：：格式化制定日期，格式：format
+	 * @param date 需要格式化的时间
+	 * @param format 日期格式
+	 * @return 当前日期，格式：format
+	 * @return
+	 */
+	public static String getDate(Date date ,String format) {
+		SimpleDateFormat fmt = new SimpleDateFormat(format);
+		return fmt.format(date);
+	}
 
 	/**
 	 * @Title: getDate

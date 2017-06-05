@@ -37,31 +37,27 @@ public class WindowGetMemeryJob implements Job{
 		Cache<Object, Object> cache = cacheManager.getCache(REDIS_MEMERY_SCALE_CACHE);
 		Map<String,Object> map =  (Map<String, Object>) cache.get(getKey(macAddress));
 		
-		
-		List<Object> memerys = null;
-		List<Object> times = null;
-		
 		if(map == null){
 			map = new HashMap<String,Object>();
-			memerys = new ArrayList<Object>();
-			times = new ArrayList<Object>();
-			map.put("memerys", memerys);
-			map.put("times", times);
 			map.put("serverName",WindowsInfoUtil.getServerName());
-		}else{
-			memerys = (List<Object>) map.get("memerys");
-			times = (List<Object>) map.get("times");
 		}
 		
-		if( memerys.size() >= 30 ){
-			memerys.remove(0);
-		}
-		memerys.add(memeryScale);
+		List<Object> datas = (List<Object>) map.get("datas");
 		
-		if( times.size() >= 30 ){
-			times.remove(0);
+		if(datas == null){
+			datas = new ArrayList<Object>();
+			map.put("datas",datas);
 		}
-		times.add(DateUtil.getDate("HH:mm"));
+		
+		if( datas.size() >= 30 ){
+			datas.remove(0);
+		}
+		
+		Map<String,Object> memeryMap = new HashMap<String,Object>();
+		memeryMap.put(DateUtil.getDate("HH:mm"), memeryScale);
+		
+		datas.add(memeryMap);
+		
 		cache.put(getKey(macAddress), map);
 		
 	}
