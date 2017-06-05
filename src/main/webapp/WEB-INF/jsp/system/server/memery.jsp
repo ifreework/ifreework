@@ -16,83 +16,79 @@
 			stompClient = Stomp.over(websocket);
 			stompClient.connect({}, function(frame) {
 				stompClient.subscribe('/topic/memeryScale', function(data) { //订阅消息
+					console.log(new Date());
 					console.log(data);
-					labels.shift();
-					labels.push(formatDate(new Date()));
-					memeryChart.data.datasets[0].data = eval(data.body);
-					memeryChart.data.labels = labels;
+					var resultList = $.parseJSON(data.body);
+					memeryChart.data.labels = resultList[0].times;
+					
+					for(var i = 0; i < resultList.length; i++){
+						memeryChart.data.datasets[i].data = resultList[i].memerys;
+					}
 					memeryChart.update();
 				});
 
 			});
 		}
 
-		function setLabels() {
-			var now;
-			labels = [];
-			now = new Date();
-			for (var i = 30; i > 0; i--) {
-				now.setMinutes(now.getMinutes() - 1);
-				labels.unshift(formatDate(now));
-			}
-		}
-
 		function initChart() {
-			var ctx = systemMemery.find("#memeryChart");
-			memeryChart = new Chart(ctx, {
-				type : 'line',
-				data : {
-					labels : labels,
-					datasets : [ {
-						label : "内存使用（%）",
-						fill : false,
-						lineTension : 0.1,
-						backgroundColor : "rgba(75,192,192,0.4)",
-						borderColor : "#fb6e52",
-						borderCapStyle : 'butt',
-						borderDash : [],
-						borderDashOffset : 0.0,
-						pointBorderColor : "#ffce55",
-						pointBackgroundColor : "#ffce55",
-						pointBorderWidth : 3,
-						pointHoverRadius : 5,
-						pointHoverBackgroundColor : "#ffce55",
-						pointHoverBorderColor : "rgba(220,220,220,1)",
-						pointHoverBorderWidth : 3,
-						pointRadius : 1,
-						pointHitRadius : 10,
-						data : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-						spanGaps : false
-					} ]
-				},
-			    options: {
-			        scales: {
-			            yAxes: [{
-			                ticks: {
-			                	max: 100,
-			                    min: 0,
-			                    stepSize: 10
-			                }
-			            }]
-			        }
-			    }
+			W.ajax({
+				url : "${contextPath}/system/memery/load",
+				success:function(resultList){
+					var datasets = [];
+					for(var i = 0;i < resultList.length ; i++){
+						var borderColor = W.randomColor();
+						var pointBorderColor = W.randomColor();
+						
+						console.log(borderColor);
+						console.log(pointBorderColor);
+						var lineOpt = {
+							label : resultList[i].serverName,
+							fill : false,
+							lineTension : 0.1,
+							borderColor : borderColor,
+							borderCapStyle : 'butt',
+							borderDash : [],
+							borderDashOffset : 0.0,
+							pointBorderColor : pointBorderColor,
+							pointBorderWidth : 3,
+							pointHoverRadius : 5,
+							pointHoverBackgroundColor : pointBorderColor,
+							pointHoverBorderWidth : 3,
+							pointRadius : 1,
+							pointHitRadius : 10,
+							data : resultList[i].memerys,
+							spanGaps : false	
+						};
+						datasets.push(lineOpt);
+					}
+					var ctx = systemMemery.find("#memeryChart");
+					memeryChart = new Chart(ctx, {
+						type : 'line',
+						data : {
+							labels : resultList[0].times,
+							datasets : datasets
+						},
+					    options: {
+					        scales: {
+					            yAxes: [{
+					                ticks: {
+					                	max: 100,
+					                    min: 0,
+					                    stepSize: 10
+					                }
+					            }]
+					        }
+					    }
+					});
+					
+					connect();
+				}
 			});
 		}
 
-		function formatDate(date) {
-			var hour = date.getHours();
-			var minutes = date.getMinutes();
-			hout = hour < 10 ? "0" + hour : hour;
-			minutes = minutes < 10 ? "0" : minutes;
-			return hour + ":" + minutes;
-		}
-		
-		
 		return {
 			init : function(){
 				systemMemery = $("#system-memery");
-				connect();
-				setLabels();
 				initChart();
 			}
 		};

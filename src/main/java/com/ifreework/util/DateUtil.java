@@ -67,6 +67,20 @@ public class DateUtil {
 	public static String getDate() {
 		return sdfDay.format(new Date());
 	}
+	
+	
+	/**
+	 * 
+	 * 描述：：获取当前日期，格式：format
+	 * @param format 日期格式
+	 * @return 当前日期，格式：format
+	 * @return
+	 */
+	public static String getDate(String format) {
+		SimpleDateFormat fmt = new SimpleDateFormat(format);
+		return fmt.format(new Date());
+	}
+	
 
 	/**
 	 * @Title: getDate

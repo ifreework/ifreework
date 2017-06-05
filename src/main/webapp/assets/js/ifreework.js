@@ -68,6 +68,13 @@ W = function() {
 				return unescape(r[2]);
 			return null;
 		},
+		randomColor : function(transparent){//获取随机色码
+			transparent = transparent == null ? 1 : transparent;
+			var r = Math.floor(Math.random()*256);
+            var g = Math.floor(Math.random()*256);
+            var b = Math.floor(Math.random()*256);
+            return "rgba("+r+"," + g + "," + b + "," + transparent +")";
+		},
 
 		/**
 		 * AJAX 继承自jquery.ajax(opt)方法，jquery.ajax的API在该方法中均可使用
