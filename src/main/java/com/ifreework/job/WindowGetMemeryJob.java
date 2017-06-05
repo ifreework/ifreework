@@ -30,23 +30,25 @@ public class WindowGetMemeryJob implements Job{
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		CacheManager cacheManager = SpringManager.getCacheManager();
 		
-		String macAddress = WindowsInfoUtil.getMACAddress();
-		Double memeryScale = WindowsInfoUtil.getMemeryScale();
+		String macAddress = WindowsInfoUtil.getMACAddress(); //获取MAC地址
+		Double memeryScale = WindowsInfoUtil.getMemeryScale(); 
 		
 		
 		Cache<Object, Object> cache = cacheManager.getCache(REDIS_MEMERY_SCALE_CACHE);
+		
 		Map<String,Object> map =  (Map<String, Object>) cache.get(getKey(macAddress));
 		
 		if(map == null){
+			String serverName = WindowsInfoUtil.getServerName();//获取计算机名称
 			map = new HashMap<String,Object>();
-			map.put("serverName",WindowsInfoUtil.getServerName());
+			map.put("serverName",serverName);
 		}
 		
-		List<Object> datas = (List<Object>) map.get("datas");
+		List<Map<String,Object>> datas = (List<Map<String,Object>>) map.get("dataSet");
 		
 		if(datas == null){
-			datas = new ArrayList<Object>();
-			map.put("datas",datas);
+			datas = new ArrayList<Map<String,Object>>();
+			map.put("dataSet",datas);
 		}
 		
 		if( datas.size() >= 30 ){
@@ -57,7 +59,6 @@ public class WindowGetMemeryJob implements Job{
 		memeryMap.put(DateUtil.getDate("HH:mm"), memeryScale);
 		
 		datas.add(memeryMap);
-		
 		cache.put(getKey(macAddress), map);
 		
 	}
@@ -65,4 +66,18 @@ public class WindowGetMemeryJob implements Job{
 	private String getKey(String macAddress){
 		return "memery-" + macAddress;
 	}
+	
+	/**
+	 * 校验超时的缓存数据
+	 * @param list
+	 */
+//	private void validate(List<Map<String,Object>> list){
+//		for (Map<String, Object> map : list) {
+//			long time = (long) map.get("time");
+//			long nowTime = new Date().getTime();
+//			if(nowTime - time >= 1000 * 60 * 35 ){
+//				list.remove(map);
+//			}
+//		}
+//	}
 }

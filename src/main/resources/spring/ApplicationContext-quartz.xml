@@ -20,6 +20,7 @@
 	<bean class="com.ifreework.common.quartz.factory.QuartzJobFactory">
 		<constructor-arg name="jobs">
 			<list>
+			<!--  -->
 				<map>
 					<entry key="jobName" value="WindowsGetMemeryJob" />
 					<entry key="jobClass" value="com.ifreework.job.WindowGetMemeryJob" />

@@ -19,10 +19,10 @@
 					console.log(new Date());
 					console.log(data);
 					var resultList = $.parseJSON(data.body);
-					memeryChart.data.labels = resultList[0].times;
+					memeryChart.data.labels = resultList.labels;
 					
-					for(var i = 0; i < resultList.length; i++){
-						memeryChart.data.datasets[i].data = resultList[i].memerys;
+					for(var i = 0; i < resultList.dataSet.length; i++){
+						memeryChart.data.datasets[i].data = resultList.dataSet[i];
 					}
 					memeryChart.update();
 				});
@@ -33,16 +33,17 @@
 		function initChart() {
 			W.ajax({
 				url : "${contextPath}/system/memery/load",
-				success:function(resultList){
+				success:function(result){
+					
 					var datasets = [];
-					for(var i = 0;i < resultList.length ; i++){
+					for(var i = 0;i < result.dataSet.length ; i++){
 						var borderColor = W.randomColor();
 						var pointBorderColor = W.randomColor();
 						
 						console.log(borderColor);
 						console.log(pointBorderColor);
 						var lineOpt = {
-							label : resultList[i].serverName,
+							label : result.names[i],
 							fill : false,
 							lineTension : 0.1,
 							borderColor : borderColor,
@@ -56,7 +57,7 @@
 							pointHoverBorderWidth : 3,
 							pointRadius : 1,
 							pointHitRadius : 10,
-							data : resultList[i].memerys,
+							data : result.dataSet[i],
 							spanGaps : false	
 						};
 						datasets.push(lineOpt);
@@ -65,7 +66,7 @@
 					memeryChart = new Chart(ctx, {
 						type : 'line',
 						data : {
-							labels : resultList[0].times,
+							labels : result.labels,
 							datasets : datasets
 						},
 					    options: {

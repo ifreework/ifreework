@@ -20,42 +20,46 @@ import com.ifreework.util.DateUtil;
 public class WindowSendMemeryJob implements Job{
 	private static final String REDIS_MEMERY_SCALE_CACHE = "REDIS_MEMERY_SCALE_CACHE1";
 	
-	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		CacheManager cacheManager = SpringManager.getCacheManager();
-		Cache<Object, Object> cache = cacheManager.getCache(REDIS_MEMERY_SCALE_CACHE);
-		Map<Object,Object> data = new HashMap<Object,Object>();
-		List<Object> dataSets = new ArrayList<Object>();
+		Cache<String, Map<String,Object>> cache = cacheManager.getCache(REDIS_MEMERY_SCALE_CACHE);
+		Map<String,Object> memeryMap = new HashMap<String,Object>();
 		
+		List<String> labels = getTimes();  //获取时间点
+		List<List<Double>> dataSet = new ArrayList<List<Double>>();
 		
-		
-		List<String> labels = getTimes();
-		data.put("labels", labels);
-		
-		for (Object key : cache.keys()) {
-			Map<String,Object> cacheMap = (Map<String, Object>) cache.get(key);
-			List<Object> doubleData = new ArrayList<Object>();
-			List<Object> memeryList = (List<Object>) cacheMap.get("datas");
+		for (Map<String,Object> map : cache.values()) {
+			List<Map<String,Object>> datas = (List<Map<String,Object>>) map.get("dataSet");
 			
-			Map<Object,Object> param = new HashMap<Object,Object>();
-			
-			for (Object object : memeryList) {
-				param.putAll((Map<Object,Object>) object);
+			for (Map<String, Object> data : datas) {
+				memeryMap.putAll(data);
 			}
 			
-			for (String object : labels) {
-				Object val = param.get(object);
-				if(val == null){
+			List<Double> dataList = new ArrayList<Double>();
+			
+			for (String label : labels) {
+				Double m = (Double) memeryMap.get(label);
+				if(m == null){
+					dataList.add(0.0);
+				}else{
+					dataList.add(m);
 				}
 			}
-			
+			dataSet.add(dataList);
 		}
 		
-		WebsocketManager.send("/topic/memeryScale", JSON.toJSONString(data));
+		memeryMap.put("labels", labels);
+		memeryMap.put("dataSet", dataSet);
+		
+		WebsocketManager.send("/topic/memeryScale", JSON.toJSONString(memeryMap));
 	}
 	
-	
+	/**
+	 * 获取时间点
+	 * @return
+	 */
 	private List<String> getTimes(){
 		List<String> list = new ArrayList<String>();
 		Calendar cal = Calendar.getInstance();
