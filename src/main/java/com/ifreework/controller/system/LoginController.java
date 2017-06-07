@@ -83,7 +83,7 @@ public class LoginController extends BaseControllerSupport {
 		if (user != null) {
 			return gotoMainView();
 		} else {
-			mv.setViewName("/system/index/index");
+			mv.setViewName("/system/login/login");
 		}
 		return mv;
 	}
@@ -156,7 +156,7 @@ public class LoginController extends BaseControllerSupport {
 		HttpServletResponse res = this.getHttpServletResponse();
 		String imgPath = user.getImgPath();
 		if(StringUtil.isEmpty(imgPath) || !new File(imgPath).exists() ){
-			imgPath = FileUtil.getRootPath() + "resources/img/main/defeat.jpg";
+			imgPath = FileUtil.getRootPath() + "assets/img/main/defeat.jpg";
 		}
 		FileUtil.fileDownload(res, imgPath);
 		return null;

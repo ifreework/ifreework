@@ -104,6 +104,10 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-12">
 				<div class="widget">
+					<div class="widget-header ">
+			            <i class="widget-icon typcn typcn-chart-line sky"></i>
+			            <span class="widget-caption">服务器内存使用监控（%）</span>
+					</div>
 					<div class="widget-body" style="height: 500px;">
 						<canvas id="memeryChart" width="0" height="0"></canvas>
 					</div>
