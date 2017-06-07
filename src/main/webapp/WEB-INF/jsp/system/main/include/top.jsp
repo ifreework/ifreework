@@ -12,14 +12,16 @@
                 </a>
 			</div>
             <!-- /Navbar Barnd -->
-    	
+            
+    		<div class="sidebar-collapse" id="sidebar-collapse">
+				<i class="collapse-icon fa fa-bars"></i>
+            </div>
+            
     		<!-- Account Area and Settings --->
             <div class="navbar-header pull-right">
             	<div class="navbar-account">
             		<ul class="account-area">
-            			<li class="sidebar-collapse" id="sidebar-collapse">
-            				<i class="collapse-icon fa fa-bars"></i>
-            			</li>
+            			
             			<li>
             				 <a class=" dropdown-toggle" data-toggle="dropdown" title="Help" href="javascript:void(0)">
                              	<i class="icon fa fa-warning"></i>
