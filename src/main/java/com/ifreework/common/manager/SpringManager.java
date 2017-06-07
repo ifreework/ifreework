@@ -78,6 +78,6 @@ public class SpringManager {
 	 * @throws
 	 */
 	public static CacheManager getCacheManager(){
-		return getBean("cacheManager",RedisCacheManager.class);
+		return getBean("cacheManager",CacheManager.class);
 	}
 }

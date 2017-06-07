@@ -77,6 +77,13 @@ public class RedisManager implements Serializable {
 		jedisPool = new JedisPool(new JedisPoolConfig(), host, port);
 	}
 
+	/**
+	 * 描述：获取jedis
+	 * @return jedis
+	 */
+	public Jedis getJedis(){
+		return jedisPool.getResource();
+	}
 
 	/**
 	 * 

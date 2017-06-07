@@ -114,7 +114,7 @@ public class ResourceServiceImpl  implements ResourceService {
 		for(Authority auth : list){
 			Operation operation = operationMapper.getOperationById(auth.getOperationId());
 			auth.setResourceId(resource.getResourceId());
-			auth.setPk(resource.getPk() + ":" + operation.getPk());
+			auth.setPk(resource.getPk() + "-" + operation.getPk());
 			auth.setAuthorityName(resourceName + "-" + operation.getOperationName());
 			authorityMapper.add(auth);
 		}

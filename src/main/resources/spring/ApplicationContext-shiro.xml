@@ -15,16 +15,21 @@
            classpath:org/springframework/transaction/config/spring-tx-4.3.xsd">
 
     
+    
 	<!-- shiro redisManager -->
 	<bean id="redisManager" class="com.ifreework.common.redis.RedisManager">
-		<constructor-arg name="host" value="192.168.199.234"/>
+		<constructor-arg name="host" value="192.168.1.27"/>
 		<constructor-arg  name="port" value="6379"/>
 		<constructor-arg  name="expire" value="0"/>
 		<constructor-arg name="timeout" value="10000"/>
 		<constructor-arg name="password" value="123456"/>
 	</bean>
 	
-	
+	<!-- ehcache 
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml"/>
+    </bean>
+    -->
 	<!-- cacheManager -->
 	<bean id="cacheManager" class="com.ifreework.common.redis.RedisCacheManager">
 		<property name="redisManager" ref="redisManager" />
@@ -67,9 +72,9 @@
         <!-- 会话验证器调度时间 -->  
         <property name="sessionValidationInterval" value="180000" />  
   
-        <!-- session存储的实现 -->  
+        <!-- session存储的实现-->  
         <property name="sessionDAO" ref="redisSessionDAO" />  
-        
+         
         <!-- 定时检查失效的session -->  
         <property name="sessionValidationSchedulerEnabled" value="true" />  
         <property name="sessionIdCookieEnabled" value="true" />  

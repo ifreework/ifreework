@@ -1,9 +1,10 @@
 package com.ifreework.common.redis;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.cache.Cache;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ifreework.util.SerializeUtils;
 
+import redis.clients.jedis.Jedis;
 
 class RedisCache<K, V> implements Cache<K, V>, Serializable {
 
@@ -22,17 +24,12 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 
 	private RedisManager redisManager;
 	private String redisKey;
-	private Map<K, V> cache;
 
-	
-	
 	public RedisCache(RedisManager redisManager, String redisKey) {
 		super();
 		this.redisManager = redisManager;
 		this.redisKey = redisKey;
-		cache = new HashMap<K, V>();
 	}
-
 
 	public String getRedisKey() {
 		return redisKey;
@@ -43,21 +40,29 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 	 * @param key 键
 	 * @return   value 值，如果key == null ,则返回null
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public V get(K key) {
+		V value;
 		if (key == null) {
 			logger.debug("{} get value has the key null!", redisKey);
 			return null;
 		} else {
-			V value = cache.get(key);
-			logger.debug("{} get key: {} , value : {}!", redisKey, key, value);
+			Jedis jedis = redisManager.getJedis();
+			try {
+				byte[] bytes = jedis.hget(getByte(redisKey), SerializeUtils.serialize(key));
+				value = (V) SerializeUtils.deserialize(bytes);
+
+				logger.debug("{} get key: {} , value : {}!", redisKey, key, value);
+			} finally {
+				jedis.close();
+			}
 			return value;
 		}
 
 	}
 
 	/**
-	 * 
 	 * 描述：通过key:value形式存储值
 	 * @param key 键
 	 * @param value 值
@@ -65,9 +70,14 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 	 */
 	@Override
 	public V put(K key, V value) {
-		cache.put(key, value);
-		redisManager.set(getByte(redisKey), getByte(this));
-		logger.debug("{} put key : {} , value : {}", redisKey, key, value);
+		Jedis jedis = redisManager.getJedis();
+		try {
+			jedis.hset(getByte(redisKey), SerializeUtils.serialize(key), SerializeUtils.serialize(value));
+
+			logger.debug("{} put key : {} , value : {}", redisKey, key, value);
+		} finally {
+			jedis.close();
+		}
 		return value;
 	}
 
@@ -79,9 +89,17 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 	 */
 	@Override
 	public V remove(K key) throws CacheException {
-		V value = cache.remove(key);
-		logger.debug("{} remove key : {} , value : {}!", redisKey, key, value);
-		redisManager.set(getByte(redisKey), getByte(this));
+		V value;
+		Jedis jedis = redisManager.getJedis();
+		try {
+			value = get(key);
+			jedis.hdel(getByte(redisKey), SerializeUtils.serialize(key));
+
+			logger.debug("{} remove key : {} , value : {}!", redisKey, key, value);
+		} finally {
+			jedis.close();
+		}
+
 		return value;
 	}
 
@@ -90,9 +108,16 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 	 */
 	@Override
 	public void clear() throws CacheException {
-		cache.clear();
-		logger.debug("{} is cleared!", redisKey);
-		redisManager.set(getByte(redisKey), getByte(this));
+		Jedis jedis = redisManager.getJedis();
+		try {
+			Set<byte[]> keys = jedis.hkeys(getByte(redisKey));
+			for (byte[] key : keys) {
+				jedis.hdel(getByte(redisKey), key);
+			}
+			logger.debug("{} is cleared!", redisKey);
+		} finally {
+			jedis.close();
+		}
 	}
 
 	/**
@@ -102,7 +127,15 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 	 */
 	@Override
 	public int size() {
-		return cache.size();
+		int size;
+		Jedis jedis = redisManager.getJedis();
+		try {
+			size = jedis.hlen(getByte(redisKey)).intValue();
+		} finally {
+			jedis.close();
+		}
+
+		return size;
 	}
 
 	/**
@@ -110,9 +143,23 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 	 * @param 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<K> keys() {
-		return cache.keySet();
+		Jedis jedis = redisManager.getJedis();
+		Set<K> keys;
+		try {
+			Set<byte[]> byteKeys = jedis.hkeys(getByte(redisKey));
+			keys = new HashSet<K>();
+			for (byte[] b : byteKeys) {
+				K k = (K) SerializeUtils.deserialize(b);
+				keys.add(k);
+			}
+		} finally {
+			jedis.close();
+		}
+
+		return keys;
 	}
 
 	/**
@@ -120,13 +167,23 @@ class RedisCache<K, V> implements Cache<K, V>, Serializable {
 	 * @param 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<V> values() {
-		return cache.values();
-	}
-
-	public String toString() {
-		return cache.toString();
+		Collection<V> values;
+		Jedis jedis = redisManager.getJedis();
+		try {
+			List<byte[]> byteKeys = jedis.hvals(getByte(redisKey));
+			values = new ArrayList<V>();
+			for (byte[] b : byteKeys) {
+				V v = (V) SerializeUtils.deserialize(b);
+				values.add(v);
+			}
+		} finally {
+			jedis.close();
+		}
+		
+		return values;
 	}
 
 	/**
