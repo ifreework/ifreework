@@ -1,4 +1,4 @@
-package com.ifreework.job;
+package com.ifreework.job.system;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.ifreework.job;
+package com.ifreework.job.system;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +63,7 @@ public class WindowSendMemeryJob implements Job{
 	private List<String> getTimes(){
 		List<String> list = new ArrayList<String>();
 		Calendar cal = Calendar.getInstance();
-		for(int i = 0 ;i <= 30 ; i++){
+		for(int i = 0 ;i < 30 ; i++){
 			cal.add(Calendar.MINUTE, -1);
 			String time = DateUtil.getDate(cal.getTime(), "HH:mm");
 			list.add(0, time);

@@ -39,9 +39,6 @@
 					for(var i = 0;i < result.dataSet.length ; i++){
 						var borderColor = W.randomColor();
 						var pointBorderColor = W.randomColor();
-						
-						console.log(borderColor);
-						console.log(pointBorderColor);
 						var lineOpt = {
 							label : result.names[i],
 							fill : false,
