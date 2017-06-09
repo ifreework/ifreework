@@ -63,7 +63,7 @@ public class UserController extends BaseControllerSupport {
 	 * @return   
 	 * @throws
 	 */
-	@RequestMapping("/add.htm")
+	@RequestMapping("/add")
 	public ModelAndView add() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("/system/user/add");
@@ -115,7 +115,7 @@ public class UserController extends BaseControllerSupport {
 	 * @param userName
 	 * @return
 	 */
-	@RequestMapping(value = "/validate.json")
+	@RequestMapping(value = "/validate")
 	@ResponseBody
 	public PageData validate() {
 		return userService.validateUserName(this.getPageData());
