@@ -12,7 +12,6 @@ package com.ifreework.common.manager;
 import org.apache.shiro.cache.CacheManager;
 import org.springframework.web.context.ContextLoader;
 
-import com.ifreework.common.redis.RedisCacheManager;
 
 /**
  * 
