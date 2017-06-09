@@ -126,7 +126,7 @@
 			<mvc:exclude-mapping path="/system/attachment/download"/>  
 			<mvc:exclude-mapping path="/error/**"/>  
 			<mvc:exclude-mapping path="/main"/>  
-			<mvc:exclude-mapping path="/websocket"/>  
+			<mvc:exclude-mapping path="/websocket/**"/>  
 			<mvc:exclude-mapping path="/error/**"/>  
 			<bean class="com.ifreework.common.shiro.interceptor.AuthHandlerInterceptor">
 				<property name="unAuthorizedUrl" value="/error/600"></property>
@@ -141,7 +141,9 @@
 			<mvc:exclude-mapping path="/system/attachment/download"/>  
 			<mvc:exclude-mapping path="/error/**"/>  
 			<mvc:exclude-mapping path="/main"/>  
-			<mvc:exclude-mapping path="/websocket"/>  
+			<mvc:exclude-mapping path="/websocket/**"/>  
+			<mvc:exclude-mapping path="/system/loginLog/**"/>  
+			<mvc:exclude-mapping path="/system/requestLog/**"/>  
 			<mvc:exclude-mapping path="/error/**"/>  
 			<bean class="com.ifreework.common.shiro.interceptor.RequestLogHandlerInterceptor">
 				<property name="requestLogManager" ref="requestLogService" />

@@ -7,10 +7,10 @@
 			<div class="navbar-header pull-left">
 				<span class="navbar-brand">
 					<small>
-                        <img alt="" src="${imagePath}/ui/logo.png">
+                        <img alt="" src="${imagePath}/system/Logo_48px.png">
                     </small>
                     <span class="logo-text">
-                    	山东省公共服务系统监控平台
+                    	iFreeWork权限管理平台
                     </span>
                 </span>
 			</div>

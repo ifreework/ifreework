@@ -40,7 +40,7 @@
 <!-- -->
 <script src="${ jsPath }/cloud.js"></script> 
 <!-- 部分自定义方法 -->
-<script src="${ jsPath }/base.js"></script>
+<script src="${ jsPath }/ifreework.js"></script>
 <script type="text/javascript" src="${ jsPath }/browser.js"></script>
 
 <script>
@@ -70,7 +70,6 @@ $(function(){
 				url : "${contextPath}/login",
 				data:{username:$("#username").val(),password:$("#password").val()},
 				success : function(result) {
-					console.log(result);
 					if(result.result == SUCCESS){
 						changeCookie($("#cookieBox").get(0).checked);
 						location.href="${contextPath}/main"
@@ -135,7 +134,7 @@ $(function(){
 
 
 <div class="logintop">    
-    <span>欢迎登录山东省公共安全服务系统监控平台</span>    
+    <span>欢迎登录iFreeWork权限管理平台</span>    
     <ul>
     <li><a href="javascript:void(0);">帮助</a></li>
     <li><a href="javascript:void(0);">关于</a></li>
@@ -145,8 +144,8 @@ $(function(){
     <div class="loginbody">
     
     <span class="systemlogo">
-    	<span class="logo-img"><img alt="" src="${imagePath }/ui/loginlogo.png"></span>
-    	<span class="logo-text">山东省公共安全服务系统监控平台</span></span> 
+    	<span class="logo-img"><img alt="" src="${imagePath}/system/Logo_48px.png"></span>
+    	<span class="logo-text">iFreeWork权限管理平台</span></span> 
        
     <div class="loginbox">
     
@@ -168,7 +167,7 @@ $(function(){
     
     </div>
     
-    <div class="loginbm">©2017  万达信息股份有限公司</div>
+    <div class="loginbm">©2017  735789026@qq.com</div>
     
 </body>
 
