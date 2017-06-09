@@ -63,7 +63,8 @@
 	var FAILED = "<%=Constant.FAILED %>"; //前后台失败标志
 	
 	$().ready(function(){
-		$("#page-body").load("${contextPath}/system/user");
+		$("#page-body").load("${contextPath}/monitor/message/business");
+		$("#sidebar-collapse").click();
 	});
 </script>
 

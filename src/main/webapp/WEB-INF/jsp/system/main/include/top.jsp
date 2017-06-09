@@ -5,11 +5,14 @@
     	<div class="navbar-inner">
     	 	<!-- Navbar Barnd -->
 			<div class="navbar-header pull-left">
-				<a href="javascript:void(0)" class="navbar-brand">
+				<span class="navbar-brand">
 					<small>
                         <img alt="" src="${imagePath}/ui/logo.png">
                     </small>
-                </a>
+                    <span class="logo-text">
+                    	山东省公共服务系统监控平台
+                    </span>
+                </span>
 			</div>
             <!-- /Navbar Barnd -->
             
