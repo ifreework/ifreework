@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ifreework.mapper.attendance.LeaveBillMapper">
+	<sql id="leaveBillColumns">
+		LEAVE_BILL_ID,
+		USER_ID,
+		START_TIME,
+		END_TIME,
+		LEAVE_TYPE,
+		LEAVE_CAUSE,
+		STATUS,
+		ATTACHMENT_ID
+	</sql>
+
+
+
+	<resultMap type="com.ifreework.entity.attendance.LeaveBill"
+		id="leaveBillMap">
+		<id column="LEAVE_BILL_ID" property="leaveBillId" />
+		<result column="USER_ID" property="userId" />
+		<result column="START_TIME" property="startTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="LEAVE_TYPE" property="leaveType" />
+		<result column="LEAVE_CAUSE" property="leaveCause" />
+		<result column="STATUS" property="status" />
+		<result column="ATTACHMENT_ID" property="attachmentId" />
+	</resultMap>
+
+
+
+	<select id="queryPageList" parameterType="pd" resultMap="leaveBillMap">
+		select
+		<include refid="leaveBillColumns" />
+		from ATT_LEAVE_BILL where USABLE_STATUS = '1'
+		<if test="userId != null and userId != ''">
+			and USER_ID = #{userId}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and START_TIME &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and END_TIME &lt;= #{endTime}
+		</if>
+		<if test="leaveType != null and leaveType != ''">
+			and LEAVE_TYPE = #{leaveType}
+		</if>
+		<if test="status != null and status != ''">
+			and STATUS = #{status}
+		</if>
+	</select>
+	
+	<insert id="add" parameterType="com.ifreework.entity.attendance.LeaveBill">
+		<selectKey keyProperty="leaveBillId" resultType="String"
+			order="BEFORE">
+			select sys_guid() from dual
+		</selectKey>
+
+		insert into ATT_LEAVE_BILL (
+		<include refid="leaveBillColumns" />
+		)
+		values
+		(
+		#{ leaveBillId,jdbcType=VARCHAR },
+		#{ userId,jdbcType=VARCHAR
+		},
+		#{ startTime,jdbcType=DATE },
+		#{ endTime,jdbcType=DATE },
+		#{
+		leaveType,jdbcType=VARCHAR },
+		#{ leaveCause,jdbcType=VARCHAR },
+		#{
+		status,jdbcType=VARCHAR },
+		#{ attachmentId,jdbcType=VARCHAR }
+		)
+	</insert>
+
+	<update id="update" parameterType="com.ifreework.entity.attendance.LeaveBill">
+		update ATT_LEAVE_BILL
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="userId != null ">
+				USER_ID = #{userId},
+			</if>
+			<if test="startTime != null ">
+				START_TIME = #{startTime},
+			</if>
+			<if test="endTime != null ">
+				END_TIME = #{endTime},
+			</if>
+			<if test="leaveType != null ">
+				LEAVE_TYPE = #{leaveType},
+			</if>
+			<if test="leaveCause != null ">
+				LEAVE_CAUSE = #{leaveCause},
+			</if>
+			<if test="status != null ">
+				STATUS = #{status},
+			</if>
+			<if test="attachmentId != null ">
+				ATTACHMENT_ID = #{attachmentId}
+			</if>
+		</trim>
+		where
+		<if test="leaveBillId != null ">
+			LEAVE_BILL_ID = #{leaveBillId}
+		</if>
+	</update>
+
+	<delete id="delete" parameterType="string">
+		delete from ATT_LEAVE_BILL
+		where LEAVE_BILL_ID = #{leaveBillId}
+	</delete>
+</mapper>
