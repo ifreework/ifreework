@@ -38,7 +38,7 @@
 <!-- jquery,bootstrap插件 -->
 <script src="${ jsPath }/bootstrap/bootbox/bootbox.js"></script>
 <!-- -->
-<script src="${ jsPath }/cloud.js"></script> 
+<script src="${ jsPath }/cloud.js"></script>  
 <!-- 部分自定义方法 -->
 <script src="${ jsPath }/ifreework.js"></script>
 <script type="text/javascript" src="${ jsPath }/browser.js"></script>

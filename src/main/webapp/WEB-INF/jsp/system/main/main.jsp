@@ -36,11 +36,13 @@
 <script src="${ jsPath }/bootstrap/bootstrap.min.js"></script>
 
 <!-- jquery,bootstrap插件 -->
-
+<!-- form校验 -->
 <script src="${ jsPath }/bootstrap/validation/bootstrapValidator.js"></script>
 <script src="${ jsPath }/bootstrap/validation/i18n/zh_CN.js"></script>
 
+<!-- 日期控件 -->
 <script src="${ jsPath }/bootstrap/datetime/bootstrap-datepicker.js"></script>
+<script src="${ jsPath }/bootstrap/datetime/bootstrap-timepicker.js"></script>
 
 <script src="${ jsPath }/bootstrap/select2/select2.js"></script>
 <script src="${ jsPath }/bootstrap/textarea/jquery.autosize.js"></script>

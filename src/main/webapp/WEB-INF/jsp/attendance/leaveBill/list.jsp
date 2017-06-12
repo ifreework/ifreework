@@ -16,7 +16,7 @@ attendance.leaveBill = function(){
 			serverSide:true, //是否启用服务器模式
 			pageLength: 100 ,
 			autoWidth: false,
-			order:[[5,'desc']],
+			order:[[1,'desc']],
 			ajax:{
 				url:"${contextPath}/attendance/leaveBill/query",
 				data: function ( d ) {
@@ -70,8 +70,14 @@ attendance.leaveBill = function(){
 	    } );
 	}
 	
+	//查询
 	function query(){
 		dataTable.ajax.reload();
+	}
+	
+	//新增
+	function add(){
+		system.main.open("${contextPath}/attendance/leaveBill/add","新建请假申请");
 	}
 	
 	return {
@@ -79,6 +85,7 @@ attendance.leaveBill = function(){
 			attendanceLeaveBill = $("#attendance-leaveBill");
 			initTable();
 			attendanceLeaveBill.find("#query").on("click",query);
+			attendanceLeaveBill.find("#add").on("click",add);
 		} 
 	}
 }();
@@ -98,8 +105,9 @@ $().ready(function(){
 				<div class="col-sm-2">
 					<input type="text" class="form-control" name="username" placeholder="用户名">
 				</div>
-				<div class="col-sm-1">
+				<div class="col-sm-2">
 					<a id="query" class="btn btn-default" href="javascript:void(0);"><i class="fa fa-search"></i> 查询</a>
+					<a id="add" class="btn btn-sky" href="javascript:void(0);"><i class="fa fa-plus"></i> 添加</a>
 				</div>
 			   </div>
 			</form>
