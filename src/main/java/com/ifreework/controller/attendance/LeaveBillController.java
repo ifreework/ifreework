@@ -3,13 +3,17 @@ package com.ifreework.controller.attendance;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ifreework.common.controller.BaseControllerSupport;
 import com.ifreework.common.entity.PageData;
+import com.ifreework.entity.attendance.LeaveBill;
+import com.ifreework.entity.system.User;
 import com.ifreework.service.attendance.LeaveBillService;
+import com.ifreework.util.StringUtil;
 
 /**
  * 
@@ -40,6 +44,19 @@ public class LeaveBillController extends BaseControllerSupport {
 	}
 	
 	/**
+	 * 
+	 * 描述：跳转到新增页面
+	 * @return 
+	 */
+	@RequestMapping("/add")
+	public ModelAndView add() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/attendance/leaveBill/edit");
+		return mv;
+	}
+	
+	
+	/**
 	 * 描述：查询我的请假信息
 	 * @return 
 	 * @return
@@ -49,6 +66,19 @@ public class LeaveBillController extends BaseControllerSupport {
 	public PageData query(){
 		PageData pd = this.getPageData();
 		pd = leaveBillService.queryPageList(pd);
+		return pd;
+	}
+	
+	@RequestMapping(value = "/save")
+	@ResponseBody
+	public PageData save(@ModelAttribute("leaveBill") LeaveBill leaveBill) {
+		PageData pd;
+		if (StringUtil.isEmpty(leaveBill.getLeaveBillId())) {
+			pd = leaveBillService.add(leaveBill);
+		} else {
+			pd = leaveBillService.update(leaveBill);
+		}
+
 		return pd;
 	}
 }

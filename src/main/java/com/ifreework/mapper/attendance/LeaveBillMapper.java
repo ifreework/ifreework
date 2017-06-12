@@ -1,10 +1,8 @@
 package com.ifreework.mapper.attendance;
 import java.util.List;
-import java.util.Map;
 
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.attendance.LeaveBill;
-import com.ifreework.entity.system.Attachment;
 
 public interface LeaveBillMapper  {
 	public List<LeaveBill> queryPageList(PageData pd);

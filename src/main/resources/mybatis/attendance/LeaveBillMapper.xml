@@ -32,24 +32,28 @@
 	<select id="queryPageList" parameterType="pd" resultMap="leaveBillMap">
 		select
 		<include refid="leaveBillColumns" />
-		from ATT_LEAVE_BILL where USABLE_STATUS = '1'
-		<if test="userId != null and userId != ''">
-			and USER_ID = #{userId}
-		</if>
-		<if test="startTime != null and startTime != ''">
-			and START_TIME &gt;= #{startTime}
-		</if>
-		<if test="endTime != null and endTime != ''">
-			and END_TIME &lt;= #{endTime}
-		</if>
-		<if test="leaveType != null and leaveType != ''">
-			and LEAVE_TYPE = #{leaveType}
-		</if>
-		<if test="status != null and status != ''">
-			and STATUS = #{status}
-		</if>
+		from ATT_LEAVE_BILL
+		<where>
+			<trim prefixOverrides="and">
+				<if test="userId != null and userId != ''">
+					and USER_ID = #{userId}
+				</if>
+				<if test="startTime != null and startTime != ''">
+					and START_TIME &gt;= #{startTime}
+				</if>
+				<if test="endTime != null and endTime != ''">
+					and END_TIME &lt;= #{endTime}
+				</if>
+				<if test="leaveType != null and leaveType != ''">
+					and LEAVE_TYPE = #{leaveType}
+				</if>
+				<if test="status != null and status != ''">
+					and STATUS = #{status}
+				</if>
+			</trim>
+		</where>
 	</select>
-	
+
 	<insert id="add" parameterType="com.ifreework.entity.attendance.LeaveBill">
 		<selectKey keyProperty="leaveBillId" resultType="String"
 			order="BEFORE">

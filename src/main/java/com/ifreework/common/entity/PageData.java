@@ -1,4 +1,3 @@
-
 /**    
  * 文件名：PageData.java    
  *    
@@ -13,16 +12,15 @@ package com.ifreework.common.entity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.ifreework.util.ReflectUtil;
 import com.ifreework.util.StringUtil;
@@ -37,59 +35,65 @@ import com.ifreework.util.StringUtil;
  * @version 1.0
  */
 @SuppressWarnings("rawtypes")
-public class PageData extends HashMap implements Map  {
-	
-	/**    
-	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）    
-	 *    
-	 * @version 1.0    
-	 */    
-	
+public class PageData extends HashMap implements Map {
+
+
 	private static final long serialVersionUID = 4182182477954304064L;
 
-	private static final Logger log = Logger.getLogger(PageData.class);
-	
+	private static final Logger log = LoggerFactory.getLogger(PageData.class);
+
 	private static final String[] COLUMN_FIELDS = { "data", "name" };
 
 	/**
-	 * 描述：获取分页事，每页显示多少条数据 @Title: getLength @param @return @throws
+	 * 
+	 * 描述：返回分页每页显示条数
+	 * @return 
 	 */
 	public Integer getLength() {
 		String length = (String) this.get("length");
-		if(StringUtil.isEmpty(length) ){
+		if (StringUtil.isEmpty(length)) {
 			return null;
 		}
-		return Integer.parseInt(length) < 0 ? 0 : Integer.parseInt(length)  ;
+		return Integer.parseInt(length) < 0 ? 0 : Integer.parseInt(length);
 	}
 
 	/**
-	 * 
-	 * 描述：设置分页时，每页的显示的数据条数 @Title: setLength @param @return @throws
+	 * 描述：设置分页查询每页显示条数
+	 * @param length 
+	 * @return
 	 */
 	public void setLength(Integer length) {
 		this.put("length", length);
 	}
 
 	/**
-	 * 获取页码 描述： @Title: getStart @param @return @throws
+	 * 
+	 * 描述：获取分页查询页码
+	 * @return 
+	 * @return
 	 */
 	public Integer getStart() {
 		String start = (String) this.get("start");
-		if(StringUtil.isEmpty(start) ){
+		if (StringUtil.isEmpty(start)) {
 			return null;
 		}
-		return Integer.parseInt(start) == 0 ? 1 : Integer.parseInt(start)    ;
+		return Integer.parseInt(start) == 0 ? 1 : Integer.parseInt(start);
 	}
 
 	/**
-	 * 描述：设置页码，从1开始 @Title: setStart @param start 当前页数 @return @throws
+	 * 
+	 * 描述：设置分页查询页码，从1开始
+	 * @param start 
+	 * @return
 	 */
 	public void setStart(Integer start) {
-		this.put("start", start == 0 ? 1 : start);
+		this.put("start", start <= 0 ? 1 : start);
 	}
 
 	/**
-	 * 描述：获取查询总数，分页中使用 @Title: getRecordsFiltered @param @return @throws
+	 * 
+	 * 描述：分页查询时，获取数据总条数
+	 * @return 
 	 */
 	public long getRecordsFiltered() {
 		Long recordsFiltered = (Long) this.get("recordsFiltered");
@@ -100,15 +104,19 @@ public class PageData extends HashMap implements Map  {
 	}
 
 	/**
-	 * 
-	 * 描述：设置查询总数 @Title: setRecordsFiltered @param @return @throws
+	 * 描述：分页查询时，设置分页查询结果总数
+	 * @param i 查询结果总条数
+	 * @return
 	 */
 	public void setRecordsFiltered(long i) {
 		this.put("recordsFiltered", i);
 	}
 
 	/**
-	 * 描述：设置分页信息 @Title: setPagination @param @return @throws
+	 * 
+	 * 描述：设置分页查询结果信息
+	 * @param list 同时实现page接口的List
+	 * @return
 	 */
 	public void setPagination(List list) {
 		if (list instanceof Page) {
@@ -123,30 +131,36 @@ public class PageData extends HashMap implements Map  {
 	}
 
 	/**
-	 * 
-	 * 描述：获取返回结果 @Title: getResult @param @return @throws
+	 * 描述：返回结果
+	 * @return 
 	 */
 	public String getResult() {
 		return this.getString("result");
 	}
 
 	/**
-	 * 设置返回结果 描述： @Title: setResult @param @return @throws
+	 * 
+	 * 描述：设置返回结果
+	 * @param result 
+	 * @return
 	 */
 	public void setResult(Object result) {
 		this.put("result", result.toString());
 	}
 
 	/**
-	 * 
-	 * 描述：获取描述信息 @Title: getMsg @param @return @throws
+	 * 描述：描述信息
+	 * @return
 	 */
 	public String getMsg() {
 		return this.getString("msg");
 	}
 
 	/**
-	 * 描述：设置描述信息 @Title: setMsg @param @return @throws
+	 * 
+	 * 描述：设置描述信息
+	 * @param msg  描述信息
+	 * @return
 	 */
 	public void setMsg(String msg) {
 		this.put("msg", msg);
@@ -154,93 +168,110 @@ public class PageData extends HashMap implements Map  {
 
 	/**
 	 * 
-	 * 描述：获取返回数据 @Title: getData @param @return @throws
+	 * 描述：返回数据
+	 * @return
 	 */
 	public Object getData() {
 		return this.getString("data");
 	}
 
 	/**
-	 * 设置返回数据 描述： @Title: setData @param @return @throws
+	 * 描述：设置返回数据
+	 * @param data 返回数据
+	 * @return
 	 */
 	public void setData(Object data) {
 		this.put("data", data);
 	}
 
-	Map map = null;
+	Map<String, Object> map = null;
 	HttpServletRequest request;
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * 初始化PageData，并将request中的参数放入pagedata对象中    
+	 * @param request 页面请求的request
+	 */
 	public PageData(HttpServletRequest request) {
 		this.request = request;
-		Map properties = request.getParameterMap();
-		Map returnMap = new HashMap();
-		Iterator entries = properties.entrySet().iterator();
-		Map.Entry entry;
-		String name = "";
-		String value = "";
-		while (entries.hasNext()) {
-			entry = (Map.Entry) entries.next();
-			name = (String) entry.getKey();
-			Object valueObj = entry.getValue();
-			if (null == valueObj) {
-				value = "";
-			} else if (valueObj instanceof String[]) {
-				String[] values = (String[]) valueObj;
-				for (int i = 0; i < values.length; i++) {
-					value = values[i] + ",";
-				}
-				value = value.substring(0, value.length() - 1);
-			} else {
-				value = valueObj.toString();
-			}
-			returnMap.put(name, value);
+		map = setParameters(request);
+		if(map.get("length") != null){
+			map.put("length", getLength());
 		}
-		setColumns(returnMap);
-		setOrder(returnMap);
-		map = returnMap;
-		
-		returnMap.put("length", getLength());
-		log.info("The page param is " + JSON.toJSONString(map));
-	}
+		setColumns(map);
+		setOrder(map);
+		log.debug("The page param is {} " , map);
+	} 
 
 	/**
 	 * 
-	 * 描述：初始化入参中的字段内容 @Title: setColumns @param @return @throws
+	 * 描述：将request中的parameter放入到map中
+	 * @param request
+	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	private void setColumns(Map map) {
+	private Map<String, Object> setParameters(HttpServletRequest request) {
+		Map<String, String[]> properties = request.getParameterMap();
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		for (String key : properties.keySet()) {
+			String[] values = properties.get(key);
+			StringBuffer valueStr = new StringBuffer();
+			for (int i = 0; i < values.length; i++) {
+				if (i == 0) {
+					valueStr = valueStr.append(values[i]);
+				} else {
+					valueStr.append(",").append(values[i]);
+				}
+			}
+			returnMap.put(key, valueStr.toString());
+		}
+		return returnMap;
+	}
+
+
+	/**
+	 * 描述：设置页面表格查询中传过来的columns信息
+	 * @param map 
+	 * @return
+	 */
+	private void setColumns(Map<String, Object> map) {
 		List<Column> columns = new ArrayList<Column>();
-		map.put("columns", columns);
 		try {
-			for (int i = 0; i > -1; i++) {
-				Column column = columns.size() > i ? columns.get(i) : new Column();
-				columns.add(i, column);
+			int i = 0;//页面传过来的column的下标
+			boolean isBreak = false; //是否结束循环
+			while(!isBreak){
+				Column column = columns.size() > i ? columns.get(i) : new Column();  //防止游标越界
 				for (String columnField : COLUMN_FIELDS) {
 					String key = "columns[" + i + "][" + columnField + "]";
 					Object columnValue = map.remove(key);
 					if (columnValue == null) {
-						columns.remove(i);
-						return;
+						isBreak = true;
+						break;
 					} else {
 						ReflectUtil.setValueByFieldName(column, columnField, columnValue);
 					}
 				}
+				if(!isBreak){
+					columns.add( column);
+					i++;
+				}
 			}
 
+			if(!columns.isEmpty()){
+				map.put("columns", columns);
+			}
 		} catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.error("Column set value error!" + e.getMessage());
+			log.error("Column set value error! {}" , e);
 		}
 	}
 
 	/**
 	 * 
-	 * 描述：设置字段的排序规则 @Title: setOrder @param @return @throws
+	 * 描述：设置查询时字段的排序规则
+	 * @param map 
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private void setOrder(Map map) {
+	private void setOrder(Map<String, Object> map) {
 		List<Column> columns = (List<Column>) map.get("columns");
 		if (columns != null && !columns.isEmpty()) {
 			for (int i = 0; i > -1; i++) {
@@ -268,7 +299,7 @@ public class PageData extends HashMap implements Map  {
 	}
 
 	public PageData() {
-		map = new HashMap();
+		map = new HashMap<String,Object>();
 	}
 
 	@Override
@@ -287,10 +318,9 @@ public class PageData extends HashMap implements Map  {
 		return (String) get(key);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object put(Object key, Object value) {
-		return map.put(key, value);
+		return map.put((String) key, value);
 	}
 
 	@Override

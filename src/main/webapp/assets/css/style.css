@@ -32,7 +32,7 @@ h2{font-weight:normal;}
 .logintop ul li a{color:#afc5d2;}
 .logintop ul li a:hover{color:#fff;}
 .loginbody{background:url(../../assets/img/ui/loginbg3.png) no-repeat center center; width:100%; height:585px; overflow:hidden; position:absolute; top:47px;}
-.systemlogo{text-align:center; width:100%; height:71px; margin-top:75px;}
+.systemlogo{text-align:center; width:100%;height: 30px;margin-top: 116px;}
 
 .systemlogo .logo-img{
 	display: inline-block;
@@ -40,16 +40,17 @@ h2{font-weight:normal;}
 .systemlogo .logo-text{
 	display: inline-block;
     font-size: 36px;
-    color: transparent;
-    background-color: #efe5e5;
-    text-shadow: rgba(255,255,255,0.5) 0 5px 6px, rgba(255,255,255,0.2) 1px 3px 3px;
-    -webkit-background-clip: text;
+    background-color: #efe5e5; 
+    text-shadow: rgba(255,255,255,0.5) 0 5px 6px, rgba(255,255,255,0.2) 1px 3px 3px; 
+    -webkit-background-clip: text; 
     height: 40px;
     padding-top: 10px;
     font-weight: 600;
     vertical-align: middle;
     margin-top: -10px;
     padding-left: 10px;
+    color: rgb(255, 255, 255);
+    -webkit-text-stroke: 1px green;
 }
 
 .loginbox{width:692px; height:336px; background:url(../../assets/img/ui/logininfo.png) no-repeat; margin-top:30px;}

@@ -1,4 +1,7 @@
 /******************************* navbar ********************************************/
+.navbar{
+	z-index: 5;
+}
 .navbar .navbar-inner{
 	background: url(../../img/ui/topbg.gif) repeat-x;
 }
@@ -14,7 +17,7 @@
 	font-weight: bold;
     line-height: 40px;
     color: rgb(255, 255, 255);
-    -webkit-text-stroke: 1px black;
+    -webkit-text-stroke: 1px blue;
     letter-spacing: 0.04em;
     vertical-align: top;
 }
