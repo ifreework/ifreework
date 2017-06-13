@@ -1,6 +1,10 @@
 package com.ifreework.entity.attendance;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.ifreework.entity.system.Attachment;
+import com.ifreework.entity.system.User;
 
 public class LeaveBill implements Serializable{
 	
@@ -14,9 +18,35 @@ public class LeaveBill implements Serializable{
 	private java.lang.String leaveCause;
 	private java.lang.String status;
 	private java.lang.String attachmentId;
+	private Double leaveDays;
+	
+	
+	
+	private User user;
+	private List<Attachment> attachments;
 	//columns END
+	
 	public java.lang.String getLeaveBillId() {
 		return leaveBillId;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public List<Attachment> getAttachments() {
+		return attachments;
+	}
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
+	}
+	public Double getLeaveDays() {
+		return leaveDays;
+	}
+	public void setLeaveDays(Double leaveDays) {
+		this.leaveDays = leaveDays;
 	}
 	public void setLeaveBillId(java.lang.String leaveBillId) {
 		this.leaveBillId = leaveBillId;

@@ -21,9 +21,6 @@ iframe {
 a{
 	color: #000000;
 }
-a:hover {
-	text-decoration: none !important;
-}
 
 i {
 	font-style: normal;
@@ -92,6 +89,9 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 
 /******************************** dialog ***************************************************/
+.modal-backdrop{
+	background: #000;
+}
 .modal-body{
 	padding: 0px;
 }
@@ -101,6 +101,62 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 .modal-body .container-footer{
 	padding: 7px 0;
 	background: #f5f5f5;
+}
+
+/******************************** dialog-image ***************************************************/
+.modal-image{
+	text-align: center;
+}
+.modal-image .modal-dialog{
+	width: auto;
+	max-width: 800px;
+	display: inline-block;
+	overflow: auto;
+}
+.modal-image .modal-dialog .modal-content{
+	background: rgba(255, 255, 255, 0);
+}
+
+.modal-image  .modal-content .close {
+    font-size: 26px;
+    top: 15px;
+    right:30px;
+    position: relative;
+    z-index: 999;
+    background: #fff;
+    opacity: 0.5;
+    border-radius: 20px;
+    height: 20px;
+    line-height: 21px;
+    width: 20px;
+}
+.modal-image .modal-dialog .modal-content .bootbox-body{
+	max-height: 600px;
+	overflow: auto;
+	padding-right: 15px;
+	margin-left: 25px;
+}
+
+.modal-image .modal-dialog .modal-content .bootbox-body::-webkit-scrollbar {
+	width: 5px;
+	background:rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+}
+.modal-image .modal-dialog .modal-content .bootbox-body::-webkit-scrollbar-thumb{
+	background:rgba(255, 255, 255, 0.5);
+	border-radius: 5px;
+}
+
+.modal-image .modal-dialog .modal-content .bootbox-body::-webkit-scrollbar-button    {
+	display: none;
+}
+
+
+
+@media only screen and (max-width: 500px) {
+	.page-breadcrumbs .breadcrumbs-buttons{
+		display: none;
+	}
 }
 
 /************************************* select2 *******************************************************/
@@ -279,6 +335,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 .attachments-body ul li>div img {
 	width:45px;
+	height:50px;
 	position: relative;
 	display: block;
 	line-height: 1;
@@ -467,4 +524,17 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 .detail-container .detail-body .detail-card .text{
 	padding: 0 15px;
+}
+
+
+
+/*************************** datatable ************************************/
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td{
+	vertical-align: middle;
+}
+.table a:NOT(.btn){
+	color: #428bca;
+}
+.table a:NOT(.btn):HOVER{
+	color: #2a6496;
 }

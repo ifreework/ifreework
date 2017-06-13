@@ -6,6 +6,7 @@ import com.ifreework.entity.attendance.LeaveBill;
 
 public interface LeaveBillService {
 	public PageData queryPageList(PageData pd);
+	public LeaveBill getLeaveBill(String leaveBillId);
 	public PageData add(LeaveBill leaveBill);
 	public PageData update(LeaveBill leaveBill);
 	public PageData delete(String leaveBillId);

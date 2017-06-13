@@ -38,36 +38,97 @@ attendance.leaveBill = function(){
 	            name : "end_time",  
 	            title : "结束时间",  
 	            defaultContent : "" 
-	        },{  
-	        	data : "browser",  
+	        }, {  
+	        	data : "leaveDays",  
 	            title : "请假天数",  
 	            defaultContent : "",
-	            orderable:false,
-	            render:function( data, type, row, meta ){
-	            	return data + " (" + row.browserVersion + ")"
-	            }
-	        },{  
+	            orderable:false
+	        }, {  
 	        	data : "leaveCause",  
 	            title : "请假原因",  
 	            defaultContent : "",
 	            orderable:false
-	        },{  
+	        }, {  
 	        	data : "status",  
 	            title : "审批状态",  
 	            defaultContent : "",
 	            orderable:false
 	        },{  
-	        	data : "attachmentId",  
-	        	name : "attachment_Id",
+	        	data : "attachments",  
 	            title : "附件",  
 	            defaultContent : "",
-	            orderable:false
+	            orderable:false,
+	            render:function( data, type, row, meta ){
+	            	console.log(data);
+	            	var attStr = "";
+	            	for(var i = 0;i < data.length;i++){
+	            		var html = '<a href="javascript:void(0)" class="tab-attachment" data-attachmentid="' + data[i].attachmentId + '">' + data[i].attachmentName + '</a>';
+	            		attStr += html;
+	            		if(i < data.length - 1 ){
+	            			attStr += "<br />";
+	            		}
+	            	}
+	            	return attStr;
+	            }
+	        },{  
+	        	title : "操作",  
+	        	data : "status",  
+	        	defaultContent : "", 
+	        	searchable:false,
+	        	orderable:false,
+	        	className : "text-center"  ,
+	        	render:function( data, type, row, meta ){
+	        		var html = '<a class="btn btn-view btn-sky btn-xs icon-only" title="查看详情" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-info "></i></a>';
+	        		if(data == '0'){
+	        			html +=  '<a class="btn btn-submit btn-palegreen btn-xs icon-only margin-left-10" title="提报" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa  fa-check-square-o "></i></a>' +
+	        					 '<a class="btn btn-edit btn-info btn-xs icon-only margin-left-10" title="修改" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +
+	        			  		 '<a class="btn btn-delete btn-danger btn-xs icon-only margin-left-10" title="删除" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-trash-o "></i></a>';
+	        		}
+	        		return html;
+	        	}
 	        }]
 	    }).on('preXhr.dt', function ( e, settings, data ) {//页面发送请求前，显示加载框
 	        bootbox.load();
 	    }).on('xhr.dt', function ( e, settings, json, xhr ) {//页面发送请求后，关闭加载遮罩
 	    	 bootbox.unload();
-	    } );
+	    } ).on( 'draw.dt', function () {
+	    	attendanceLeaveBill.find('.tab-attachment').on("click",function(){
+	    		var id = $(this).data("attachmentid");
+	    		bootbox.image("${contextPath}/system/attachment/download?attachmentId=" + id);
+	    	});
+	    	
+	    	attendanceLeaveBill.find('.btn-edit').on("click",function(){
+	    		var id = $(this).data("leavebillid");
+	    		edit(id);
+	    	});
+	    	
+	    	attendanceLeaveBill.find('.btn-delete').on("click",function(){
+	    		var id = $(this).data("leavebillid");
+	    		deleteData(id);
+	    	});
+	    });
+	}
+	
+	
+	//删除
+	function deleteData(id){
+		bootbox.confirm("确定要删除该请假信息吗？","",function(e){
+			if(e){
+				W.ajax({
+					url : "${ contextPath }/attendance/leaveBill/delete",
+					data:{ leaveBillId : id },
+					success:function(param){
+						if(param.result === SUCCESS){
+							bootbox.alert("数据删除成功","",function(){
+								dataTable.ajax.reload();
+							});
+						}else{
+							bootbox.alert("数据异常，删除失败");
+						}
+					}
+				});
+			}
+		});
 	}
 	
 	//查询
@@ -78,6 +139,11 @@ attendance.leaveBill = function(){
 	//新增
 	function add(){
 		system.main.open("${contextPath}/attendance/leaveBill/add","新建请假申请");
+	}
+	
+	//新增
+	function edit(id){
+		system.main.open("${contextPath}/attendance/leaveBill/edit","修改请假申请",{leaveBillId : id});
 	}
 	
 	return {
@@ -100,10 +166,14 @@ $().ready(function(){
 	<div class="container-body">
 		<div class="table-toolbar">
 			<form class="form-horizontal" id="queryForm">
-				 <div class="has-feedback row">
-				<label class="col-sm-1 control-label">用户名</label>
+				<div class="has-feedback row">
+				<label class="col-sm-1 control-label">请假类型</label>
 				<div class="col-sm-2">
-					<input type="text" class="form-control" name="username" placeholder="用户名">
+					<select class="form-control" name="leaveType">
+						<option value="">全部</option>
+						<option value="sj">事假</option>
+						<option value="bj">病假</option>
+					</select>
 				</div>
 				<div class="col-sm-2">
 					<a id="query" class="btn btn-default" href="javascript:void(0);"><i class="fa fa-search"></i> 查询</a>

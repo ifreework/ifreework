@@ -1,6 +1,8 @@
 package com.ifreework.controller.attendance;
 
 
+import java.util.Calendar;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ifreework.common.controller.BaseControllerSupport;
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.attendance.LeaveBill;
-import com.ifreework.entity.system.User;
 import com.ifreework.service.attendance.LeaveBillService;
 import com.ifreework.util.StringUtil;
 
@@ -51,6 +52,33 @@ public class LeaveBillController extends BaseControllerSupport {
 	@RequestMapping("/add")
 	public ModelAndView add() {
 		ModelAndView mv = this.getModelAndView();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 1);
+		cal.set(Calendar.SECOND, 0);
+		
+		LeaveBill leaveBill = new LeaveBill();
+		cal.set(Calendar.HOUR_OF_DAY, 8);
+		cal.set(Calendar.MINUTE, 30);
+		leaveBill.setStartTime(cal.getTime());
+		cal.set(Calendar.HOUR_OF_DAY, 17);
+		
+		leaveBill.setEndTime(cal.getTime());
+		mv.addObject("leaveBill", leaveBill);
+		mv.setViewName("/attendance/leaveBill/edit");
+		return mv;
+	}
+	
+	/**
+	 * 
+	 * 描述：跳转到新增页面
+	 * @return 
+	 */
+	@RequestMapping("/edit")
+	public ModelAndView edit() {
+		ModelAndView mv = this.getModelAndView();
+		String leaveBillId = this.getPageData().getString("leaveBillId");
+		LeaveBill leaveBill = leaveBillService.getLeaveBill(leaveBillId);
+		mv.addObject("leaveBill", leaveBill);
 		mv.setViewName("/attendance/leaveBill/edit");
 		return mv;
 	}
@@ -79,6 +107,19 @@ public class LeaveBillController extends BaseControllerSupport {
 			pd = leaveBillService.update(leaveBill);
 		}
 
+		return pd;
+	}
+	
+	/**
+	 * 描述：删除我的请假信息
+	 * @return 
+	 * @return
+	 */
+	@RequestMapping(value = "/delete")
+	@ResponseBody
+	public PageData delete(){
+		PageData pd = this.getPageData();
+		pd = leaveBillService.delete(pd.getString("leaveBillId"));
 		return pd;
 	}
 }

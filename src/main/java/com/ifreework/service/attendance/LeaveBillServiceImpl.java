@@ -17,6 +17,10 @@ public class LeaveBillServiceImpl  implements LeaveBillService {
 	@Autowired
 	private LeaveBillMapper leaveBillMapper;
 
+	public LeaveBill getLeaveBill(String leaveBillId){
+		return leaveBillMapper.getLeaveBill(leaveBillId);
+	}
+	
 	@Override
 	public PageData queryPageList(PageData pd) {
 		pd.put("userId", UserManager.getUser().getUserId());
@@ -29,6 +33,7 @@ public class LeaveBillServiceImpl  implements LeaveBillService {
 	public PageData add(LeaveBill leaveBill) {
 		PageData pd = new PageData();
 		leaveBill.setStatus("0");
+		leaveBill.setUserId(UserManager.getUser().getUserId());
 		leaveBillMapper.add(leaveBill);
 		pd.setResult(Constant.SUCCESS);
 		return pd;

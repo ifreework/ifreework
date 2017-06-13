@@ -268,6 +268,12 @@ $.extend(bootbox , {
 			}
 		});
 	},
+	image : function(src, callback) { //image图片预览
+		bootbox.dialog({
+			message : '<div class="row"><div class="col-md-12"><image class="image-body" src="' + src + '"/></span></div></div>',
+			className : "modal-darkorange modal-image"
+		});
+	},
 	load : function() { //遮罩加载
 		var loadDiv = $(".loading-container",
 				window.top.window.document);

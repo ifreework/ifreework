@@ -7,17 +7,14 @@
 <script type="text/javascript">
 $.namespace("attendance.leaveBill.add");
 attendance.leaveBill.edit = function(){
-	var attendanceUserEdit ,
+	var attendanceLeaveBillEdit ,
 		bootstrapValidator,
 		dropzone,
-		startTime,
-		endTime,
-		DEFAULT_START_TIME = '8:30:00', //默认上午考勤时间
+		attachments = "${leaveBill.attachmentId}".split(","),
 		DEFAULT_START_CUMPUTE = 8.5, //默认早上计算考勤时间
-		DEFAULT_END_TIME = '17:30:00', //默认下午考勤时间
 		DEFAULT_END_CUMPUTE = 17.5; //默认下午计算考勤时间
 	function initBootstrapValidator(){
-		bootstrapValidator = attendanceUserEdit.find("#saveForm").bootstrapValidator({
+		bootstrapValidator = attendanceLeaveBillEdit.find("#saveForm").bootstrapValidator({
 	     	fields: {
 	            leaveBillname: {
 	                validators: {
@@ -69,18 +66,17 @@ attendance.leaveBill.edit = function(){
 	}
 	
 	function initSelect(){
-		attendanceUserEdit.find("#leaveType").select2();
+		attendanceLeaveBillEdit.find("#leaveType").select2();
 	}
 	
 	function initDate(){
-		attendanceUserEdit.find('#sDate').datepicker({
+		attendanceLeaveBillEdit.find('#sDate').datepicker({
 			autoclose:true
 		}).on("changeDate",function(e){
 			validateTime();
 		});
 		
-		attendanceUserEdit.find('#sTime').timepicker({
-			defaultTime:DEFAULT_START_TIME,
+		attendanceLeaveBillEdit.find('#sTime').timepicker({
 			maxHours:18,
 			minHours:8,
 			showMeridian:false,
@@ -89,14 +85,13 @@ attendance.leaveBill.edit = function(){
 			
 			validateTime();
 		});
-		attendanceUserEdit.find('#eDate').datepicker({
+		attendanceLeaveBillEdit.find('#eDate').datepicker({
 			autoclose:true
 		}).on("changeDate",function(e){
 			validateTime();
 		});
 		
-		attendanceUserEdit.find('#eTime').timepicker({
-			defaultTime:DEFAULT_END_TIME,
+		attendanceLeaveBillEdit.find('#eTime').timepicker({
 			maxHours:18,
 			minHours:8,
 			showMeridian:false,
@@ -107,51 +102,64 @@ attendance.leaveBill.edit = function(){
 	}
 	
 	function initAutosize(){
-		attendanceUserEdit.find('#leaveCause').autosize({ append: "\n" });
+		attendanceLeaveBillEdit.find('#leaveCause').autosize({ append: "\n" });
 	}
 	
 	//上传附件
 	function initDropzone(){
-		dropzone = new Dropzone("#system-attachment #dropzone", {
+		dropzone = new Dropzone("#attendance-leaveBill-edit #dropzone", {
 			url : "${ contextPath }/system/attachment/fileUpload",
 			autoProcessQueue : true,
 			addRemoveLinks:true,
 			maxFilesize:100,
+			acceptedFiles:'image/png,image/jpeg,image/jpg,image/gif',
 			success:function(file,data){
-				console.log(file);
-				console.log(data);
 				file.attachmentId = data.attachmentId;
-				
+				attachments.push(data.attachmentId);
 				$(file.previewElement).addClass("dz-success");
 			},
 			removedfile:function(file){
 				console.log(file);
-				var opt = {
-					url:"${contextPath}//system/attachment/delete",
-					data:{
-						attachmentId:file.attachmentId
-					},
-					success:function(){
-						$(file.previewElement).remove();
-					}
-				}
-				W.ajax(opt);
+				removeFile(file.attachmentId);
+				$(file.previewElement).remove();
 			}
+		});
+		attendanceLeaveBillEdit.find(".attachment-delete").on("click",function(e){
+			var _li = $(e.target).closest("li"); // 获取点击的a标签
+			var attachmentId = $(this).data("attachmentid");
+			W.arrayRemove(attachments,attachmentId);
+			_li.remove();
 		});
 	}
 	
+	function removeFile(attachmentId){
+		var opt = {
+			url:"${contextPath}/system/attachment/delete",
+			data:{
+				attachmentId:attachmentId
+			},
+			success:function(){
+				W.arrayRemove(attachments,attachmentId);
+			}
+		}
+		W.ajax(opt);
+	}
+	
 	function initSave(){
-	    attendanceUserEdit.find("#btn-save").click(function(){
+	    attendanceLeaveBillEdit.find("#btn-save").click(function(){
 	    	bootstrapValidator.validate();
 	    	if(bootstrapValidator.isValid()){
-	    		var data = attendanceUserEdit.find("#saveForm").serializeJson();
+	    		var data = attendanceLeaveBillEdit.find("#saveForm").serializeJson();
+	    		data.startTime = new Date($("#sDate").val() + " " + $("#sTime").val());
+	    		data.endTime = new Date($("#eDate").val() + " " + $("#eTime").val());
+	    		data.attachmentId = attachments.toString();
 	    		var opt = {
 	    				url : "${ contextPath }/attendance/leaveBill/save",
 	    				data:data,
 	    				success:function(param){
 	    					if(param.result === SUCCESS){
 	    						bootbox.alert("数据保存成功","",function(){
-	    							attendance.main.history();
+	    							system.main.history();
 	    						});
 	    					}else{
 	    						bootbox.alert("数据异常，保存失败");
@@ -169,6 +177,8 @@ attendance.leaveBill.edit = function(){
 			sTime =  $("#sTime").val(),
 			eDate = $("#eDate").val(),
 			eTime =  $("#eTime").val(),
+			startTime
+			endTime,
 			minuteTime; 
 		
 		if(!W.isNull(sDate) && !W.isNull(sTime) && !W.isNull(eDate) && !W.isNull(eTime)){
@@ -191,8 +201,7 @@ attendance.leaveBill.edit = function(){
 		var minuteTime,  
 		tempTime,
 		nextStartDay, //开始时间的下一天
-		dateNum;
-		
+		leaveDays;
 		nextStartDay = new Date(sDate + " " + sTime);
 		nextStartDay.setDate(nextStartDay.getDate() + 1);
 		nextStartDay.setHours(0,0,0,0);
@@ -202,26 +211,26 @@ attendance.leaveBill.edit = function(){
 		
 		if( minuteTime < 0 ){  //如果小于0，说明请假是在当天
 			tempTime = (endTime.getHours() + endTime.getMinutes() / 60 ) - ( startTime.getHours() + startTime.getMinutes() / 60) ;
-			dateNum = tempTime > 4 ? 1 : 0.5 ;
+			leaveDays = tempTime > 4 ? 1 : 0.5 ;
 		}else if( minuteTime > 0 ){  //如果是隔天
 			tempTime = DEFAULT_END_CUMPUTE - (startTime.getHours() + startTime.getMinutes() / 60); //获取开始日期当天的请假时间
-			dateNum = tempTime > 4 ? 1 : 0.5 ;   
+			leaveDays = tempTime > 4 ? 1 : 0.5 ;   
 			
 			tempTime = (endTime.getHours() + endTime.getMinutes() / 60) - DEFAULT_START_CUMPUTE; //获取结束当天的请假时间
 			tempTime = tempTime > 4 ? 1 : 0.5 ;   
-			dateNum += tempTime;
+			leaveDays += tempTime;
 			if(minuteTime >= 1){
 				tempTime = parseInt(minuteTime);
-				dateNum += tempTime;
+				leaveDays += tempTime;
 			}
 		}
 		
-		$("#dateNum").val(dateNum + "天");
+		$("#leaveDays").val(leaveDays);
 	}
 	
 	return {
 		init:function(){
-			attendanceUserEdit = $("#attendance-leaveBill-edit");
+			attendanceLeaveBillEdit = $("#attendance-leaveBill-edit");
 			initBootstrapValidator();
 			initSelect();
 			initDate();
@@ -262,13 +271,13 @@ $().ready(function(){
 					<div class="col-sm-5">
 						<span class="input-icon icon-left">
 							<i class="fa fa-calendar"></i>
-							<input type="text" class="form-control" name="sDate" id="sDate" readonly="readonly">
+							<input type="text" class="form-control" name="sDate" id="sDate" readonly="readonly" value='<fmt:formatDate value="${leaveBill.startTime}" pattern="yyyy/MM/dd"/>'>
 						</span>
 					</div>
 					<div class="col-sm-4">
 						<span class="input-icon icon-left">
 							<i class="fa fa-clock-o"></i>
-							<input type="text" class="form-control" name="sTime" id="sTime" readonly="readonly">
+							<input type="text" class="form-control" name="sTime" id="sTime" readonly="readonly" value='<fmt:formatDate value="${leaveBill.startTime}" pattern="HH:mm:ss"/>'>
 						</span>
 					</div>
 				</div>
@@ -278,13 +287,13 @@ $().ready(function(){
 					<div class="col-sm-5">
 						<span class="input-icon icon-left">
 							<i class="fa fa-clock-o"></i>
-							<input type="text" class="form-control" name="eDate" id="eDate" readonly="readonly">
+							<input type="text" class="form-control" name="eDate" id="eDate" readonly="readonly" value='<fmt:formatDate value="${leaveBill.endTime}" pattern="yyyy/MM/dd"/>'>
 						</span>
 					</div>
 					<div class="col-sm-4">
 						<span class="input-icon icon-left">
 							<i class="fa fa-clock-o"></i>
-							<input type="text" class="form-control" name="eTime" id="eTime" readonly="readonly">
+							<input type="text" class="form-control" name="eTime" id="eTime" readonly="readonly" value='<fmt:formatDate value="${leaveBill.endTime}" pattern="HH:mm:ss"/>'>
 						</span>
 					</div>
 				</div>
@@ -292,7 +301,7 @@ $().ready(function(){
 				<div class="form-group has-feedback row">
 					<label class="col-sm-2 control-label">请假天数</label>
 					<div class="col-sm-9">
-						<input type="text" id="dateNum" class="form-control" value="0天" readonly="readonly" >
+						<input type="text" id="leaveDays" name="leaveDays" class="form-control" value="${leaveBill.leaveDays == null ? 1 : leaveBill.leaveDays}" readonly="readonly" >
 					</div>
 				</div>
 				
@@ -304,9 +313,34 @@ $().ready(function(){
 				</div>
 				
 				<div class="form-group has-feedback row">
-					<label class="col-sm-2 control-label"></label>
+					<label class="col-sm-2 control-label">附件</label>
 					<div class="col-sm-9">
 						<div id="dropzone" class="dropzone ">
+						</div>
+					</div>
+				</div>
+				<div class="form-group has-feedback row">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-9">
+						<div class="attachments-body ">
+							<ul>
+							<c:forEach items="${leaveBill.attachments }" var="atta">
+								<li>
+				                    <div class="thumb">
+				                        <img src="${contextPath}/system/attachment/download?attachmentId=${atta.attachmentId}" onclick="bootbox.image('${contextPath}/system/attachment/download?attachmentId=${atta.attachmentId}')" />
+				                    </div>
+				
+				                    <div class="detail">
+				                    	<span class="name" title="${atta.attachmentName }">${atta.attachmentName }</span>
+				                    	<span class="size">(16KB)</span>
+				                    	<div class="links">
+				                    		<a href="${contextPath }/system/attachment/download?attachmentId=${atta.attachmentId}" target="_blank">下载</a> - 
+				                    		<a href="javascript:void(0)" class="attachment-delete" data-attachmentid="${atta.attachmentId}">删除</a>
+				                    	</div>
+				                    </div>
+				                </li>
+				           </c:forEach>
+							</ul>
 						</div>
 					</div>
 				</div>
