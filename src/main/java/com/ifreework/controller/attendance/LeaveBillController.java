@@ -122,4 +122,9 @@ public class LeaveBillController extends BaseControllerSupport {
 		pd = leaveBillService.delete(pd.getString("leaveBillId"));
 		return pd;
 	}
+	
+	
+	public PageData submit(){
+		return null;
+	}
 }

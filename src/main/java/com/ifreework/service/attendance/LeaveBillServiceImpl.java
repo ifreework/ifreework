@@ -1,7 +1,10 @@
 package com.ifreework.service.attendance;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.activiti.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +15,19 @@ import com.ifreework.entity.attendance.LeaveBill;
 import com.ifreework.mapper.attendance.LeaveBillMapper;
 
 @Service("leaveBillService")
-public class LeaveBillServiceImpl  implements LeaveBillService {
+public class LeaveBillServiceImpl implements LeaveBillService {
 
+	private static final String ACTIVITI_LEAVE_BILL_KEY = "leave_bill";
 	@Autowired
 	private LeaveBillMapper leaveBillMapper;
-
-	public LeaveBill getLeaveBill(String leaveBillId){
+	
+	@Autowired
+	private RuntimeService runtimeService;
+	
+	public LeaveBill getLeaveBill(String leaveBillId) {
 		return leaveBillMapper.getLeaveBill(leaveBillId);
 	}
-	
+
 	@Override
 	public PageData queryPageList(PageData pd) {
 		pd.put("userId", UserManager.getUser().getUserId());
@@ -39,7 +46,6 @@ public class LeaveBillServiceImpl  implements LeaveBillService {
 		return pd;
 	}
 
-
 	@Override
 	public PageData update(LeaveBill leaveBill) {
 		PageData pd = new PageData();
@@ -54,6 +60,20 @@ public class LeaveBillServiceImpl  implements LeaveBillService {
 		leaveBillMapper.delete(leaveBillId);
 		pd.setResult(Constant.SUCCESS);
 		return pd;
+	}
+
+	public void saveStartProcess(String leaveBillId) {
+		LeaveBill leaveBill = getLeaveBill(leaveBillId);
+
+		// 2：更新请假单的请假状态从0变成1（初始录入-->审核中）
+		leaveBill.setStatus("1");
+
+		Map<String, Object> variables = new HashMap<String, Object>();
+		variables.put("inputUser", UserManager.getUser());// 表示惟一用户
+		variables.put("leaveBillId", leaveBillId);
+
+		// 6：使用流程定义的key，启动流程实例，同时设置流程变量，同时向正在执行的执行对象表中的字段BUSINESS_KEY添加业务数据，同时让流程关联业务
+		runtimeService.startProcessInstanceByKey(ACTIVITI_LEAVE_BILL_KEY, leaveBillId, variables);
 	}
 
 }
