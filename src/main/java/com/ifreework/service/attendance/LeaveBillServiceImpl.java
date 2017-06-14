@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 	
 	@Autowired
 	private RuntimeService runtimeService;
+	
+	@Autowired
+	private TaskService taskService;
 	
 	public LeaveBill getLeaveBill(String leaveBillId) {
 		return leaveBillMapper.getLeaveBill(leaveBillId);
@@ -62,7 +67,8 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 		return pd;
 	}
 
-	public void saveStartProcess(String leaveBillId) {
+	public PageData saveStartProcess(String leaveBillId) { 
+		PageData pd = new PageData();
 		LeaveBill leaveBill = getLeaveBill(leaveBillId);
 
 		// 2：更新请假单的请假状态从0变成1（初始录入-->审核中）
@@ -74,6 +80,25 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 
 		// 6：使用流程定义的key，启动流程实例，同时设置流程变量，同时向正在执行的执行对象表中的字段BUSINESS_KEY添加业务数据，同时让流程关联业务
 		runtimeService.startProcessInstanceByKey(ACTIVITI_LEAVE_BILL_KEY, leaveBillId, variables);
+		
+		update(leaveBill);
+		pd.setResult(Constant.SUCCESS);
+		return pd;
 	}
+	
+	/**
+	 * 描述：查询个人待办任务
+	 * @return 
+	 * @return
+	 */
+	public List<Task> queyTaskListByName() {
+		String userName = UserManager.getUsername();
+		List<Task> list = taskService.createTaskQuery()//
+					.taskAssignee(userName)//指定个人任务查询
+					.orderByTaskCreateTime().asc()//
+					.list();
+		return list;
+	}
+	
 
 }

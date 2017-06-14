@@ -2,7 +2,9 @@ package com.ifreework.controller.attendance;
 
 
 import java.util.Calendar;
+import java.util.List;
 
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -83,6 +85,16 @@ public class LeaveBillController extends BaseControllerSupport {
 		return mv;
 	}
 	
+	@RequestMapping(value = "/queyTaskListByName")
+	public ModelAndView queyTaskListByName() {
+		ModelAndView mv = this.getModelAndView();
+		List<Task> tasks = leaveBillService.queyTaskListByName();
+		mv.addObject("tasks", tasks);
+		
+		mv.setViewName("/attendance/leaveBill/taskList");
+		return mv;
+	}
+	
 	
 	/**
 	 * 描述：查询我的请假信息
@@ -124,7 +136,14 @@ public class LeaveBillController extends BaseControllerSupport {
 	}
 	
 	
-	public PageData submit(){
-		return null;
+	/**
+	 * 描述：提交请假申请，启动启动流程
+	 * @return
+	 */
+	@RequestMapping(value = "/saveStartProcess")
+	@ResponseBody
+	public PageData saveStartProcess(){
+		PageData pd = this.getPageData();
+		return leaveBillService.saveStartProcess(pd.getString("leaveBillId"));
 	}
 }

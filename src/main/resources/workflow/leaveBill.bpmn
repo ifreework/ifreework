@@ -3,8 +3,8 @@
   <process id="leave_bill" name="leave_bill" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <endEvent id="endevent1" name="End"></endEvent>
-    <userTask id="firstAuthTask" name="初审"></userTask>
-    <userTask id="secondAuthTask" name="复审"></userTask>
+    <userTask id="firstAuthTask" name="初审" activiti:assignee="admin"></userTask>
+    <userTask id="secondAuthTask" name="复审" activiti:assignee="lisi"></userTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="firstAuthTask"></sequenceFlow>
     <sequenceFlow id="flow2" sourceRef="firstAuthTask" targetRef="secondAuthTask"></sequenceFlow>
     <sequenceFlow id="flow3" sourceRef="secondAuthTask" targetRef="endevent1"></sequenceFlow>

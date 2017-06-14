@@ -28,9 +28,6 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 	private RuntimeService runtimeService;
 
 	@Autowired
-	private TaskService taskService;
-
-	@Autowired
 	private FormService formService;
 
 	@Autowired

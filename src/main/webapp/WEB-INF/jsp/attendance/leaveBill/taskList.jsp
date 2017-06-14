@@ -7,7 +7,6 @@ $.namespace("system.workFlow");
 
 system.workFlow = function(){
 	var systemWorkFlow,
-		dialog,
 		dataTable;
 	
 	function initTable(){
@@ -18,15 +17,6 @@ system.workFlow = function(){
 	    });
 	}
 	
-	
-	function add(){
-		dialog = bootbox.dialog({
-			id:"workFlowDialog",
-			title: "上传流程附件",
-			width:700,
-	        loadUrl: "${contextPath}/system/workFlow/add"
-	    });
-	}
 	
 	return {
 		init : function(){
@@ -45,30 +35,23 @@ $().ready(function(){
 </script>
 <div class="container-content" id="system-workFlow">
 	<div class="container-body">
-		<div class="table-toolbar">
-			<form class="form-horizontal" id="queryForm">
-				<div class="has-feedback row">
-					<div class="col-sm-12">
-						<a id="add" class="btn btn-sky" href="javascript:void(0);"><i class="fa fa-plus"></i>添加</a>
-					</div>
-			   	</div>
-			</form>
-		 </div>
 		<table class="table table-striped table-bordered table-hover" id="workFlowTab">
 			<thead>
 				<tr>
-					<th>ID</th>
-					<th>流程名称</th>
-					<th>发布时间</th>
+					<th>任务ID</th>
+					<th>任务名称</th>
+					<th>创建时间</th>
+					<th>创建人</th>
 					<th>操作</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${ deployments }" var="deployment">
+				<c:forEach items="${ tasks }" var="task">
 				<tr>
-					<td>${deployment.id }</td>
-					<td>${deployment.name }</td>
-					<td><fmt:formatDate value="${deployment.deploymentTime }" pattern="yyyy/MM/dd HH:mm:ss"/></td>
+					<td>${task.id }</td>
+					<td>${task.name }</td>
+					<td><fmt:formatDate value="${task.createTime }" pattern="yyyy/MM/dd HH:mm:ss"/></td>
+					<td>${task.assignee }</td>
 					<td></td>
 				</tr>
 				</c:forEach>

@@ -97,6 +97,11 @@ attendance.leaveBill = function(){
 	    		bootbox.image("${contextPath}/system/attachment/download?attachmentId=" + id);
 	    	});
 	    	
+	    	attendanceLeaveBill.find('.btn-submit').on("click",function(){
+	    		var id = $(this).data("leavebillid");
+	    		saveStartProcess(id);
+	    	});
+	    	
 	    	attendanceLeaveBill.find('.btn-edit').on("click",function(){
 	    		var id = $(this).data("leavebillid");
 	    		edit(id);
@@ -109,6 +114,27 @@ attendance.leaveBill = function(){
 	    });
 	}
 	
+	
+	//提报
+	function saveStartProcess(id){
+		bootbox.confirm("信息提报后将不能进行修改，确定要提交该请假申请吗？","",function(e){
+			if(e){
+				W.ajax({
+					url : "${ contextPath }/attendance/leaveBill/saveStartProcess",
+					data:{ leaveBillId : id },
+					success:function(param){
+						if(param.result === SUCCESS){
+							bootbox.alert("数据提报成功","",function(){
+								dataTable.ajax.reload();
+							});
+						}else{
+							bootbox.alert("数据异常，删除失败");
+						}
+					}
+				});
+			}
+		});
+	}
 	
 	//删除
 	function deleteData(id){

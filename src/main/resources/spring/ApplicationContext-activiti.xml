@@ -21,10 +21,17 @@
 	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
 		<!-- 数据源 -->
 		<property name="dataSource" ref="dataSource" />
+		
 		<!-- 配置事务管理器，统一事务 -->
 		<property name="transactionManager" ref="transactionManager" />
-		<!-- 设置建表策略，如果没有表，自动创建表 -->
+		
+		<!-- 设置建表策略，如果没有表，自动创建表 ,如果数据库activiti表版本较低，将自动更新到当前使用版本-->
+		<!-- 注意：如果数据库中已存在activiti表且版本比当前使用版本高时，会抛出异常 -->
 		<property name="databaseSchemaUpdate" value="true" />
+		
+		<!-- 系统在启动时扫描加载的activiti配置，如果文件修改后，系统会自动扫描加载 
+		<property name="deploymentResources" value="classpath*:/org/activiti/spring/test/autodeployment/autodeploy.*.bpmn20.xml" /> 
+		-->
 	</bean>
 	
 	<!-- 创建流程引擎对象 -->
