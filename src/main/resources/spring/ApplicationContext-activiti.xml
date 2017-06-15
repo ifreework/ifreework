@@ -30,8 +30,19 @@
 		<property name="databaseSchemaUpdate" value="true" />
 		
 		<!-- 系统在启动时扫描加载的activiti配置，如果文件修改后，系统会自动扫描加载 
-		<property name="deploymentResources" value="classpath*:/org/activiti/spring/test/autodeployment/autodeploy.*.bpmn20.xml" /> 
+		<property name="deploymentResources" value="classpath*:/workflow/*/*.bpmn20.xml" /> 
 		-->
+		
+		<property name="mailServerHost" value="smtp.163.com" />  
+        <property name="mailServerPort" value="25" />   
+        <!--默认发送方-->  
+        <property name="mailServerDefaultFrom" value="cd_wangyh@163.com" />  
+        <!--发送方登录用户名-->  
+        <property name="mailServerUsername" value="cd_wangyh@163.com"></property>    
+        <!--发送方登录密码-->  
+        <property name="mailServerPassword" value="wyh198910"></property>   
+        <!--加密方式 一定要有-->  
+        <property name="mailServerUseSSL" value="true" />  
 	</bean>
 	
 	<!-- 创建流程引擎对象 -->

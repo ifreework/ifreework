@@ -109,7 +109,6 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 .modal-image .modal-dialog{
 	width: auto;
-	max-width: 800px;
 	display: inline-block;
 	overflow: auto;
 }
@@ -130,13 +129,15 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     line-height: 21px;
     width: 20px;
 }
+
 .modal-image .modal-dialog .modal-content .bootbox-body{
 	max-height: 600px;
 	overflow: auto;
-	padding-right: 15px;
-	margin-left: 25px;
 }
 
+.modal-image .modal-dialog .modal-content .bootbox-body img{
+	max-width: 700px;
+}
 .modal-image .modal-dialog .modal-content .bootbox-body::-webkit-scrollbar {
 	width: 5px;
 	background:rgba(0, 0, 0, 0.5);

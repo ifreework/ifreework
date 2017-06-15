@@ -11,7 +11,8 @@
 		LEAVE_CAUSE,
 		STATUS,
 		ATTACHMENT_ID,
-		LEAVE_DAYS
+		LEAVE_DAYS,
+		PROCESS_ID
 	</sql>
 
 
@@ -27,6 +28,7 @@
 		<result column="STATUS" property="status" />
 		<result column="ATTACHMENT_ID" property="attachmentId" />
 		<result column="LEAVE_DAYS" property="leaveDays" />
+		<result column="PROCESS_ID" property="processId" />
 		
 		<association property="user" javaType="com.ifreework.entity.system.User">
 			<result column="USERNAME" property="username"/>
@@ -59,7 +61,8 @@
 			l.LEAVE_CAUSE,
 			l.STATUS,
 			l.ATTACHMENT_ID,
-			l.LEAVE_DAYS
+			l.LEAVE_DAYS,
+			l.PROCESS_ID
 		from ATT_LEAVE_BILL l
 		inner join SYS_USER u on l.user_id = u.user_id
 		<where>
@@ -101,7 +104,8 @@
 			l.LEAVE_CAUSE,
 			l.STATUS,
 			l.ATTACHMENT_ID,
-			l.LEAVE_DAYS
+			l.LEAVE_DAYS,
+			l.PROCESS_ID
 		from ATT_LEAVE_BILL l
 		inner join SYS_USER u on l.user_id = u.user_id
 		where LEAVE_BILL_ID = #{leaveBillId}
@@ -136,7 +140,8 @@
 		#{
 		status,jdbcType=VARCHAR },
 		#{ attachmentId,jdbcType=VARCHAR },
-		#{ leaveDays,jdbcType=DOUBLE }
+		#{ leaveDays,jdbcType=DOUBLE },
+		#{ processId,jdbcType=DOUBLE }
 		)
 	</insert>
 
@@ -165,7 +170,10 @@
 				ATTACHMENT_ID = #{attachmentId},
 			</if>
 			<if test="leaveDays != null ">
-				LEAVE_DAYS = #{leaveDays}
+				LEAVE_DAYS = #{leaveDays},
+			</if>
+			<if test="processId != null ">
+				PROCESS_ID = #{processId}
 			</if>
 		</trim>
 		where

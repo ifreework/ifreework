@@ -78,9 +78,9 @@ attendance.leaveBill = function(){
 	        	orderable:false,
 	        	className : "text-center"  ,
 	        	render:function( data, type, row, meta ){
-	        		var html = '<a class="btn btn-view btn-sky btn-xs icon-only" title="查看详情" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-info "></i></a>';
+	        		var html = '<a class="btn btn-view btn-sky btn-xs icon-only" title="查看详情" data-processid="' + row.processId + '" href="javascript:void(0);"><i class="fa fa-info "></i></a>';
 	        		if(data == '0'){
-	        			html +=  '<a class="btn btn-submit btn-palegreen btn-xs icon-only margin-left-10" title="提报" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa  fa-check-square-o "></i></a>' +
+	        			html +=  '<a class="btn btn-submit btn-palegreen btn-xs icon-only margin-left-10" title="提报" data-processid="' + row.processId + '" href="javascript:void(0);"><i class="fa  fa-check-square-o "></i></a>' +
 	        					 '<a class="btn btn-edit btn-info btn-xs icon-only margin-left-10" title="修改" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +
 	        			  		 '<a class="btn btn-delete btn-danger btn-xs icon-only margin-left-10" title="删除" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-trash-o "></i></a>';
 	        		}
@@ -98,7 +98,7 @@ attendance.leaveBill = function(){
 	    	});
 	    	
 	    	attendanceLeaveBill.find('.btn-submit').on("click",function(){
-	    		var id = $(this).data("leavebillid");
+	    		var id = $(this).data("processid");
 	    		saveStartProcess(id);
 	    	});
 	    	
@@ -120,15 +120,15 @@ attendance.leaveBill = function(){
 		bootbox.confirm("信息提报后将不能进行修改，确定要提交该请假申请吗？","",function(e){
 			if(e){
 				W.ajax({
-					url : "${ contextPath }/attendance/leaveBill/saveStartProcess",
-					data:{ leaveBillId : id },
+					url : "${ contextPath }/attendance/leaveBill/submit",
+					data:{ processId : id },
 					success:function(param){
 						if(param.result === SUCCESS){
 							bootbox.alert("数据提报成功","",function(){
 								dataTable.ajax.reload();
 							});
 						}else{
-							bootbox.alert("数据异常，删除失败");
+							bootbox.alert("数据异常，提报失败");
 						}
 					}
 				});

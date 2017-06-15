@@ -19,8 +19,7 @@ public class LeaveBill implements Serializable{
 	private java.lang.String status;
 	private java.lang.String attachmentId;
 	private Double leaveDays;
-	
-	
+	private String processId ;
 	
 	private User user;
 	private List<Attachment> attachments;
@@ -92,6 +91,14 @@ public class LeaveBill implements Serializable{
 	}
 	public void setAttachmentId(java.lang.String attachmentId) {
 		this.attachmentId = attachmentId;
+	}
+
+	public String getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(String processId) {
+		this.processId = processId;
 	}
 }
 

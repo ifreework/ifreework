@@ -3,6 +3,7 @@ package com.ifreework.controller.attendance;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,16 +86,14 @@ public class LeaveBillController extends BaseControllerSupport {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/queyTaskListByName")
-	public ModelAndView queyTaskListByName() {
+	@RequestMapping(value = "/taskList")
+	public ModelAndView taskList() {
 		ModelAndView mv = this.getModelAndView();
-		List<Task> tasks = leaveBillService.queyTaskListByName();
-		mv.addObject("tasks", tasks);
-		
 		mv.setViewName("/attendance/leaveBill/taskList");
 		return mv;
 	}
 	
+
 	
 	/**
 	 * 描述：查询我的请假信息
@@ -135,15 +134,43 @@ public class LeaveBillController extends BaseControllerSupport {
 		return pd;
 	}
 	
-	
 	/**
-	 * 描述：提交请假申请，启动启动流程
+	 * 描述：查询我的待办任务
+	 * @return 
 	 * @return
 	 */
-	@RequestMapping(value = "/saveStartProcess")
+	@RequestMapping(value = "/queyTaskListByName")
 	@ResponseBody
-	public PageData saveStartProcess(){
+	public PageData queyTaskListByName() {
+		PageData pd = new PageData();
+		List<Map<String,Object>> list = leaveBillService.queyTaskListByName();
+		pd.setData(list);
+		return pd;
+	}
+	
+	
+	/**
+	 * 描述：完成当前任务
+	 * @return
+	 */
+	@RequestMapping(value = "/submit")
+	@ResponseBody
+	public PageData submit(){
 		PageData pd = this.getPageData();
-		return leaveBillService.saveStartProcess(pd.getString("leaveBillId"));
+		pd = leaveBillService.submit(pd.getString("processId"));
+		return pd;
+	}
+	
+	
+	/**
+	 * 描述：完成当前任务
+	 * @return
+	 */
+	@RequestMapping(value = "/complete")
+	@ResponseBody
+	public PageData complete(){
+		PageData pd = this.getPageData();
+		pd = leaveBillService.complete(pd.getString("taskId"), pd.getString("status"));
+		return pd;
 	}
 }

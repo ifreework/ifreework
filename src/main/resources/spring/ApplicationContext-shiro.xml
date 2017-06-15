@@ -70,7 +70,7 @@
         <property name="deleteInvalidSessions" value="true" />  
   
         <!-- 会话验证器调度时间 -->  
-        <property name="sessionValidationInterval" value="180000" />  
+        <property name="sessionValidationInterval" value="1800000" />  
   
         <!-- session存储的实现-->  
         <property name="sessionDAO" ref="redisSessionDAO" />  

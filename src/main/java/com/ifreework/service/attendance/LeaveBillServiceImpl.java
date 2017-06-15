@@ -1,5 +1,6 @@
 package com.ifreework.service.attendance;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,12 +44,12 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 
 	@Override
 	public PageData add(LeaveBill leaveBill) {
-		PageData pd = new PageData();
 		leaveBill.setStatus("0");
 		leaveBill.setUserId(UserManager.getUser().getUserId());
 		leaveBillMapper.add(leaveBill);
-		pd.setResult(Constant.SUCCESS);
-		return pd;
+		String processId = saveStartProcess(leaveBill.getLeaveBillId());
+		leaveBill.setProcessId(processId);
+		return update(leaveBill);
 	}
 
 	@Override
@@ -67,23 +68,83 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 		return pd;
 	}
 
-	public PageData saveStartProcess(String leaveBillId) { 
-		PageData pd = new PageData();
-		LeaveBill leaveBill = getLeaveBill(leaveBillId);
-
-		// 2：更新请假单的请假状态从0变成1（初始录入-->审核中）
-		leaveBill.setStatus("1");
-
+	private String saveStartProcess(String leaveBillId) { 
 		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("inputUser", UserManager.getUser());// 表示惟一用户
+		variables.put("submitUser", UserManager.getUser().getUserId());// 提交人
+		variables.put("secondUser", "1");// 初审人，admin
+		variables.put("thirdUser1", "9991f4d7782a4ccfb8a65bd96ea7aafa");// 部门经理审批 lisi
+		variables.put("thirdUser2", "e29149962e944589bb7da23ad18ddeed");// 总经理审批 zhangsan
 		variables.put("leaveBillId", leaveBillId);
-
-		// 6：使用流程定义的key，启动流程实例，同时设置流程变量，同时向正在执行的执行对象表中的字段BUSINESS_KEY添加业务数据，同时让流程关联业务
-		runtimeService.startProcessInstanceByKey(ACTIVITI_LEAVE_BILL_KEY, leaveBillId, variables);
+		return runtimeService.startProcessInstanceByKey(ACTIVITI_LEAVE_BILL_KEY,  variables).getId();
+	}
+	
+	
+	/**
+	 * 
+	 * 描述：个人提报请假申请
+	 * @param executionId 
+	 * @return
+	 */
+	public PageData submit(String processId){
 		
-		update(leaveBill);
+		String userId = UserManager.getUser().getUserId();
+		List<Task> tasks = taskService.createTaskQuery()//
+				.taskAssignee(userId)//指定个人任务查询
+				.processInstanceId(processId)
+				.list();
+		if(tasks != null && !tasks.isEmpty()){
+			Task task = tasks.get(0);
+			return complete(task.getId(),"1");
+		}else{
+			PageData pd = new PageData();
+			pd.setResult(Constant.FAILED);
+			pd.setMsg("当前请假任务不存在，提报失败");
+			return pd;
+		}
+	}
+	
+	
+	/**
+	 * 描述：根据taskId,完成当前任务
+	 * @param taskId 任务ID
+	 * @param status  审批状态，0 未通过 1通过
+	 * @return
+	 */
+	public PageData complete(String taskId,String status){
+		PageData pd = new PageData();
+		String leaveBillId = (String) taskService.getVariable(taskId, "leaveBillId");
+		
+		taskService.setVariable(taskId, "status", status);
+		if("0".equals(status)){
+			deleteTask(taskId);
+			LeaveBill leaveBill = getLeaveBill(leaveBillId);
+			leaveBill.setStatus(status);
+			update(leaveBill);
+		}
+		taskService.complete(taskId);
 		pd.setResult(Constant.SUCCESS);
 		return pd;
+	}
+	
+	/**
+	 * 描述：删除其他分支的流程
+	 * @param notDeleteTaskId 保存的流程
+	 * @return
+	 */
+	private void deleteTask(String notDeleteTaskId){
+		List<Task> list = taskService.createTaskQuery()
+				.taskId(notDeleteTaskId).list();
+		if(list != null && !list.isEmpty()){
+			List<Task> tasks = taskService.createTaskQuery()
+					.processInstanceId(list.get(0).getProcessInstanceId())
+					.list();
+			for (Task task : tasks) {
+				String taskId = task.getId();
+				if(!notDeleteTaskId.equals(taskId)){
+					taskService.deleteTask(taskId);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -91,12 +152,30 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 	 * @return 
 	 * @return
 	 */
-	public List<Task> queyTaskListByName() {
-		String userName = UserManager.getUsername();
-		List<Task> list = taskService.createTaskQuery()//
-					.taskAssignee(userName)//指定个人任务查询
+	public List<Map<String,Object>> queyTaskListByName() {
+		String userId = UserManager.getUser().getUsername();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		
+		List<Task> tasks = taskService.createTaskQuery()//
+					.taskAssignee(userId)//指定个人任务查询
+					.processDefinitionKey(ACTIVITI_LEAVE_BILL_KEY)
 					.orderByTaskCreateTime().asc()//
 					.list();
+		
+		for (Task task : tasks) {
+			Map<String,Object> map = new HashMap<String,Object>();
+			String taskId = task.getId();
+			String leaveBillId = (String) taskService.getVariable(taskId, "leaveBillId");
+			LeaveBill leaveBill = getLeaveBill(leaveBillId);
+			if("1".equals(leaveBill.getStatus())){
+				map.put("taskId", taskId);
+				map.put("taskName", task.getName());
+				
+				map.put("leaveBill", leaveBill);
+				list.add(map);
+			}
+		}
+		
 		return list;
 	}
 	

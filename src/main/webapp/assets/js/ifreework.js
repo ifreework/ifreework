@@ -270,7 +270,7 @@ $.extend(bootbox , {
 	},
 	image : function(src, callback) { //image图片预览
 		bootbox.dialog({
-			message : '<div class="row"><div class="col-md-12"><image class="image-body" src="' + src + '"/></span></div></div>',
+			message : '<image class="image-body" src="' + src + '"/>',
 			className : "modal-darkorange modal-image"
 		});
 	},
