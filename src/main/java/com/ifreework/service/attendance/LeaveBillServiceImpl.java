@@ -1,6 +1,7 @@
 package com.ifreework.service.attendance;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,7 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 	public PageData add(LeaveBill leaveBill) {
 		leaveBill.setStatus("0");
 		leaveBill.setUserId(UserManager.getUser().getUserId());
+		leaveBill.setCreateTime(new Date());
 		leaveBillMapper.add(leaveBill);
 		String processId = saveStartProcess(leaveBill.getLeaveBillId());
 		leaveBill.setProcessId(processId);
@@ -117,10 +119,10 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 		taskService.setVariable(taskId, "status", status);
 		if("0".equals(status)){
 			deleteTask(taskId);
-			LeaveBill leaveBill = getLeaveBill(leaveBillId);
-			leaveBill.setStatus(status);
-			update(leaveBill);
 		}
+		LeaveBill leaveBill = getLeaveBill(leaveBillId);
+		leaveBill.setStatus(status);
+		update(leaveBill);
 		taskService.complete(taskId);
 		pd.setResult(Constant.SUCCESS);
 		return pd;
@@ -153,7 +155,7 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 	 * @return
 	 */
 	public List<Map<String,Object>> queyTaskListByName() {
-		String userId = UserManager.getUser().getUsername();
+		String userId = UserManager.getUser().getUserId();
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		
 		List<Task> tasks = taskService.createTaskQuery()//

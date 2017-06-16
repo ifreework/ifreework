@@ -177,7 +177,7 @@ attendance.leaveBill.edit = function(){
 			sTime =  $("#sTime").val(),
 			eDate = $("#eDate").val(),
 			eTime =  $("#eTime").val(),
-			startTime
+			startTime, 
 			endTime,
 			minuteTime; 
 		
@@ -192,17 +192,18 @@ attendance.leaveBill.edit = function(){
 				return;
 			}
 			bootstrapValidator.updateStatus("eTime", "VALID");
-			computeLeaveDay(sDate,sTime,eDate,eTime);
+			computeLeaveDay(sDate,sTime,eDate,eTime,startTime,endTime);
 		}
 	}
 	
 	//计算请假时间
-	function computeLeaveDay(sDate,sTime,eDate,eTime){
+	function computeLeaveDay(sDate,sTime,eDate,eTime,startTime,endTime){
 		var minuteTime,  
 		tempTime,
 		nextStartDay, //开始时间的下一天
-		leaveDays;
+		leaveDays,
 		nextStartDay = new Date(sDate + " " + sTime);
+		
 		nextStartDay.setDate(nextStartDay.getDate() + 1);
 		nextStartDay.setHours(0,0,0,0);
 		

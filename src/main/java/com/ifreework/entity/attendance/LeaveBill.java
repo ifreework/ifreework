@@ -20,6 +20,7 @@ public class LeaveBill implements Serializable{
 	private java.lang.String attachmentId;
 	private Double leaveDays;
 	private String processId ;
+	private java.util.Date createTime;
 	
 	private User user;
 	private List<Attachment> attachments;
@@ -100,6 +101,15 @@ public class LeaveBill implements Serializable{
 	public void setProcessId(String processId) {
 		this.processId = processId;
 	}
+
+	public java.util.Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(java.util.Date createTime) {
+		this.createTime = createTime;
+	}
+	
 }
 
 

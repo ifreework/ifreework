@@ -12,7 +12,8 @@
 		STATUS,
 		ATTACHMENT_ID,
 		LEAVE_DAYS,
-		PROCESS_ID
+		PROCESS_ID,
+		CREATE_TIME
 	</sql>
 
 
@@ -29,6 +30,7 @@
 		<result column="ATTACHMENT_ID" property="attachmentId" />
 		<result column="LEAVE_DAYS" property="leaveDays" />
 		<result column="PROCESS_ID" property="processId" />
+		<result column="CREATE_TIME" property="createTime" />
 		
 		<association property="user" javaType="com.ifreework.entity.system.User">
 			<result column="USERNAME" property="username"/>
@@ -62,7 +64,8 @@
 			l.STATUS,
 			l.ATTACHMENT_ID,
 			l.LEAVE_DAYS,
-			l.PROCESS_ID
+			l.PROCESS_ID,
+			l.CREATE_TIME
 		from ATT_LEAVE_BILL l
 		inner join SYS_USER u on l.user_id = u.user_id
 		<where>
@@ -105,7 +108,8 @@
 			l.STATUS,
 			l.ATTACHMENT_ID,
 			l.LEAVE_DAYS,
-			l.PROCESS_ID
+			l.PROCESS_ID,
+			l.CREATE_TIME
 		from ATT_LEAVE_BILL l
 		inner join SYS_USER u on l.user_id = u.user_id
 		where LEAVE_BILL_ID = #{leaveBillId}
@@ -141,7 +145,8 @@
 		status,jdbcType=VARCHAR },
 		#{ attachmentId,jdbcType=VARCHAR },
 		#{ leaveDays,jdbcType=DOUBLE },
-		#{ processId,jdbcType=DOUBLE }
+		#{ processId,jdbcType=DOUBLE },
+		#{ createTime,jdbcType=TIMESTAMP }
 		)
 	</insert>
 
@@ -173,7 +178,10 @@
 				LEAVE_DAYS = #{leaveDays},
 			</if>
 			<if test="processId != null ">
-				PROCESS_ID = #{processId}
+				PROCESS_ID = #{processId},
+			</if>
+			<if test="createTime != null ">
+				CREATE_TIME = #{createTime}
 			</if>
 		</trim>
 		where
