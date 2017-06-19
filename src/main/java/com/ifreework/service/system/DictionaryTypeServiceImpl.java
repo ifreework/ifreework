@@ -28,7 +28,7 @@ import com.ifreework.mapper.system.DictionaryTypeMapper;
  * @modifyDate：2017年5月8日 
  * @version 1.0
  */
-@Service("dictionaryService")
+@Service("dictionaryTypeService")
 public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 	
 	@Autowired

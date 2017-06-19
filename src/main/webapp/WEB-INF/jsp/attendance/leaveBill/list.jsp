@@ -24,7 +24,7 @@ attendance.leaveBill = function(){
 			    }
 			},
 			columns : [ {  
-	            data : "leaveType",  
+	            data : "dictionary.dictionaryName",  
 	            name : "leave_type",  
 	            title : "请假类型",  
 	            defaultContent : "" 

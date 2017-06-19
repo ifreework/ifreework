@@ -34,12 +34,11 @@
 		from  SYS_DICTIONARY  
 		<where>
 			<trim prefixOverrides="and">
-			
 				<if test=" dictionaryTypeId != null and  dictionaryTypeId != ''">
-				and  DICTIONARY_TYPE_ID = #[dictionaryTypeId]
+				and  DICTIONARY_TYPE_ID = #{dictionaryTypeId}
 				</if>
-				<if test=" parentId != null and  parentId != ''">
-				and  PARENT_ID = #[parentId]
+				<if test=" id != null and  id != ''">
+				and  PARENT_ID = #{id}
 				</if>
 				
 			</trim>
@@ -54,7 +53,33 @@
 		from  SYS_DICTIONARY  where 1 = 1
 		and  DICTIONARY_ID = #{dictionaryId}
 	</select>
+	
+	<!-- 通过字典编码与类型编码获取该字典 -->
+	<select id="getDictionaryByCode" parameterType="pd"
+		resultMap="dictionary">
+		select
+		<include refid="dictionaryColumns" />
+		from  SYS_DICTIONARY  
+		where 
+			dictionary_code = #{dictionaryCode}
+    		and dictionary_type_id = #{dictionaryTypeId}
+	</select>
+	
 		
+	<!-- 通过类型编码获取该编码下所有数据字典 -->
+	<select id="queryDictionaryByType" parameterType="pd"
+		resultMap="dictionary">
+		select
+		<include refid="dictionaryColumns" />
+		from  SYS_DICTIONARY 
+		where 
+    		dictionary_type_id = #{dictionaryTypeId}
+    	<if test=" parentId != null and  parentId != ''">
+    		and PARENT_ID = #{parentId}
+    	</if>
+	</select>
+	
+	
 	<!-- 查询节点下最大的排序 -->
 	<select id="getMaxDictionaryOrder" parameterType="string"
 		resultMap="dictionary">

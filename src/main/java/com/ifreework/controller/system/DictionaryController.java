@@ -64,9 +64,11 @@ public class DictionaryController extends BaseControllerSupport {
 	public ModelAndView add(){
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-		String treeId = pd.getString("treeId");
+		String parentId = pd.getString("parentId");
+		String dictionaryTypeId = pd.getString("dictionaryTypeId");
 		Dictionary dictionary = new Dictionary();
-		dictionary.setParentId(treeId);
+		dictionary.setParentId(parentId);
+		dictionary.setDictionaryTypeId(dictionaryTypeId);
 		mv.addObject("dictionary", dictionary);
 		mv.setViewName("/system/dictionary/edit");
 		return mv;
@@ -93,5 +95,31 @@ public class DictionaryController extends BaseControllerSupport {
 		}
 		
 		return pd;
+	}
+	
+	/**
+	 * 
+	 * 描述：根据类型编码与字典编码，查询字典
+	 * @param dictionaryCode 字典编码
+	 * @param dictionaryTypeId 字典类型编码
+	 * @return 
+	 */
+	@RequestMapping(value = "/getDictionaryByCode")
+	@ResponseBody
+	public Dictionary getDictionaryByCode() {
+		return dictionaryService.getDictionaryByCode(this.getPageData());
+	}
+	
+	/**
+	 * 
+	 * 描述：根据类型编码与父节点，查询该类型下的节点
+	 * @param dictionaryTypeId 字典类型编码
+	 * @param parentId 父节点，如果为null，则查询该父节点下全部子节点
+	 * @return 
+	 */
+	@RequestMapping(value = "/queryDictionaryByCode")
+	@ResponseBody
+	public List<Dictionary> queryDictionaryByCode() {
+		return dictionaryService.queryDictionaryByType(this.getPageData());
 	}
 }

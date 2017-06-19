@@ -1,6 +1,5 @@
 package com.ifreework.controller.system;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,9 +11,6 @@ import com.ifreework.common.controller.BaseControllerSupport;
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.DictionaryType;
 import com.ifreework.service.system.DictionaryTypeService;
-import com.ifreework.util.StringUtil;
-
-
 
 /**    
  *     
@@ -33,18 +29,17 @@ import com.ifreework.util.StringUtil;
 public class DictionaryTypeController extends BaseControllerSupport {
 
 	@Autowired
-	private DictionaryTypeService dictionaryTypeService ;
-	
-	
+	private DictionaryTypeService dictionaryTypeService;
+
 	@RequestMapping("/add")
-	public ModelAndView add(){
+	public ModelAndView add() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("/system/dictionaryType/edit");
 		return mv;
 	}
-	
+
 	@RequestMapping("/update")
-	public ModelAndView update(){
+	public ModelAndView update() {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
 		DictionaryType dictionaryType = dictionaryTypeService.getDictionaryTypeById(pd.getString("treeId"));
@@ -52,17 +47,18 @@ public class DictionaryTypeController extends BaseControllerSupport {
 		mv.setViewName("/system/dictionaryType/edit");
 		return mv;
 	}
-	
-	@RequestMapping(value = "/save")
+
+	@RequestMapping(value = "/addSave")
 	@ResponseBody
-	public PageData save(@ModelAttribute( "dictionaryType" )DictionaryType dictionaryType){
-		PageData pd;
-		if(StringUtil.isEmpty(dictionaryType.getDictionaryTypeId())){
-			pd = dictionaryTypeService.add(dictionaryType);
-		}else{
-			pd = dictionaryTypeService.update(dictionaryType);
-		}
-		
+	public PageData addSave(@ModelAttribute("dictionaryType") DictionaryType dictionaryType) {
+		PageData pd = dictionaryTypeService.add(dictionaryType);
+		return pd;
+	}
+
+	@RequestMapping(value = "/editSave")
+	@ResponseBody
+	public PageData editSave(@ModelAttribute("dictionaryType") DictionaryType dictionaryType) {
+		PageData pd = dictionaryTypeService.update(dictionaryType);
 		return pd;
 	}
 }

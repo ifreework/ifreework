@@ -11,7 +11,6 @@ package com.ifreework.service.system;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +19,7 @@ import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.Dictionary;
 import com.ifreework.mapper.system.DictionaryMapper;
 import com.ifreework.mapper.system.DictionaryTypeMapper;
+import com.ifreework.util.StringUtil;
 
 /**
  * 
@@ -42,11 +42,12 @@ public class DictionaryServiceImpl implements DictionaryService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List queryDictionaryList(PageData pd) {
-		String flag = pd.getString("flag");
-		if("type".equals(flag)){
+		String dictionaryTypeId = pd.getString("dictionaryTypeId");
+		if(StringUtil.isEmpty(dictionaryTypeId)){
 			List list = dictionaryTypeMapper.queryDictionaryTypeList(pd);
 			return list;
 		}
+		
 		List list = dictionaryMapper.queryDictionaryList(pd);
 		
 		return list;
@@ -111,7 +112,16 @@ public class DictionaryServiceImpl implements DictionaryService {
 
 	@Override
 	public PageData delete(String dictionaryId) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Dictionary getDictionaryByCode(PageData pd) {
+		return dictionaryMapper.getDictionaryByCode(pd);
+	}
+
+	@Override
+	public List<Dictionary> queryDictionaryByType(PageData pd) {
+		return dictionaryMapper.queryDictionaryByType(pd);
 	}
 }

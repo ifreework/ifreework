@@ -37,6 +37,11 @@
 			<result column="PERSON_NAME" property="personName"/>
 		</association>
 		
+		<association property="dictionary" javaType="com.ifreework.entity.system.Dictionary">
+			<result column="DICTIONARY_CODE" property="dictionaryCode"/>
+			<result column="DICTIONARY_NAME" property="dictionaryName"/>
+		</association>
+		
 		<collection property="attachments"  javaType="ArrayList"  
 			column="ATTACHMENT_ID" select="selectAttachments" />
 	</resultMap>
@@ -65,9 +70,12 @@
 			l.ATTACHMENT_ID,
 			l.LEAVE_DAYS,
 			l.PROCESS_ID,
-			l.CREATE_TIME
+			l.CREATE_TIME,
+			d.DICTIONARY_CODE,
+			d.DICTIONARY_NAME
 		from ATT_LEAVE_BILL l
 		inner join SYS_USER u on l.user_id = u.user_id
+		inner join SYS_DICTIONARY d on d.DICTIONARY_TYPE_ID = 'attendance' and d.DICTIONARY_CODE = l.LEAVE_TYPE
 		<where>
 			<trim prefixOverrides="and">
 				<if test="userId != null and userId != ''">
@@ -109,9 +117,12 @@
 			l.ATTACHMENT_ID,
 			l.LEAVE_DAYS,
 			l.PROCESS_ID,
-			l.CREATE_TIME
+			l.CREATE_TIME,
+			d.DICTIONARY_CODE,
+			d.DICTIONARY_NAME
 		from ATT_LEAVE_BILL l
 		inner join SYS_USER u on l.user_id = u.user_id
+		inner join SYS_DICTIONARY d on d.DICTIONARY_TYPE_ID = 'attendance' and d.DICTIONARY_CODE = l.LEAVE_TYPE
 		where LEAVE_BILL_ID = #{leaveBillId}
 	</select>
 	

@@ -3,11 +3,10 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ifreework.mapper.system.DictionaryTypeMapper">
 
-	<resultMap type="com.ifreework.entity.system.DictionaryType"
-		id="dictionaryType">
-		<id column="DICTIONARY_TYPE_ID" property="dictionaryTypeId" />
-		<result column="DICTIONARY_TYPE_NAME" property="dictionaryTypeName" />
-		<result column="DESCRIBE" property="describe" />
+	<resultMap type="com.ifreework.entity.system.DictionaryType" id="dictionaryType">
+		<id column="DICTIONARY_TYPE_ID" property="dictionaryTypeId"/>
+		<result column="DICTIONARY_TYPE_NAME" property="dictionaryTypeName"/>
+		<result column="DESCRIBE" property="describe"/>
 	</resultMap>
 
 	<select id="queryDictionaryTypeList" parameterType="pd"
@@ -39,28 +38,32 @@
 	</select>
 
 	<insert id="add" parameterType="com.ifreework.entity.system.DictionaryType">
-		insert into SYS_DICTIONARY_TYPE (<include refid="dictionaryTypeColumns"/>) 
+		insert into SYS_DICTIONARY_TYPE (
+			DICTIONARY_TYPE_ID,
+			DICTIONARY_TYPE_NAME,
+			DESCRIBE
+		) 
 		values 
 		(
-			#[ dictionaryTypeId,jdbcType=VARCHAR ],
-			#[ dictionaryTypeName,jdbcType=VARCHAR ],
-			#[ describe,jdbcType=VARCHAR ]
+			#{ dictionaryTypeId,jdbcType=VARCHAR },
+			#{ dictionaryTypeName,jdbcType=VARCHAR },
+			#{ describe,jdbcType=VARCHAR }
 		)
 	</insert>
 
-	<update id="update" parameterType="com.ifreework.entity.system.DictionaryTypeType">
+	<update id="update" parameterType="com.ifreework.entity.system.DictionaryType">
 		update  SYS_DICTIONARY_TYPE
 		<trim prefix="SET" suffixOverrides=",">  
 	        <if test="dictionaryTypeName != null ">  
-	           DICTIONARY_TYPE_NAME = #[dictionaryTypeName],
+	           DICTIONARY_TYPE_NAME = #{dictionaryTypeName},
 	        </if>  
 	        <if test="describe != null ">  
-	           DESCRIBE = #[describe]
+	           DESCRIBE = #{describe}
 	        </if>  
 		</trim>
 			where 
 	        <if test="dictionaryTypeId != null ">  
-	           DICTIONARY_TYPE_ID = #[dictionaryTypeId]
+	           DICTIONARY_TYPE_ID = #{dictionaryTypeId}
 	        </if>  
 	</update>
 </mapper>

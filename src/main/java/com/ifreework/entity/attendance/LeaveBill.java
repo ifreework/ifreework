@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.ifreework.entity.system.Attachment;
+import com.ifreework.entity.system.Dictionary;
 import com.ifreework.entity.system.User;
 
 public class LeaveBill implements Serializable{
@@ -23,6 +24,7 @@ public class LeaveBill implements Serializable{
 	private java.util.Date createTime;
 	
 	private User user;
+	private Dictionary dictionary;
 	private List<Attachment> attachments;
 	//columns END
 	
@@ -109,6 +111,15 @@ public class LeaveBill implements Serializable{
 	public void setCreateTime(java.util.Date createTime) {
 		this.createTime = createTime;
 	}
+
+	public Dictionary getDictionary() {
+		return dictionary;
+	}
+
+	public void setDictionary(Dictionary dictionary) {
+		this.dictionary = dictionary;
+	}
+	
 	
 }
 

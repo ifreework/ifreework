@@ -21,8 +21,13 @@ attendance.leaveBill.taskList = function(){
 			ajax:{
 				url:"${contextPath}/attendance/leaveBill/queyTaskListByName"
 			},
-			columns : [ {  
-	            data : "leaveBill.leaveType",  
+			columns : [  {  
+	            data : "leaveBill.user.personName",  
+	            name : "leave_type",  
+	            title : "请假人",  
+	            defaultContent : ""
+	        }, {  
+	            data : "leaveBill.dictionary.dictionaryName",  
 	            name : "leave_type",  
 	            title : "请假类型",  
 	            defaultContent : "" 

@@ -11,7 +11,6 @@ package com.ifreework.service.system;
 
 import java.util.List;
 
-
 import com.ifreework.common.entity.PageData;
 import com.ifreework.entity.system.Dictionary;
 
@@ -33,4 +32,7 @@ public interface DictionaryService {
 	public PageData add(Dictionary dictionary);
 	public PageData update(Dictionary dictionary);
 	public PageData delete(String dictionaryId);
+	
+	public Dictionary getDictionaryByCode(PageData pd);
+	public List<Dictionary> queryDictionaryByType(PageData pd);
 }

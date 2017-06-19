@@ -66,7 +66,26 @@ attendance.leaveBill.edit = function(){
 	}
 	
 	function initSelect(){
-		attendanceLeaveBillEdit.find("#leaveType").select2();
+		attendanceLeaveBillEdit.find("#leaveType").select2({
+			allowClear: true,
+			ajax: {
+			    url: "${ contextPath }/system/dictionary/queryDictionaryByCode",
+			    delay: 250,
+			    dataType: 'json',
+				data: {dictionaryTypeId:"attendance"},
+			    processResults: function (data, params) {
+		               params.page = params.page || 1;
+		               for(var i = 0; i < data.length;i++){
+		            	   data[i].id =  data[i].dictionaryCode;
+		            	   data[i].text =  data[i].dictionaryName;
+		               }
+		               return {
+		                   results: data
+		               };
+		        },
+			    cache: true
+			}
+		});
 	}
 	
 	function initDate(){
@@ -261,8 +280,9 @@ $().ready(function(){
 					<label class="col-sm-2 control-label">请假类型</label>
 					<div class="col-sm-9">
 						<select  id="leaveType" name="leaveType" style="width: 100%;" >
-							<option value="sj">事假</option>
-							<option value="bj">病假</option>
+							<c:if test="${ leaveBill.leaveType != null && leaveBill.leaveType != '' }">
+							<option value="${ leaveBill.leaveType}" selected="selected">${ leaveBill.dictionary.dictionaryName}</option>
+							</c:if>
 						</select>
 					</div>
 				</div>
