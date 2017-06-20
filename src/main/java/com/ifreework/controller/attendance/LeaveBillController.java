@@ -35,7 +35,6 @@ public class LeaveBillController extends BaseControllerSupport {
 	private LeaveBillService leaveBillService;
 	
 	/**
-	 * 
 	 * 描述：跳转到请假首页
 	 * @return 
 	 */
@@ -93,6 +92,18 @@ public class LeaveBillController extends BaseControllerSupport {
 	}
 	
 
+	@RequestMapping(value = "/detail")
+	public ModelAndView detail() {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = this.getPageData();
+		String leaveBillId = pd.getString("leaveBillId");
+		LeaveBill leaveBill = leaveBillService.getLeaveBill(leaveBillId);
+		List<Map<String,Object>> list = leaveBillService.queryHistoryTask(leaveBill.getProcessId());
+		mv.addObject("historyTaskList", list);
+		mv.addObject("leaveBill", leaveBill);
+		mv.setViewName("/attendance/leaveBill/detail");
+		return mv;
+	}
 	
 	/**
 	 * 描述：查询我的请假信息
@@ -169,7 +180,20 @@ public class LeaveBillController extends BaseControllerSupport {
 	@ResponseBody
 	public PageData complete(){
 		PageData pd = this.getPageData();
-		pd = leaveBillService.complete(pd.getString("taskId"), pd.getString("status"));
+		pd = leaveBillService.complete(pd.getString("taskId"), pd.getString("status"),pd.getString("comment"));
 		return pd;
+	}
+	
+	
+	/**
+	 * 描述：通过任务ID，下载任务图片
+	 * @return
+	 */
+	@RequestMapping(value = "/downloadImage")
+	@ResponseBody
+	public void downloadImage(){
+		PageData pd = this.getPageData();
+		String taskId = pd.getString("taskId");
+		leaveBillService.downloadImage(taskId);
 	}
 }

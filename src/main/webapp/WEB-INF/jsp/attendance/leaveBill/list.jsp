@@ -49,8 +49,13 @@ attendance.leaveBill = function(){
 	            defaultContent : "",
 	            orderable:false
 	        }, {  
-	        	data : "status",  
-	            title : "审批状态",  
+	        	data : "taskName",  
+	            title : "单据状态",  
+	            defaultContent : "",
+	            orderable:false
+	        },{  
+	        	data : "lastOperationUser",  
+	            title : "最后一次操作人",  
 	            defaultContent : "",
 	            orderable:false
 	        },{  
@@ -61,12 +66,15 @@ attendance.leaveBill = function(){
 	            render:function( data, type, row, meta ){
 	            	console.log(data);
 	            	var attStr = "";
-	            	for(var i = 0;i < data.length;i++){
-	            		var html = '<a href="javascript:void(0)" class="tab-attachment" data-attachmentid="' + data[i].attachmentId + '">' + data[i].attachmentName + '</a>';
-	            		attStr += html;
-	            		if(i < data.length - 1 ){
-	            			attStr += "<br />";
-	            		}
+	            	if(data != null){
+	            		
+		            	for(var i = 0;i < data.length;i++){
+		            		var html = '<a href="javascript:void(0)" class="tab-attachment" data-attachmentid="' + data[i].attachmentId + '">' + data[i].attachmentName + '</a>';
+		            		attStr += html;
+		            		if(i < data.length - 1 ){
+		            			attStr += "<br />";
+		            		}
+		            	}
 	            	}
 	            	return attStr;
 	            }
@@ -78,7 +86,7 @@ attendance.leaveBill = function(){
 	        	orderable:false,
 	        	className : "text-center"  ,
 	        	render:function( data, type, row, meta ){
-	        		var html = '<a class="btn btn-view btn-sky btn-xs icon-only" title="查看详情" data-processid="' + row.processId + '" href="javascript:void(0);"><i class="fa fa-info "></i></a>';
+	        		var html = '<a class="btn btn-view btn-sky btn-xs icon-only" title="查看审批详情" data-leavebillid="' + row.leaveBillId + '" data-person="' + row.user.personName + '" href="javascript:void(0);"><i class="fa fa-info "></i></a>';
 	        		if(data == '0'){
 	        			html +=  '<a class="btn btn-submit btn-palegreen btn-xs icon-only margin-left-10" title="提报" data-processid="' + row.processId + '" href="javascript:void(0);"><i class="fa  fa-check-square-o "></i></a>' +
 	        					 '<a class="btn btn-edit btn-info btn-xs icon-only margin-left-10" title="修改" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-edit "></i></a>' +
@@ -95,6 +103,13 @@ attendance.leaveBill = function(){
 	    	attendanceLeaveBill.find('.tab-attachment').on("click",function(){
 	    		var id = $(this).data("attachmentid");
 	    		bootbox.image("${contextPath}/system/attachment/download?attachmentId=" + id);
+	    	});
+	    	
+	    	attendanceLeaveBill.find('.btn-view').on("click",function(){
+	    		var leaveBillId =  $(this).data("leavebillid");
+	    		var person = $(this).data("person");
+	    		var url = "${contextPath}/attendance/leaveBill/detail?leaveBillId=" + leaveBillId ;
+	    		openDialog(url , person + "的请假申请");
 	    	});
 	    	
 	    	attendanceLeaveBill.find('.btn-submit').on("click",function(){
@@ -114,6 +129,13 @@ attendance.leaveBill = function(){
 	    });
 	}
 	
+	function openDialog(url,title){
+		var dialog = bootbox.dialog({
+			title: title,
+			width:700,
+	        loadUrl: url
+	    });
+	}
 	
 	//提报
 	function saveStartProcess(id){

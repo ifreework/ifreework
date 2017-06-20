@@ -530,12 +530,13 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 
 
 /*************************** datatable ************************************/
-.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td{
+.dataTable >thead>tr>th, .dataTable >tbody>tr>th, .dataTable >tfoot>tr>th, .dataTable >thead>tr>td, .dataTable >tbody>tr>td{
 	vertical-align: middle;
 }
-.table a:NOT(.btn){
+.dataTable  a:NOT(.btn){
 	color: #428bca;
 }
-.table a:NOT(.btn):HOVER{
+.dataTable  a:NOT(.btn):HOVER{
 	color: #2a6496;
 }
+

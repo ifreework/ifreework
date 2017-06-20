@@ -66,7 +66,6 @@
 	
 	$().ready(function(){
 		$("#page-body").load("${contextPath}/monitor/message/business");
-		$("#sidebar-collapse").click();
 	});
 </script>
 

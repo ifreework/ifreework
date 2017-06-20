@@ -15,6 +15,10 @@ public interface LeaveBillService {
 	public PageData update(LeaveBill leaveBill);
 	public PageData delete(String leaveBillId);
 	public List<Map<String, Object>> queyTaskListByName();
-	public PageData complete(String taskId,String status);
+	public PageData complete(String taskId,String status,String comment);
 	public PageData submit(String processId);
+	
+	public void downloadImage(String taskId);
+	
+	public List<Map<String, Object>> queryHistoryTask(String processId);
 }

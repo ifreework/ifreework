@@ -26,6 +26,7 @@ public class LeaveBill implements Serializable{
 	private User user;
 	private Dictionary dictionary;
 	private List<Attachment> attachments;
+	
 	//columns END
 	
 	public java.lang.String getLeaveBillId() {

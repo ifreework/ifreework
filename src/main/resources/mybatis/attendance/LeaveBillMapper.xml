@@ -19,7 +19,7 @@
 
 
 	<resultMap type="com.ifreework.entity.attendance.LeaveBill"
-		id="leaveBillMap">
+		id="leaveBill">
 		<id column="LEAVE_BILL_ID" property="leaveBillId" />
 		<result column="USER_ID" property="userId" />
 		<result column="START_TIME" property="startTime" />
@@ -46,6 +46,34 @@
 			column="ATTACHMENT_ID" select="selectAttachments" />
 	</resultMap>
 
+
+	<resultMap type="java.util.HashMap"
+		id="leaveBillMap">
+		<id column="LEAVE_BILL_ID" property="leaveBillId" />
+		<result column="USER_ID" property="userId" />
+		<result column="START_TIME" property="startTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="LEAVE_TYPE" property="leaveType" />
+		<result column="LEAVE_CAUSE" property="leaveCause" />
+		<result column="STATUS" property="status" />
+		<result column="ATTACHMENT_ID" property="attachmentId" />
+		<result column="LEAVE_DAYS" property="leaveDays" />
+		<result column="PROCESS_ID" property="processId" />
+		<result column="CREATE_TIME" property="createTime" />
+		
+		<association property="user" javaType="com.ifreework.entity.system.User">
+			<result column="USERNAME" property="username"/>
+			<result column="PERSON_NAME" property="personName"/>
+		</association>
+		
+		<association property="dictionary" javaType="com.ifreework.entity.system.Dictionary">
+			<result column="DICTIONARY_CODE" property="dictionaryCode"/>
+			<result column="DICTIONARY_NAME" property="dictionaryName"/>
+		</association>
+		
+		<collection property="attachments"  javaType="ArrayList"  
+			column="ATTACHMENT_ID" select="selectAttachments" />
+	</resultMap>
 
 	<resultMap type="com.ifreework.entity.system.Attachment" id="attachment">
 		<id column="ATTACHMENT_ID" property="attachmentId"/>
@@ -103,7 +131,7 @@
         </foreach>
 	</select>
 
-	<select id="getLeaveBill" parameterType="string" resultMap="leaveBillMap">
+	<select id="getLeaveBill" parameterType="string" resultMap="leaveBill">
 		select
 			u.USERNAME,
 			u.PERSON_NAME,

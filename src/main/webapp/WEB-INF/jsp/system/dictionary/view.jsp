@@ -104,6 +104,7 @@ system.dictionary = function(){
 	    });
 	}
 	
+	
 	function deleteNode(){
 		var opt = {
 				url : "${ contextPath }/system/dictionary/delete",

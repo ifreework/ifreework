@@ -6,11 +6,11 @@
 $.namespace("attendance.leaveBill.taskList");
 
 attendance.leaveBill.taskList = function(){
-	var attendanceLeaveBill,
+	var attendanceLeaveBillTask,
 		dataTable;
 	
 	function initTable(){
-		dataTable = attendanceLeaveBill.find('#leaveBillTaskTab').DataTable({
+		dataTable = attendanceLeaveBillTask.find('#leaveBillTaskTab').DataTable({
 			searching : false,//
 			lengthChange: false,
 			info:false,
@@ -53,7 +53,12 @@ attendance.leaveBill.taskList = function(){
 	            orderable:false
 	        }, {  
 	        	data : "leaveBill.status",  
-	            title : "审批状态",  
+	            title : "单据状态",  
+	            defaultContent : "",
+	            orderable:false
+	        },{  
+	        	data : "lastOperationUser",  
+	            title : "最后一次操作人",  
 	            defaultContent : "",
 	            orderable:false
 	        },{  
@@ -83,7 +88,7 @@ attendance.leaveBill.taskList = function(){
 	        	render:function( data, type, row, meta ){
 	        		var html = '<a class="btn btn-view btn-sky btn-xs icon-only" title="查看详情" data-leavebillid="' + row.leaveBillId + '" href="javascript:void(0);"><i class="fa fa-info "></i></a>' +
 	        				   '<a class="btn btn-agree btn-palegreen btn-xs icon-only margin-left-10" title="提报" data-taskid="' + row.taskId + '" href="javascript:void(0);"><i class="fa  fa-check-square-o "></i></a>' +
-	        				   '<a class="btn btn-reject btn-danger btn-xs icon-only margin-left-10" title="提报" data-taskid="' + row.taskId + '" href="javascript:void(0);"><i class="fa  fa-check-square-o "></i></a>' ;
+	        				   '<a class="btn btn-reject btn-danger btn-xs icon-only margin-left-10" title="驳回" data-taskid="' + row.taskId + '" href="javascript:void(0);"><i class="fa  fa-mail-reply "></i></a>' ;
 	        		return html;
 	        	}
 	        }]
@@ -92,24 +97,63 @@ attendance.leaveBill.taskList = function(){
 	    }).on('xhr.dt', function ( e, settings, json, xhr ) {//页面发送请求后，关闭加载遮罩
 	    	 bootbox.unload();
 	    } ).on( 'draw.dt', function () {
-	    	attendanceLeaveBill.find('.btn-agree').on("click",function(){
+	    	attendanceLeaveBillTask.find('.btn-agree').on("click",function(){
 	    		var id = $(this).data("taskid");
-	    		complete(id);
+	    		complete(id,"1","");
 	    	});
+	    	attendanceLeaveBillTask.find('.btn-reject').on("click",function(){
+	    		var id = $(this).data("taskid");
+	    		openDialog(id);
+	    	});
+	    });
+		
+		attendanceLeaveBillTask.find('#leaveCause').autosize({ append: "\n" });
+	}
+	
+	function openDialog(id){
+		var dialog = bootbox.dialog({
+			title: "驳回申请",
+			width:700,
+	        message:$("#dialog").html(),
+	        buttons : {
+				success : {
+					label : "确定",
+					className : "btn-default",
+					callback : function(){
+						var commentStr = $('#comment').val();
+						W.ajax({
+							url : "${ contextPath }/attendance/leaveBill/complete",
+							data:{ taskId : id ,status:"0",comment:"aaaaa撒打算"},
+							success:function(param){
+								if(param.result === SUCCESS){
+									bootbox.alert("数据提报成功","",function(){
+										dataTable.ajax.reload();
+										bootbox.hideAll();
+									});
+								}else{
+									bootbox.alert("数据异常，提报失败");
+								}
+							}
+						});
+					}
+				}
+			}
 	    });
 	}
 	
+	
 	//提报
-	function complete(id){
+	function complete(id,status,comment){
 		bootbox.confirm("确定通过该请假申请吗？","",function(e){
 			if(e){
 				W.ajax({
 					url : "${ contextPath }/attendance/leaveBill/complete",
-					data:{ taskId : id ,status:"1"},
+					data:{ taskId : id ,status:status,comment:comment},
 					success:function(param){
 						if(param.result === SUCCESS){
 							bootbox.alert("数据提报成功","",function(){
 								dataTable.ajax.reload();
+								bootbox.hideAll();
 							});
 						}else{
 							bootbox.alert("数据异常，提报失败");
@@ -122,7 +166,7 @@ attendance.leaveBill.taskList = function(){
 	
 	return {
 		init : function(){
-			attendanceLeaveBill = $("#attendance-leaveBill-task");
+			attendanceLeaveBillTask = $("#attendance-leaveBill-task");
 			initTable();
 		} 
 	}
@@ -138,5 +182,13 @@ $().ready(function(){
 	<div class="container-body">
 		<table class="table table-striped table-bordered table-hover" id="leaveBillTaskTab">
 		</table>
+	</div>
+	<div id="dialog" style="display: none;">
+		<div class="row no-margin padding-top-15 padding-bottom-15">
+			<label class="col-sm-12 control-label">批注</label>
+			<div class="col-sm-12">
+				   <textarea class="form-control" id="comment" name="comment"></textarea>
+			</div>
+		</div>
 	</div>
 </div>
