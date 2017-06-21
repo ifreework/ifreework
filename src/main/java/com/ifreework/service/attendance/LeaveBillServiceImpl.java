@@ -271,13 +271,17 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 		return list;
 	}
 
+	
+	
 	/**
 	 * 描述：下载流程图
-	 * @param taskId 任务ID
+	 * @param processId 当前实例ID
 	 * @return
 	 */
-	public void downloadImage(String taskId) {
-		ProcessDefinition pd = this.getProcessDefinitionByTaskId(taskId);
+	public void downloadImage(String processId) {
+		
+		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processId).singleResult();
+		ProcessDefinition pd = repositoryService.getProcessDefinition(processInstance.getProcessDefinitionId());
 
 		String deploymentId = pd.getDeploymentId();
 		String imageName = pd.getDiagramResourceName();
@@ -298,14 +302,6 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private ProcessDefinition getProcessDefinitionByTaskId(String taskId) {
-		// 1. 得到task
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		// 2. 通过task对象的pdid获取流程定义对象
-		ProcessDefinition pd = repositoryService.getProcessDefinition(task.getProcessDefinitionId());
-		return pd;
 	}
 
 	public Map<String, Object> getCurrentActivityCoordinates(String taskId) {

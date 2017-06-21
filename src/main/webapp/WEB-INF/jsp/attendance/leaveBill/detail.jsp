@@ -69,6 +69,14 @@
 	                         	
 	                         </td>
 	                     </tr>
+	                     <tr>
+	                         <th>
+	                                                  流程图
+	                         </th>
+	                         <td>
+	                         	<img alt="" src="${contextPath }/attendance/leaveBill/downloadImage?processId=${leaveBill.processId }" style="max-width: 500px;">
+	                         </td>
+	                     </tr>
 	                 </tbody>
 	       		</table>
 			</div>

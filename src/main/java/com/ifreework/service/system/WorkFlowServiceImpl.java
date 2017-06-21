@@ -5,11 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
-import org.activiti.engine.FormService;
-import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +19,6 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 
 	@Autowired
 	private RepositoryService repositoryService;
-
-	@Autowired
-	private RuntimeService runtimeService;
-
-	@Autowired
-	private FormService formService;
-
-	@Autowired
-	private HistoryService historyService;
 
 	/**
 	 * 

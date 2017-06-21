@@ -193,7 +193,7 @@ public class LeaveBillController extends BaseControllerSupport {
 	@ResponseBody
 	public void downloadImage(){
 		PageData pd = this.getPageData();
-		String taskId = pd.getString("taskId");
-		leaveBillService.downloadImage(taskId);
+		String processId = pd.getString("processId");
+		leaveBillService.downloadImage(processId);
 	}
 }
